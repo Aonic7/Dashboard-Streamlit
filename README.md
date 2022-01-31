@@ -1,2 +1,2 @@
 # Dashboard-Streamlit
-The project is multi-page dashboard built on StreamlitIO platform. 
+The project is a multi-page dashboard built on StreamlitIO platform. 
