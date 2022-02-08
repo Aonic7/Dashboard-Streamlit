@@ -29,32 +29,21 @@ class Interface():
             filename = StringIO(filename)
             dt_obj.df = pd.read_csv(filename, sep=';', decimal=',', index_col = False)
             dt_obj.filesize = dt_obj.df.size
-      
-    def __bool__(self):
-      if self.filesize != 0:
-        return True
-      else:
-        return False
-    
-    
-    @classmethod
-    def buttons(cls, dt_obj):
 
-      #defining buttons for menu
-      data_prev_button = st.sidebar.button('Data Preview')
-      data_prep_button = st.sidebar.button('Data Preparation')
-      classification_button = st.sidebar.button('Classification')
-      regression_button = st.sidebar.button('Regression')
+        data_prev_button = st.sidebar.button('Data Preview')
+        data_prep_button = st.sidebar.button('Data Preparation')
+        classification_button = st.sidebar.button('Classification')
+        regression_button = st.sidebar.button('Regression')
 
-      if data_prev_button:
-        data_preview(dt_obj)
+        if data_prev_button:
+          data_preview(dt_obj)
 
-      if data_prep_button:
-        st.header("DATA PREPARATION")
-      if classification_button:
-        st.header("CLASSIFICATION")
-      if regression_button:
-        st.header('REGRESSION')
+        if data_prep_button:
+          st.header("DATA PREPARATION")
+        if classification_button:
+          st.header("CLASSIFICATION")
+        if regression_button:
+          st.header('REGRESSION')
         
         #menu = ['Data Preview', 'Data Preparation', 'Classification', 'Regression']
          
@@ -63,8 +52,6 @@ def main():
   data_main = DataObject()
   interface = Interface()
   interface.side_bar(data_main)
-  if bool(data_main):
-    interface.buttons(data_main)
 
   st.title('Dashboard')
   if data_main.df is not None:
