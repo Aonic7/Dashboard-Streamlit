@@ -51,9 +51,10 @@ class Interface():
 def main():
   data_main = DataObject()
   interface = Interface()
+  
+  st.title('Dashboard')
   interface.side_bar(data_main)
 
-  st.title('Dashboard')
   if data_main.df is not None:
     pass
 
