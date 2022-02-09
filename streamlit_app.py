@@ -1,8 +1,8 @@
 import pandas as pd
 import streamlit as st
 from io import StringIO
-from data_preview import data_preview
-
+from data_preview import data_preview_run
+from data_preparation import data_preparation_run
 
 
 
@@ -36,10 +36,11 @@ class Interface():
         regression_button = st.sidebar.button('Regression')
 
         if data_prev_button:
-          data_preview(dt_obj)
+          data_preview_run(dt_obj)
 
         if data_prep_button:
-          st.header("DATA PREPARATION")
+          data_preparation_run(dt_obj)
+        
         if classification_button:
           st.header("CLASSIFICATION")
         if regression_button:
@@ -51,12 +52,14 @@ class Interface():
 def main():
   data_main = DataObject()
   interface = Interface()
-  
-  st.title('Dashboard')
   interface.side_bar(data_main)
+  #st.write(data_main.filesize)
+  
+  
+  #st.title('Dashboard')
 
-  if data_main.df is not None:
-    pass
 
   
 main()
+
+#blah
