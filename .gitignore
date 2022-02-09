@@ -1,1 +1,4 @@
 __pycache__/data_preview.cpython-39.pyc
+.vscode/settings.json
+__pycache__/data_preparation.cpython-39.pyc
+__pycache__/streamlit_app.cpython-39.pyc

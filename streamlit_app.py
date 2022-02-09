@@ -30,26 +30,28 @@ class Interface():
             dt_obj.df = pd.read_csv(filename, sep=';', decimal=',', index_col = False)
             dt_obj.filesize = dt_obj.df.size
 
-        data_prev_button = st.sidebar.button('Data Preview')
-        data_prep_button = st.sidebar.button('Data Preparation')
-        classification_button = st.sidebar.button('Classification')
-        regression_button = st.sidebar.button('Regression')
+        menu = ['Data Preview', 'Data Preparation', 'Classification', 'Regression']
+        navigation = st.sidebar.selectbox(label="Select menu", options=menu)
 
-        if data_prev_button:
-          data_preview_run(dt_obj)
+        if navigation == 'Data Preview':
+          with st.container():
+           data_preview_run(dt_obj)
 
-        if data_prep_button:
+        if navigation == 'Data Preparation':
           data_preparation_run(dt_obj)
         
-        if classification_button:
+        if navigation == 'Classification':
           st.header("CLASSIFICATION")
-        if regression_button:
+        if navigation == 'Regression':
           st.header('REGRESSION')
-        
-        #menu = ['Data Preview', 'Data Preparation', 'Classification', 'Regression']
          
 
 def main():
+  st.set_page_config(page_title="MAIT 21/22 Data Analytics Dashboard",
+                     page_icon=None,
+                     layout="wide",
+                     initial_sidebar_state="expanded",
+                     menu_items=None)
   data_main = DataObject()
   interface = Interface()
   interface.side_bar(data_main)
@@ -61,5 +63,3 @@ def main():
 
   
 main()
-
-#blah

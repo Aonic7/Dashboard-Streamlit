@@ -11,7 +11,7 @@ def linePlot_Out_recogn(dataframe, column):
 
 def data_preparation_run(data_obj):
     st.header("DATA PREPARATION")
-    st.write('Remove outlier')
+    st.subheader('Remove outlier')
     st.dataframe(data_obj.df)
 
     columns_list = list(data_obj.df.select_dtypes(exclude=['object']).columns)
