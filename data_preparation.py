@@ -9,29 +9,41 @@ def linePlot_Out_recogn(dataframe, column):
     sns.lineplot(y = column, x = [i for i in range(len(dataframe.df[column]))], data = dataframe.df)
     st.pyplot(fig)
 
+def BoxPlot(dataframe, column):
+    fig = plt.figure(figsize=(10, 4))
+    sns.boxplot(dataframe[column])
+    st.pyplot(fig)
+
 def data_preparation_run(data_obj):
     st.header("DATA PREPARATION")
     st.subheader('Remove outlier')
     st.dataframe(data_obj.df)
 
-    columns_list = list(data_obj.df.select_dtypes(exclude=['object']).columns)
-    std_coeff = st.number_input("Enter standard deviation coefficient (multiplier) ", 0.0, 3.0, 2.0, 0.1)
-    selected_column = st.selectbox("Select a column", columns_list)
+    with st.form("Data Preparation parameters selector"):
+        columns_list = list(data_obj.df.select_dtypes(exclude=['object']).columns)
+        std_coeff = st.number_input("Enter standard deviation coefficient (multiplier) ", 0.0, 3.1, 2.0, 0.1)
+        selected_column = st.selectbox("Select a column", columns_list)
+
+        submitted = st.form_submit_button("Create a plot")
+        if submitted:
+            st.write("Standard deviation", std_coeff, "Column", selected_column)
     
     
-    linePlot_Out_recogn(data_obj, selected_column)
+    rm_outlier = removeOutlier(data_obj, selected_column, std_coeff)
+    BoxPlot(rm_outlier, selected_column)
+
+    rm_outlier.to_csv("Prepared Dataset.csv")
 
 
-def removeOutlier (df, columnName, n):
-    mean = df[columnName].mean() #find the mean for the column
-    std = df[columnName].std()  #find standard deviation for column
-    print(f'Mean = {mean}, std = {std}') #we can print these 2 values
-    print(f'Dataframe size = {df.size}') # also we can print initial size of the dataset
-    fromVal = mean - n * std  # find the min value of the filtering boundary (by default n=2)
-    toVal = mean + n * std # find the max value of the filtering boundary (by default n=2)
-    print(f'Valid values from {fromVal} to {toVal}') # we can print the filtering boundaries
-    filtered = df[(df[columnName] >= fromVal) & (df[columnName] <= toVal)] #apply the filtering formula to the column
-    return filtered #return the filtered dataset
+
+
+def removeOutlier (data_obj, columnName, n):
+    mean = data_obj.df[columnName].mean()
+    std = data_obj.df[columnName].std()  
+    fromVal = mean - n * std 
+    toVal = mean + n * std 
+    filtered = data_obj.df[(data_obj.df[columnName] >= fromVal) & (data_obj.df[columnName] <= toVal)] #apply the filtering formula to the column
+    return filtered 
 
 # syncMachine = pd.read_csv("D:\MAIT21\OOP\Data\Regression\synchronous_machine.csv", delimiter=';', decimal=',')
 # syncMachine = removeOutlier(syncMachine, 'If', 2)

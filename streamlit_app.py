@@ -10,12 +10,13 @@ class DataObject():
     def __init__(self, df=None, filesize=None):
       self.df = df
       self.filesize = filesize
+
             
 class Interface():
     def __init__(self):
       pass
     
-    @classmethod
+    # @classmethod
     def side_bar(cls, dt_obj):
       filename = st.sidebar.file_uploader("Upload a data file", type=(["csv", "data"]))                   # Accepts .csv and .data
       if filename is not None:                                                                            # Work with global variables  and 'filesize                                                                            # Try coma as a separator and proc an error if separator is different
@@ -37,6 +38,7 @@ class Interface():
           with st.container():
            data_preview_run(dt_obj)
 
+
         if navigation == 'Data Preparation':
           data_preparation_run(dt_obj)
         
@@ -55,11 +57,8 @@ def main():
   data_main = DataObject()
   interface = Interface()
   interface.side_bar(data_main)
-  #st.write(data_main.filesize)
-  
-  
-  #st.title('Dashboard')
 
+  st.dataframe(pd.read_csv("Prepared Dataset.csv"))
 
-  
-main()
+if __name__ == '__main__':
+  main()
