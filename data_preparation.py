@@ -3,6 +3,7 @@ import pandas as pd
 import streamlit as st
 import seaborn as sns
 import numpy as np
+import scipy.stats as stats
 
 def linePlot_Out_recogn(dataframe, column):
     fig = plt.figure(figsize=(10, 4))
@@ -31,6 +32,13 @@ def removeOutlier_q(df, columnName, n1, n2):
     lower_quantile, upper_quantile = df[columnName].quantile([n1, n2]) #quantiles are generally expressed as a fraction (from 0 to 1)
     filtered = df[(df[columnName] > lower_quantile) & (df[columnName] < upper_quantile)]
     return filtered
+
+def removeOutlier_z(df, columnName, n):
+    z = np.abs(stats.zscore(df[columnName])) #find the Z-score for the column
+    filtered = df[(z < n)] #apply the filtering formula to the column
+    return filtered #return the filtered dataset
+
+
 
 def data_preparation_run(data_obj):
     st.header("DATA PREPARATION")
@@ -121,6 +129,42 @@ def data_preparation_run(data_obj):
                     current_df = q_outlier.reset_index(drop=True)
                     current_df.to_csv("Prepared Dataset.csv", index=False)
 
+        if rmo_radio == 'Z':
+
+            with st.container():
+                st.subheader('Remove outliers using Z-score')
+
+                cc1, cc2, cc3 = st.columns(3)
+                with cc1:
+                    columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
+                    std_coeff = st.number_input("Enter standard deviation coefficient: ", 0.0, 3.1, 1.1, 0.1)
+                    #ask Marina about min and max values
+                    selected_column = st.selectbox("Select a column:", columns_list)
+                    z_outlier = removeOutlier_z(current_df, selected_column, std_coeff)
+                    
+                with cc2:
+                    st.write(" ")
+                    st.write(" ")
+                    bp = st.button("Boxplot")
+                    hist = st.button("Histogram")
+                with cc3:
+                    st.write(" ")
+                    st.write(" ")
+                    st.warning(f'If applied, {current_df.shape[0]-z_outlier.shape[0]} rows will be removed.')
+                        
+                if bp:
+                    BoxPlot(current_df, selected_column)
+                if hist:
+                    Histogram(current_df, selected_column)
+
+                #current_df = rm_outlier.reset_index(drop=True)
+                if st.button("Save remove outlier results"):
+                    current_df = z_outlier.reset_index(drop=True)
+                    current_df.to_csv("Prepared Dataset.csv", index=False)
+
+    if dp_method == 'Filtering':
+        rmo_radio = st.radio(label = 'Remove outliers method',
+                             options = ['Std','Q','Z'])
 
     with col2:
         st.subheader('Resulting dataframe')
@@ -130,7 +174,10 @@ def data_preparation_run(data_obj):
         if dp_method == 'Remove outliers' and rmo_radio == 'Q':
             st.dataframe(q_outlier.reset_index(drop=True))
             st.write(q_outlier.shape)
-
+        if dp_method == 'Remove outliers' and rmo_radio == 'Z':
+            st.dataframe(z_outlier.reset_index(drop=True))
+            st.write(z_outlier.shape)
+    
     with col3:
         st.subheader('Current dataframe')
         st.dataframe(current_df)
