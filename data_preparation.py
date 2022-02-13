@@ -25,7 +25,12 @@ def removeOutlier(df, columnName, n):
     fromVal = mean - n * std 
     toVal = mean + n * std 
     filtered = df[(df[columnName] >= fromVal) & (df[columnName] <= toVal)] #apply the filtering formula to the column
-    return filtered 
+    return filtered
+
+def removeOutlier_q(df, columnName, n1, n2):
+    lower_quantile, upper_quantile = df[columnName].quantile([n1, n2]) #quantiles are generally expressed as a fraction (from 0 to 1)
+    filtered = df[(df[columnName] > lower_quantile) & (df[columnName] < upper_quantile)]
+    return filtered
 
 def data_preparation_run(data_obj):
     st.header("DATA PREPARATION")
@@ -44,41 +49,87 @@ def data_preparation_run(data_obj):
         st.dataframe(data_obj.df)
         st.write(data_obj.df.shape)
 
-    with st.expander("Remove outliers"):
-        st.subheader('Remove outliers')
+    st.write('<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;}</style>', unsafe_allow_html=True)
+    
+    dp_method = st.radio(label = 'Data Prep Method', options = ['Remove outliers','Filtering','Smoothing'])
+    
+    if dp_method == 'Remove outliers':
+        rmo_radio = st.radio(label = 'Remove outliers method',
+                             options = ['Std','Q','Z'])
+
+        if rmo_radio == 'Std':
 
 
+            with st.container():
+                st.subheader('Remove outliers using standard deviation')
 
-        cc1, cc2, cc3 = st.columns(3)
-        with cc1:
-            columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
-            std_coeff = st.number_input("Enter standard deviation coefficient (multiplier): ", 0.0, 3.1, 2.0, 0.1)
-            selected_column = st.selectbox("Select a column:", columns_list)
-            rm_outlier = removeOutlier(current_df, selected_column, std_coeff)
-        with cc2:
-            st.write(" ")
-            st.write(" ")
-            bp = st.button("Boxplot")
-            hist = st.button("Histogram")
-        with cc3:
-            st.write(" ")
-            st.write(" ")
-            st.warning(f'If applied, {current_df.shape[0]-rm_outlier.shape[0]} rows will be removed.')
-                
-        if bp:
-            BoxPlot(current_df, selected_column)
-        if hist:
-            Histogram(current_df, selected_column)
+                cc1, cc2, cc3 = st.columns(3)
+                with cc1:
+                    columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
+                    std_coeff = st.number_input("Enter standard deviation coefficient (multiplier): ", 0.0, 3.1, 2.0, 0.1)
+                    selected_column = st.selectbox("Select a column:", columns_list)
+                    rm_outlier = removeOutlier(current_df, selected_column, std_coeff)
+                with cc2:
+                    st.write(" ")
+                    st.write(" ")
+                    bp = st.button("Boxplot")
+                    hist = st.button("Histogram")
+                with cc3:
+                    st.write(" ")
+                    st.write(" ")
+                    st.warning(f'If applied, {current_df.shape[0]-rm_outlier.shape[0]} rows will be removed.')
+                        
+                if bp:
+                    BoxPlot(current_df, selected_column)
+                if hist:
+                    Histogram(current_df, selected_column)
 
-        #current_df = rm_outlier.reset_index(drop=True)
-        if st.button("Save remove outlier results"):
-            current_df = rm_outlier.reset_index(drop=True)
-            current_df.to_csv("Prepared Dataset.csv", index=False)
+                #current_df = rm_outlier.reset_index(drop=True)
+                if st.button("Save remove outlier results"):
+                    current_df = rm_outlier.reset_index(drop=True)
+                    current_df.to_csv("Prepared Dataset.csv", index=False)
+
+        if rmo_radio == 'Q':
+
+            with st.container():
+                st.subheader('Remove outliers using quantiles')
+
+                cc1, cc2, cc3 = st.columns(3)
+                with cc1:
+                    columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
+                    q_values = st.slider('Select a range of quantiles',
+                                        0.00, 1.00, (0.25, 0.75))
+                    selected_column = st.selectbox("Select a column:", columns_list)
+                    q_outlier = removeOutlier_q(current_df, selected_column, q_values[0], q_values[1])
+                with cc2:
+                    st.write(" ")
+                    st.write(" ")
+                    bp = st.button("Boxplot")
+                    hist = st.button("Histogram")
+                with cc3:
+                    st.write(" ")
+                    st.write(" ")
+                    st.warning(f'If applied, {current_df.shape[0]-q_outlier.shape[0]} rows will be removed.')
+                        
+                if bp:
+                    BoxPlot(current_df, selected_column)
+                if hist:
+                    Histogram(current_df, selected_column)
+
+                #current_df = rm_outlier.reset_index(drop=True)
+                if st.button("Save remove outlier results"):
+                    current_df = q_outlier.reset_index(drop=True)
+                    current_df.to_csv("Prepared Dataset.csv", index=False)
+
 
     with col2:
         st.subheader('Resulting dataframe')
-        st.dataframe(rm_outlier.reset_index(drop=True))
-        st.write(rm_outlier.shape)
+        if dp_method == 'Remove outliers' and rmo_radio == 'Std':
+            st.dataframe(rm_outlier.reset_index(drop=True))
+            st.write(rm_outlier.shape)
+        if dp_method == 'Remove outliers' and rmo_radio == 'Q':
+            st.dataframe(q_outlier.reset_index(drop=True))
+            st.write(q_outlier.shape)
 
     with col3:
         st.subheader('Current dataframe')
