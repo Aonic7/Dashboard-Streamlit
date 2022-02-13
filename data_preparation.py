@@ -33,7 +33,7 @@ def data_preparation_run(data_obj):
     if st.sidebar.button("Reset dataframe to the initial one"):
         data_obj.df.to_csv("Prepared Dataset.csv", index=False)
 
-    if pd.read_csv('Prepared Dataset.csv').shape[0] <= data_obj.df.shape[0]:
+    if pd.read_csv('Prepared Dataset.csv').shape[0] < data_obj.df.shape[0]:
         current_df = pd.read_csv('Prepared Dataset.csv', index_col = None)
     else:
         current_df = data_obj.df
@@ -70,8 +70,9 @@ def data_preparation_run(data_obj):
         if hist:
             Histogram(current_df, selected_column)
 
-        current_df = rm_outlier.reset_index(drop=True)
+        #current_df = rm_outlier.reset_index(drop=True)
         if st.button("Save remove outlier results"):
+            current_df = rm_outlier.reset_index(drop=True)
             current_df.to_csv("Prepared Dataset.csv", index=False)
 
     with col2:
