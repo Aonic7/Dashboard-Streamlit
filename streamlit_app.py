@@ -58,7 +58,7 @@ def main():
   interface = Interface()
   interface.side_bar(data_main)
 
-  st.dataframe(pd.read_csv("Prepared Dataset.csv"))
+  #st.dataframe(pd.read_csv("Prepared Dataset.csv"))
 
 if __name__ == '__main__':
   main()
