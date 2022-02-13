@@ -12,7 +12,16 @@ def linePlot_Out_recogn(dataframe, column):
 
 def BoxPlot(dataframe, column):
     fig = plt.figure(figsize=(10, 4))
-    sns.boxplot(dataframe[column])
+    sns.boxplot(y = dataframe[column], orient='v')
+    st.pyplot(fig)
+
+def DoubleBoxPlot(initdf, dataframe, column):
+    fig, axes = plt.subplots(2,1, sharex=True, figsize=(10,4))
+    sns.boxplot(initdf[column], ax=axes[0], color='skyblue', orient="v")
+    axes[0].set_title("Original dataframe")
+    sns.boxplot(dataframe[column], ax=axes[1], color='green', orient="v")
+    axes[1].set_title("Resulting dataframe")
+    fig.tight_layout()
     st.pyplot(fig)
 
 def Histogram(dataframe, column):
@@ -59,7 +68,7 @@ def data_preparation_run(data_obj):
 
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;}</style>', unsafe_allow_html=True)
     
-    dp_method = st.radio(label = 'Data Prep Method', options = ['Remove outliers','Filtering','Smoothing'])
+    dp_method = st.radio(label = 'Data Prep Method', options = ['Remove outliers','Interpolation','Smoothing'])
     
     if dp_method == 'Remove outliers':
         rmo_radio = st.radio(label = 'Remove outliers method',
@@ -88,9 +97,10 @@ def data_preparation_run(data_obj):
                     st.warning(f'If applied, {current_df.shape[0]-rm_outlier.shape[0]} rows will be removed.')
                         
                 if bp:
-                    BoxPlot(current_df, selected_column)
+                    #BoxPlot(rm_outlier.reset_index(drop=True), selected_column)
+                    DoubleBoxPlot(data_obj.df, rm_outlier.reset_index(drop=True), selected_column)
                 if hist:
-                    Histogram(current_df, selected_column)
+                    Histogram(rm_outlier.reset_index(drop=True), selected_column)
 
                 #current_df = rm_outlier.reset_index(drop=True)
                 if st.button("Save remove outlier results"):
@@ -120,9 +130,9 @@ def data_preparation_run(data_obj):
                     st.warning(f'If applied, {current_df.shape[0]-q_outlier.shape[0]} rows will be removed.')
                         
                 if bp:
-                    BoxPlot(current_df, selected_column)
+                    DoubleBoxPlot(data_obj.df, q_outlier.reset_index(drop=True), selected_column)
                 if hist:
-                    Histogram(current_df, selected_column)
+                    Histogram(q_outlier.reset_index(drop=True), selected_column)
 
                 #current_df = rm_outlier.reset_index(drop=True)
                 if st.button("Save remove outlier results"):
@@ -137,7 +147,7 @@ def data_preparation_run(data_obj):
                 cc1, cc2, cc3 = st.columns(3)
                 with cc1:
                     columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
-                    std_coeff = st.number_input("Enter standard deviation coefficient: ", 0.0, 3.1, 1.1, 0.1)
+                    std_coeff = st.number_input("Enter standard deviation coefficient: ", 0.0, 3.1, 2.0, 0.1)
                     #ask Marina about min and max values
                     selected_column = st.selectbox("Select a column:", columns_list)
                     z_outlier = removeOutlier_z(current_df, selected_column, std_coeff)
@@ -153,18 +163,19 @@ def data_preparation_run(data_obj):
                     st.warning(f'If applied, {current_df.shape[0]-z_outlier.shape[0]} rows will be removed.')
                         
                 if bp:
-                    BoxPlot(current_df, selected_column)
+                    DoubleBoxPlot(data_obj.df, z_outlier.reset_index(drop=True), selected_column)
+
                 if hist:
-                    Histogram(current_df, selected_column)
+                    Histogram(z_outlier.reset_index(drop=True), selected_column)
 
                 #current_df = rm_outlier.reset_index(drop=True)
                 if st.button("Save remove outlier results"):
                     current_df = z_outlier.reset_index(drop=True)
                     current_df.to_csv("Prepared Dataset.csv", index=False)
 
-    if dp_method == 'Filtering':
-        rmo_radio = st.radio(label = 'Remove outliers method',
-                             options = ['Std','Q','Z'])
+    if dp_method == 'Smoothing':
+        rmo_radio = st.radio(label = 'Smoothing',
+                             options = ['Median filter','Moving average','Savitzky Golay'])
 
     with col2:
         st.subheader('Resulting dataframe')
