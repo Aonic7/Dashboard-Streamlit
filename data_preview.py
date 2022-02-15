@@ -12,14 +12,24 @@ def Heatmap(data_obj):
 def data_preview_run(data_obj):
     st.header("DATA PREVIEW")
     col1, col2 = st.columns(2)
+    col3, col4 = st.columns(2)
+    
     with col1:
         st.subheader("Original dataframe")
         st.dataframe(data_obj.df)
         st.write(data_obj.df.shape)
+        
     with col2:
         st.subheader("Dataframe description")
         st.dataframe(data_obj.df.describe())
-    st.subheader("Correlation")
-    st.dataframe(data_obj.df.corr())
+    
+    with col3:
+        st.subheader("Data types")
+        st.dataframe(data_obj.df.dtypes)
+        
+    with col4:
+        st.subheader("Correlation")
+        st.dataframe(data_obj.df.corr())
+
     Heatmap(data_obj)
     #AgGrid(data_obj.df)

@@ -4,10 +4,18 @@ import streamlit as st
 import seaborn as sns
 import numpy as np
 import scipy.stats as stats
+from scipy.signal import medfilt
+
 
 def linePlot_Out_recogn(dataframe, column):
     fig = plt.figure(figsize=(10, 4))
-    sns.lineplot(y = column, x = [i for i in range(len(dataframe.df[column]))], data = dataframe.df)
+    sns.lineplot(y = column, x = [i for i in range(len(dataframe[column]))], data = dataframe)
+    st.pyplot(fig)
+
+def doubleLinePlot(initdf, dataframe, column):
+    fig = plt.figure(figsize=(10, 4))
+    sns.lineplot(y = column, x = [i for i in range(len(initdf[column]))], data = initdf)
+    sns.lineplot(y = column, x = [i for i in range(len(dataframe[column]))], data = dataframe)
     st.pyplot(fig)
 
 def BoxPlot(dataframe, column):
@@ -46,6 +54,25 @@ def removeOutlier_z(df, columnName, n):
     z = np.abs(stats.zscore(df[columnName])) #find the Z-score for the column
     filtered = df[(z < n)] #apply the filtering formula to the column
     return filtered #return the filtered dataset
+
+
+def median_filter(dataframe, column, filter_length):
+    """
+    data: function that will be filtered
+    filter_length: length of the window
+    """
+    s = dataframe.copy()
+    # medfilt_tair = medfilt(dataframe[column], filter_lenght)
+    # filtered = dataframe[(dataframe[column] == medfilt_tair)] 
+    # # s = pd.DataFrame(medfilt_tair)
+    # # s.columns=[column]
+    # return filtered
+
+    medfilt_tair = medfilt(dataframe[column], filter_length)
+    s[column] = medfilt_tair
+    #s = pd.DataFrame(medfilt_tair)
+    #s.columns=[column]
+    return s
 
 
 
@@ -174,8 +201,52 @@ def data_preparation_run(data_obj):
                     current_df.to_csv("Prepared Dataset.csv", index=False)
 
     if dp_method == 'Smoothing':
-        rmo_radio = st.radio(label = 'Smoothing',
+        smooth_radio = st.radio(label = 'Smoothing',
                              options = ['Median filter','Moving average','Savitzky Golay'])
+        if smooth_radio == 'Median filter':
+            
+            with st.container():
+                st.subheader('Median filter')
+
+                cc1, cc2, cc3 = st.columns(3)
+                with cc1:
+                    columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
+                    filter_len = st.slider('Length of the window', 3, 7, 5, 2)
+                    selected_column = st.selectbox("Select a column:", columns_list)
+                    median_filt = median_filter(current_df, selected_column, filter_len)
+                    
+                with cc2:
+                    st.write(" ")
+                    st.write(" ")
+                    plot_basic = st.button('Plot')
+                    bp = st.button("Boxplot")
+                    hist = st.button("Histogram")
+                with cc3:
+                    st.write(" ")
+                    st.write(" ")
+                    st.warning(f'If applied, {current_df.shape[0]-median_filt.shape[0]} rows will be removed.')
+                
+                if plot_basic:
+                    doubleLinePlot(data_obj.df, median_filt.reset_index(drop=True), selected_column)
+                    # st.dataframe(median_filt)
+                    # st.write(data_obj.df[selected_column].value_counts(ascending=False))
+                    # st.write(median_filt[selected_column].value_counts(ascending=False))
+                    # st.write("Blah")
+                    # l = {'col1': medfilt(data_obj.df[selected_column], filter_len)}
+                    # lf = pd.DataFrame(data=l)
+                    # st.write(lf.value_counts(ascending=False))
+
+
+                if bp:
+                    DoubleBoxPlot(data_obj.df, median_filt.reset_index(drop=True), selected_column)
+
+                if hist:
+                    Histogram(median_filt.reset_index(drop=True), selected_column)
+
+                #current_df = rm_outlier.reset_index(drop=True)
+                if st.button("Save remove outlier results"):
+                    current_df = median_filt.reset_index(drop=True)
+                    current_df.to_csv("Prepared Dataset.csv", index=False)
 
     with col2:
         st.subheader('Resulting dataframe')
@@ -188,331 +259,11 @@ def data_preparation_run(data_obj):
         if dp_method == 'Remove outliers' and rmo_radio == 'Z':
             st.dataframe(z_outlier.reset_index(drop=True))
             st.write(z_outlier.shape)
+        if dp_method == 'Smoothing' and smooth_radio == 'Median filter':
+            st.dataframe(median_filt.reset_index(drop=True))
+            st.write(median_filt.shape)
     
     with col3:
         st.subheader('Current dataframe')
         st.dataframe(current_df)
         st.write(current_df.shape)
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def data_preparation_run(data_obj):
-#     st.header("DATA PREPARATION")
-
-#     col1, col2 = st.columns(2)
-#     with col1:
-#         st.subheader('Original dataframe')
-#         st.dataframe(data_obj.df)
-#         st.write(data_obj.df.shape)
-
-#     if 'current_df' not in st.session_state:
-#         if data_obj.df.shape[0] == pd.read_csv("Prepared Dataset.csv").shape[0]:
-#             st.session_state.current_df = data_obj.df
-#         else:
-#             st.session_state.current_df = pd.read_csv("Prepared Dataset.csv")
-#         st.write('Blah')
-
-#     if st.sidebar.button("Reset dataframe to the initial one"):
-#         del st.session_state['current_df']
-#         st.session_state.current_df = data_obj.df
-
-
-
-#     st.subheader('Select Data Preparation Methods:')
-#     with st.expander("Remove outliers"):
-#         st.subheader('Remove outliers')
-
-#         with st.form("Data Preparation parameters selector"):
-#             columns_list = list(st.session_state.current_df.select_dtypes(exclude=['object']).columns)
-#             std_coeff = st.number_input("Enter standard deviation coefficient (multiplier): ", 0.0, 3.1, 2.0, 0.1)
-#             selected_column = st.selectbox("Select a column:", columns_list)
-#             graph = st.radio('Select a graph:', ['Boxplot', 'Histogram', 'Update', 'Reset'])
-#             submitted = st.form_submit_button("Create a plot")
-
-#             if submitted:
-#                 st.write("Standard deviation: ", round(std_coeff, 2), "   Column: ", selected_column)
-
-#                 if graph == 'Boxplot':
-#                     rm_outlier = removeOutlier(st.session_state.current_df, selected_column, std_coeff)
-#                     BoxPlot(rm_outlier, selected_column)
-
-#                     st.write(f'{st.session_state.current_df.shape[0]-rm_outlier.shape[0]} rows will be dropped.')
-#                     st.dataframe(rm_outlier)
-#                     st.write(rm_outlier.shape)
-#                     st.write(st.session_state.current_df.shape)
-#                     rm_outlier.to_csv("Prepared Dataset.csv", index=False)
-
-#                 elif graph == 'Histogram':
-#                     rm_outlier = removeOutlier(st.session_state.current_df, selected_column, std_coeff)
-#                     Histogram(rm_outlier, selected_column)
-
-#                     st.write(f'{st.session_state.current_df.shape[0]-rm_outlier.shape[0]} rows will be dropped.')
-#                     st.dataframe(rm_outlier)
-#                     st.write(rm_outlier.shape)
-#                     st.write(st.session_state.current_df.shape)
-#                     rm_outlier.to_csv("Prepared Dataset.csv", index=False)
-
-#                 elif graph == 'Update':
-#                     st.write("Updated!")
-
-#                 elif graph == 'Reset':
-#                     del st.session_state['current_df']
-
-#                 #st.write(st.session_state.current_df.shape)
-#                 #st.session_state.current_df.to_csv("Prepared Dataset.csv", index=False)
-
-
-#     with col2:
-#         st.subheader('Current dataframe')
-#         st.dataframe(st.session_state.current_df)
-#         st.write(st.session_state.current_df.shape)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def data_preparation_run(data_obj):
-#     st.header("DATA PREPARATION")
-
-#     col1, col2 = st.columns(2)
-#     with col1:
-#         st.subheader('Original dataframe')
-#         st.dataframe(data_obj.df)
-#         st.write(data_obj.df.shape)
-
-#     if 'current_df' not in st.session_state:
-#         st.session_state.current_df = data_obj.df
-#         st.session_state.current_df.to_csv("Prepared Dataset.csv", index=False)
-#         st.write('Blah')
-#     else:
-#         st.session_state.current_df = pd.read_csv("Prepared Dataset.csv")
-
-#     if st.sidebar.button("Reset dataframe to the initial one"):
-#         del st.session_state['current_df']
-#         st.session_state.current_df = data_obj.df
-
-#     with col2:
-#         st.subheader('Current dataframe')
-#         st.dataframe(st.session_state.current_df)
-#         st.write(st.session_state.current_df.shape)
-
-#     st.subheader('Select Data Preparation Methods:')
-#     with st.expander("Remove outliers"):
-#         st.subheader('Remove outliers')
-
-#         with st.form("Data Preparation parameters selector"):
-#             columns_list = list(st.session_state.current_df.select_dtypes(exclude=['object']).columns)
-#             std_coeff = st.number_input("Enter standard deviation coefficient (multiplier): ", 0.0, 3.1, 2.0, 0.1)
-#             selected_column = st.selectbox("Select a column:", columns_list)
-#             graph = st.radio('Select a graph:', ['Boxplot', 'Histogram', 'Update', 'Reset'])
-#             #rm_outlier = removeOutlier(st.session_state.current_df, selected_column, std_coeff)
-#             submitted = st.form_submit_button("Create a plot")
-
-#             if submitted:
-#                 st.write("Standard deviation: ", round(std_coeff, 2), "   Column: ", selected_column)
-#                 rm_outlier = removeOutlier(st.session_state.current_df, selected_column, std_coeff)
-
-#                 if graph == 'Boxplot':
-#                     BoxPlot(rm_outlier, selected_column)
-
-#                     st.write(f'{st.session_state.current_df.shape[0]-rm_outlier.shape[0]} rows were dropped.')
-#                     st.dataframe(rm_outlier)
-#                     st.write(rm_outlier.shape)
-
-#                     rm_outlier.to_csv("Prepared Dataset.csv", index=False)
-#                     st.write(st.session_state.current_df.shape)
-
-#                 elif graph == 'Histogram':
-#                     Histogram(rm_outlier, selected_column)
-
-#                     st.write(f'{st.session_state.current_df.shape[0]-rm_outlier.shape[0]} rows were dropped.')
-#                     st.dataframe(rm_outlier)
-#                     st.write(rm_outlier.shape)
-
-#                     rm_outlier.to_csv("Prepared Dataset.csv", index=False)
-#                     st.write(st.session_state.current_df.shape)
-
-#                 elif graph == 'Update':
-#                     st.write("Updated!")
-
-#                 elif graph == 'Reset':
-#                     del st.session_state['current_df']
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # if st.button('Apply data preparation changes'):
-    #     st.session_state.current_df.to_csv("Prepared Dataset.csv", index=False)
-    #     del st.session_state['current_df']
-    #     st.write('Saved!')
-    # else:
-    #     st.write('Your work has not been saved!')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # st.subheader('Select Data Preparation Methods:')
-    # with st.expander("Remove outliers"):
-    #     st.subheader('Remove outliers')
-
-    #     with st.form("Data Preparation parameters selector"):
-    #         columns_list = list(data_obj.df.select_dtypes(exclude=['object']).columns)
-    #         std_coeff = st.number_input("Enter standard deviation coefficient (multiplier): ", 0.0, 3.1, 2.0, 0.1)
-    #         selected_column = st.selectbox("Select a column:", columns_list)
-    #         graph = st.radio('Select a graph:', ['Boxplot', 'Histogram'])
-    #         rm_outlier = removeOutlier(data_obj, selected_column, std_coeff)
-    #         submitted = st.form_submit_button("Create a plot")
-
-    #         if submitted:
-    #             st.write("Standard deviation: ", round(std_coeff, 2), "   Column: ", selected_column)
-    #             if graph == 'Boxplot':
-    #                 BoxPlot(rm_outlier, selected_column)
-    #             elif graph == 'Histogram':
-    #                 Histogram(rm_outlier, selected_column)
-
-    #             st.write(f'{data_obj.df.shape[0]-rm_outlier.shape[0]} rows were dropped.')
-    #             st.dataframe(rm_outlier)
-    #             st.write(rm_outlier.shape)
-
-    #             rm_outlier.to_csv("Prepared Dataset.csv", index=False)
-
-
-
-
-
-# syncMachine = pd.read_csv("D:\MAIT21\OOP\Data\Regression\synchronous_machine.csv", delimiter=';', decimal=',')
-# syncMachine = removeOutlier(syncMachine, 'If', 2)
-# print(f'Dataframe size after filtering = {syncMachine.size}') # also we can print the size of the dataset after filtering
-# syncMachine.If.hist() # we can plot the histogram after filtering
-# plt.show()

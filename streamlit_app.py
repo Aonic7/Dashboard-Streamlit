@@ -4,8 +4,6 @@ from io import StringIO
 from data_preview import data_preview_run
 from data_preparation import data_preparation_run
 
-
-
 class DataObject():
     def __init__(self, df=None, filesize=None):
       self.df = df
@@ -16,7 +14,22 @@ class Interface():
     def __init__(self):
       pass
     
-    # @classmethod
+    # # @classmethod
+    # def side_bar(cls, dt_obj):
+    #   filename = st.sidebar.file_uploader("Upload a data file", type=(["csv", "data"]))                   # Accepts .csv and .data
+    #   if filename is not None:                                                                            # Work with global variables  and 'filesize                                                                            # Try coma as a separator and proc an error if separator is different
+    #     try:                                                                                            # Read data into a dataframe while recognizing a separator using 're'
+    #         dt_obj.df = pd.read_csv(filename, sep=';|,', decimal=',', engine='python')                  # Exception for ';' separator                                                                       
+    #         dt_obj.filesize = dt_obj.df.size
+    #     except:
+    #         filename.seek(0)
+    #         filename = filename.read()
+    #         filename = str(filename,'utf-8')
+    #         filename = StringIO(filename)
+    #         dt_obj.df = pd.read_csv(filename, sep=';', decimal=',', index_col = False)
+    #         dt_obj.filesize = dt_obj.df.size
+
+        # @classmethod
     def side_bar(cls, dt_obj):
       filename = st.sidebar.file_uploader("Upload a data file", type=(["csv", "data"]))                   # Accepts .csv and .data
       if filename is not None:                                                                            # Work with global variables  and 'filesize                                                                            # Try coma as a separator and proc an error if separator is different
@@ -30,6 +43,14 @@ class Interface():
             filename = StringIO(filename)
             dt_obj.df = pd.read_csv(filename, sep=';', decimal=',', index_col = False)
             dt_obj.filesize = dt_obj.df.size
+
+        for col in dt_obj.df.columns:
+          if dt_obj.df[col].dtype == 'object':
+            try:
+              dt_obj.df[col] = pd.to_datetime(dt_obj.df[col])
+            except ValueError:
+              pass
+      
 
         menu = ['Data Preview', 'Data Preparation', 'Classification', 'Regression']
         navigation = st.sidebar.selectbox(label="Select menu", options=menu)
