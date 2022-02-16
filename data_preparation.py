@@ -104,7 +104,7 @@ def data_preparation_run(data_obj):
 
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;}</style>', unsafe_allow_html=True)
     
-    dp_method = st.radio(label = 'Data Prep Method', options = ['Remove outliers','Interpolation','Smoothing'])
+    dp_method = st.radio(label = 'Data Prep Method', options = ['Remove outliers','Smoothing','Interpolation'])
     
     if dp_method == 'Remove outliers':
         rmo_radio = st.radio(label = 'Remove outliers method',
@@ -303,6 +303,11 @@ def data_preparation_run(data_obj):
                     current_df.to_csv("Prepared Dataset.csv", index=False)
 
     with col2:
+        st.subheader('Current dataframe')
+        st.dataframe(current_df)
+        st.write(current_df.shape)
+
+    with col3:
         st.subheader('Resulting dataframe')
         if dp_method == 'Remove outliers' and rmo_radio == 'Std':
             st.dataframe(rm_outlier.reset_index(drop=True))
@@ -320,8 +325,4 @@ def data_preparation_run(data_obj):
             st.dataframe(moving_ave.reset_index(drop=True))
             st.write(moving_ave.shape)
             
-    
-    with col3:
-        st.subheader('Current dataframe')
-        st.dataframe(current_df)
-        st.write(current_df.shape)
+

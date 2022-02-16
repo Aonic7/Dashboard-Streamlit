@@ -25,7 +25,7 @@ def data_preview_run(data_obj):
     
     with col3:
         st.subheader("Data types")
-        st.dataframe(data_obj.df.dtypes)
+        st.dataframe(data_obj.df.dtypes.astype(str))
         
     with col4:
         st.subheader("Correlation")
