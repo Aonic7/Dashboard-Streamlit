@@ -37,6 +37,12 @@ def Histogram(dataframe, column):
     sns.histplot(data=dataframe, x=column)
     st.pyplot(fig)
 
+def ScatterPlot(initdf, dataframe, column1, column2):
+    fig = plt.figure(figsize=(10, 4))
+    sns.scatterplot(data=initdf, x=column1, y=column2)
+    sns.scatterplot(data=dataframe, x=column1, y=column2)
+    st.pyplot(fig)
+
 def removeOutlier(df, columnName, n):
     mean = df[columnName].mean()
     std = df[columnName].std()  
@@ -116,7 +122,7 @@ def data_preparation_run(data_obj):
             with st.container():
                 st.subheader('Remove outliers using standard deviation')
 
-                cc1, cc2, cc3 = st.columns(3)
+                cc1, cc2, cc3, cc4 = st.columns(4)
                 with cc1:
                     columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
                     std_coeff = st.number_input("Enter standard deviation coefficient (multiplier): ", 0.0, 3.1, 2.0, 0.1)
@@ -125,20 +131,26 @@ def data_preparation_run(data_obj):
                 with cc2:
                     st.write(" ")
                     st.write(" ")
+                    scatter_plot = st.button('Scatter plot')
                     bp = st.button("Boxplot")
                     hist = st.button("Histogram")
+
                 with cc3:
+                    scatter_column2 = st.selectbox('Select 2nd column for the scatter plot', [s for s in columns_list if s != selected_column])
+
+                with cc4:
                     st.write(" ")
                     st.write(" ")
                     st.warning(f'If applied, {current_df.shape[0]-rm_outlier.shape[0]} rows will be removed.')
-                        
+                
+                if scatter_plot:
+                    ScatterPlot(data_obj.df, rm_outlier.reset_index(drop=True), selected_column, scatter_column2)
+
                 if bp:
-                    #BoxPlot(rm_outlier.reset_index(drop=True), selected_column)
                     DoubleBoxPlot(data_obj.df, rm_outlier.reset_index(drop=True), selected_column)
                 if hist:
                     Histogram(rm_outlier.reset_index(drop=True), selected_column)
 
-                #current_df = rm_outlier.reset_index(drop=True)
                 if st.button("Save remove outlier results"):
                     current_df = rm_outlier.reset_index(drop=True)
                     current_df.to_csv("Prepared Dataset.csv", index=False)
@@ -231,10 +243,10 @@ def data_preparation_run(data_obj):
                     plot_basic = st.button('Plot')
                     bp = st.button("Boxplot")
                     hist = st.button("Histogram")
-                with cc3:
-                    st.write(" ")
-                    st.write(" ")
-                    st.warning(f'If applied, {current_df.shape[0]-median_filt.shape[0]} rows will be removed.')
+                # with cc3:
+                #     st.write(" ")
+                #     st.write(" ")
+                #     st.warning(f'If applied, {current_df.shape[0]-median_filt.shape[0]} rows will be removed.')
                 
                 if plot_basic:
                     doubleLinePlot(data_obj.df, median_filt.reset_index(drop=True), selected_column)
