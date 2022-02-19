@@ -2,6 +2,8 @@
 import pandas as pd #to work with dataframes
 import streamlit as st #streamlit backend
 import numpy as np #to work with arrays and series
+import os
+from io import StringIO
 
 from scipy.signal import medfilt
 
@@ -11,6 +13,21 @@ from visualization import doubleLinePlot, DoubleBoxPlot, Histogram, ScatterPlot
 # Remove outliers import
 from dp_remove_outliers import removeOutlier, removeOutlier_q, removeOutlier_z
 
+def import_dset(data_obj):
+    try:
+        a = pd.read_csv('Filtered Dataset.csv', index_col = None)
+        if a.equals(data_obj.df) == False:
+            current_df = a
+            #st.sidebar.write("1")
+            #st.sidebar.write(a.equals(data_obj.df))
+        else:
+            current_df = data_obj.df
+            #st.sidebar.write("2")
+    except:
+        current_df = data_obj.df
+        #st.sidebar.write("3")
+
+    return current_df
 
 def moving_average(dataframe, column, filter_length):
     df_prep = dataframe.copy()
@@ -42,18 +59,30 @@ def median_filter(dataframe, column, filter_length):
 
 
 
-def data_preparation_run(data_obj):
-    st.header("DATA PREPARATION")
+def smoothing_and_filtering_run(data_obj):
+    st.header("Smoothing and filtering")
 
     # A button to circumvent loading the dataset using in the last session
     if st.sidebar.button("Reset dataframe to the initial one"):
-        data_obj.df.to_csv("Prepared Dataset.csv", index=False)
+        data_obj.df.to_csv("Filtered Dataset.csv", index=False)
 
+    # 1
     # Loading the appropriate dataset
-    if pd.read_csv('Prepared Dataset.csv').shape[0] < data_obj.df.shape[0]:
-        current_df = pd.read_csv('Prepared Dataset.csv', index_col = None)
-    else:
-        current_df = data_obj.df
+    #if pd.read_csv('Filtered Dataset.csv').shape[0] < data_obj.df.shape[0]:
+        #current_df = pd.read_csv('Filtered Dataset.csv', index_col = None)
+    #else:
+        #current_df = data_obj.df
+
+    # 2
+    # try:
+    #     if pd.read_csv('Filtered Dataset.csv').shape[0] < data_obj.df.shape[0]:
+    #         current_df = pd.read_csv('Filtered Dataset.csv', index_col = None)
+    #     else:
+    #         current_df = data_obj.df
+    # except:
+    #     current_df = data_obj.df
+
+    current_df = import_dset(data_obj)
 
     # Overview of the dataframes
     col1, col2, col3 = st.columns(3)
@@ -68,7 +97,7 @@ def data_preparation_run(data_obj):
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;}</style>', unsafe_allow_html=True)
     
     # Main data preparation method radio selector
-    dp_method = st.radio(label = 'Data Prep Method', options = ['Remove outliers','Smoothing','Interpolation'])
+    dp_method = st.radio(label = 'Filtering Method', options = ['Remove outliers','Smoothing','Interpolation'])
     
     # Selected 'Remove outliers'
     if dp_method == 'Remove outliers':
@@ -114,9 +143,9 @@ def data_preparation_run(data_obj):
                     Histogram(rm_outlier.reset_index(drop=True), selected_column)
 
                 # Save results to csv
-                if st.button("Save remove outlier results"):
+                if st.button("Save intermediate remove outlier results (std)"):
                     current_df = rm_outlier.reset_index(drop=True)
-                    current_df.to_csv("Prepared Dataset.csv", index=False)
+                    current_df.to_csv("Filtered Dataset.csv", index=False)
 
         # Quantile range method selected
         if rmo_radio == 'Q':
@@ -156,9 +185,9 @@ def data_preparation_run(data_obj):
                     Histogram(q_outlier.reset_index(drop=True), selected_column)
 
                 # Save results to csv
-                if st.button("Save remove outlier results"):
+                if st.button("Save intermediate remove outlier results (Q)"):
                     current_df = q_outlier.reset_index(drop=True)
-                    current_df.to_csv("Prepared Dataset.csv", index=False)
+                    current_df.to_csv("Filtered Dataset.csv", index=False)
 
         # Z-score method selected
         if rmo_radio == 'Z':
@@ -197,9 +226,9 @@ def data_preparation_run(data_obj):
                     Histogram(z_outlier.reset_index(drop=True), selected_column)
 
                 # Save results to csv
-                if st.button("Save remove outlier results"):
+                if st.button("Save intermediate remove outlier results (Z)"):
                     current_df = z_outlier.reset_index(drop=True)
-                    current_df.to_csv("Prepared Dataset.csv", index=False)
+                    current_df.to_csv("Filtered Dataset.csv", index=False)
 
 
 
@@ -243,9 +272,9 @@ def data_preparation_run(data_obj):
                 if hist:
                     Histogram(median_filt.reset_index(drop=True), selected_column)
 
-                if st.button("Save remove outlier results"):
+                if st.button("Save intermediate smoothing results (median filter)"):
                     current_df = median_filt.reset_index(drop=True)
-                    current_df.to_csv("Prepared Dataset.csv", index=False)
+                    current_df.to_csv("Filtered Dataset.csv", index=False)
 
         if smooth_radio == 'Moving average':
             with st.container():
@@ -286,7 +315,7 @@ def data_preparation_run(data_obj):
 
                 if st.button("Save remove outlier results"):
                     current_df = moving_ave.reset_index(drop=True)
-                    current_df.to_csv("Prepared Dataset.csv", index=False)
+                    current_df.to_csv("Filtered Dataset.csv", index=False)
 
     # Current dataframe display
     with col2:
@@ -316,5 +345,55 @@ def data_preparation_run(data_obj):
         if dp_method == 'Smoothing' and smooth_radio == 'Moving average':
             st.dataframe(moving_ave.reset_index(drop=True))
             st.write(moving_ave.shape)
-            
 
+
+    try:
+        a = pd.read_csv('Filtered Dataset.csv')
+        if a.equals(current_df):
+            st.sidebar.warning("Currently saved results are equal to the current dataframe")
+        else:
+            st.dataframe(a.dtypes.astype(str))
+            st.dataframe(current_df.dtypes.astype(str))
+    except:
+        st.sidebar.success("You haven't made any changes to the original dataframe yet")
+    
+
+    
+    st.sidebar.subheader("Finalize smoothing & filtering changes:")
+    if st.sidebar.button("Finalize!"):
+        current_df.to_csv("Preprocessing dataset.csv", index=False)
+        if os.path.isfile("Filtered Dataset.csv"):
+            os.remove("Filtered Dataset.csv")
+        st.sidebar.success("Saved!")
+    else:
+        st.sidebar.error("You have unsaved changes")
+
+    # try:
+    #     b = pd.read_csv('Preprocessing dataset.csv')
+    #     if b.equals(current_df):
+    #         st.sidebar.success("Your changes are finalized")
+    #     else:
+    #         st.sidebar.error("Your changes are not finalized.")
+    # except:
+    #     st.sidebar.warning("Bleh")
+
+
+
+    # st.sidebar.subheader("Finalize changes:")
+    # if st.sidebar.button("Finalize!"):
+    #     current_df.to_csv("Preprocessing dataset.csv", index=False)
+    #     if os.path.isfile("Filtered Dataset.csv"):
+    #         os.remove("Filtered Dataset.csv")
+    #     st.sidebar.success("Saved!")
+    # else:
+    #     st.sidebar.error("You have unsaved changes")
+
+    # try:
+    #     a = pd.read_csv('Filtered Dataset.csv')
+    #     if a.equals(current_df):
+    #         st.sidebar.write("Filtered equals current")
+    #     else:
+    #         st.dataframe(a.dtypes.astype(str))
+    #         st.dataframe(current_df.dtypes.astype(str))
+    # except:
+    #     st.sidebar.write("")

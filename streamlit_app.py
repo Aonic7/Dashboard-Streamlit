@@ -5,7 +5,8 @@ from io import StringIO #to read data files as .csv correctly
 
 # Dashboard apps
 from data_preview import data_preview_run #page 1: Data Preview
-from data_preparation import data_preparation_run #page 2: Data Preparation
+from smoothing_and_filtering import smoothing_and_filtering_run #page 2: Smoothing and Filtering
+from dp_scaler_split import scaler_split_run #page 3: Scaling and Train-test split
 
 # Data object class
 class DataObject():
@@ -53,16 +54,17 @@ class Interface():
             dt_obj.df = pd.read_csv(filename, sep=';', decimal=',', index_col = False)
             dt_obj.filesize = dt_obj.df.size
 
+
         # Attempts to convert all numerical columns to 'datetime' format. Relevant for timeseries.
-        for col in dt_obj.df.columns:
-          if dt_obj.df[col].dtype == 'object':
-            try:
-              dt_obj.df[col] = pd.to_datetime(dt_obj.df[col])
-            except ValueError:
-              pass
+        # for col in dt_obj.df.columns:
+        #   if dt_obj.df[col].dtype == 'object':
+        #     try:
+        #       dt_obj.df[col] = pd.to_datetime(dt_obj.df[col])
+        #     except ValueError:
+        #       pass
       
         # Side bar navigation menu with a select box
-        menu = ['Data Preview', 'Data Preparation', 'Classification', 'Regression']
+        menu = ['Data Preview', 'Smoothing and filtering', 'Data Preparation', 'Classification', 'Regression']
         navigation = st.sidebar.selectbox(label="Select menu", options=menu)
 
         # Runs 'Data Preview' app
@@ -70,9 +72,13 @@ class Interface():
           with st.container():
            data_preview_run(dt_obj)
 
+        # Runs 'Smoothing and filtering' app
+        if navigation == 'Smoothing and filtering':
+          smoothing_and_filtering_run(dt_obj)
+
         # Runs 'Data Preparation' app
         if navigation == 'Data Preparation':
-          data_preparation_run(dt_obj)
+          scaler_split_run(dt_obj)
         
         # Runs 'Classification' app
         if navigation == 'Classification':
