@@ -1,65 +1,33 @@
-import matplotlib.pyplot as plt
-import pandas as pd
-import streamlit as st
-import seaborn as sns
-import numpy as np
-import scipy.stats as stats
+# General import section
+import pandas as pd #to work with dataframes
+import streamlit as st #streamlit backend
+import numpy as np #to work with arrays and series
+import os
+from io import StringIO
+
 from scipy.signal import medfilt
 
+# Visualization import section
+from visualization import doubleLinePlot, DoubleBoxPlot, Histogram, ScatterPlot
 
-def linePlot_Out_recogn(dataframe, column):
-    fig = plt.figure(figsize=(10, 4))
-    sns.lineplot(y = column, x = [i for i in range(len(dataframe[column]))], data = dataframe)
-    st.pyplot(fig)
+# Remove outliers import
+from dp_remove_outliers import removeOutlier, removeOutlier_q, removeOutlier_z
 
-def doubleLinePlot(initdf, dataframe, column):
-    fig = plt.figure(figsize=(10, 4))
-    sns.lineplot(y = column, x = [i for i in range(len(initdf[column]))], data = initdf)
-    sns.lineplot(y = column, x = [i for i in range(len(dataframe[column]))], data = dataframe)
-    st.pyplot(fig)
+def import_dset(data_obj):
+    try:
+        a = pd.read_csv('Filtered Dataset.csv', index_col = None)
+        if a.equals(data_obj.df) == False:
+            current_df = a
+            #st.sidebar.write("1")
+            #st.sidebar.write(a.equals(data_obj.df))
+        else:
+            current_df = data_obj.df
+            #st.sidebar.write("2")
+    except:
+        current_df = data_obj.df
+        #st.sidebar.write("3")
 
-def BoxPlot(dataframe, column):
-    fig = plt.figure(figsize=(10, 4))
-    sns.boxplot(y = dataframe[column], orient='v')
-    st.pyplot(fig)
-
-def DoubleBoxPlot(initdf, dataframe, column):
-    fig, axes = plt.subplots(2,1, sharex=True, figsize=(10,4))
-    sns.boxplot(initdf[column], ax=axes[0], color='skyblue', orient="v")
-    axes[0].set_title("Original dataframe")
-    sns.boxplot(dataframe[column], ax=axes[1], color='green', orient="v")
-    axes[1].set_title("Resulting dataframe")
-    fig.tight_layout()
-    st.pyplot(fig)
-
-def Histogram(dataframe, column):
-    fig = plt.figure(figsize=(10, 4))
-    sns.histplot(data=dataframe, x=column)
-    st.pyplot(fig)
-
-def ScatterPlot(initdf, dataframe, column1, column2):
-    fig = plt.figure(figsize=(10, 4))
-    sns.scatterplot(data=initdf, x=column1, y=column2)
-    sns.scatterplot(data=dataframe, x=column1, y=column2)
-    st.pyplot(fig)
-
-def removeOutlier(df, columnName, n):
-    mean = df[columnName].mean()
-    std = df[columnName].std()  
-    fromVal = mean - n * std 
-    toVal = mean + n * std 
-    filtered = df[(df[columnName] >= fromVal) & (df[columnName] <= toVal)] #apply the filtering formula to the column
-    return filtered
-
-def removeOutlier_q(df, columnName, n1, n2):
-    lower_quantile, upper_quantile = df[columnName].quantile([n1, n2]) #quantiles are generally expressed as a fraction (from 0 to 1)
-    filtered = df[(df[columnName] > lower_quantile) & (df[columnName] < upper_quantile)]
-    return filtered
-
-def removeOutlier_z(df, columnName, n):
-    z = np.abs(stats.zscore(df[columnName])) #find the Z-score for the column
-    filtered = df[(z < n)] #apply the filtering formula to the column
-    return filtered #return the filtered dataset
+    return current_df
 
 def moving_average(dataframe, column, filter_length):
     df_prep = dataframe.copy()
@@ -91,38 +59,63 @@ def median_filter(dataframe, column, filter_length):
 
 
 
-def data_preparation_run(data_obj):
-    st.header("DATA PREPARATION")
+def smoothing_and_filtering_run(data_obj):
+    st.header("Smoothing and filtering")
 
+    # A button to circumvent loading the dataset using in the last session
     if st.sidebar.button("Reset dataframe to the initial one"):
-        data_obj.df.to_csv("Prepared Dataset.csv", index=False)
+        data_obj.df.to_csv("Filtered Dataset.csv", index=False)
 
-    if pd.read_csv('Prepared Dataset.csv').shape[0] < data_obj.df.shape[0]:
-        current_df = pd.read_csv('Prepared Dataset.csv', index_col = None)
-    else:
-        current_df = data_obj.df
+    # 1
+    # Loading the appropriate dataset
+    #if pd.read_csv('Filtered Dataset.csv').shape[0] < data_obj.df.shape[0]:
+        #current_df = pd.read_csv('Filtered Dataset.csv', index_col = None)
+    #else:
+        #current_df = data_obj.df
 
+    # 2
+    # try:
+    #     if pd.read_csv('Filtered Dataset.csv').shape[0] < data_obj.df.shape[0]:
+    #         current_df = pd.read_csv('Filtered Dataset.csv', index_col = None)
+    #     else:
+    #         current_df = data_obj.df
+    # except:
+    #     current_df = data_obj.df
+
+    current_df = import_dset(data_obj)
+
+    # Overview of the dataframes
     col1, col2, col3 = st.columns(3)
+
+    # Original dataframe display
     with col1:
         st.subheader('Original dataframe')
         st.dataframe(data_obj.df)
         st.write(data_obj.df.shape)
 
+    # Horizontal styling of radio buttons
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;}</style>', unsafe_allow_html=True)
     
-    dp_method = st.radio(label = 'Data Prep Method', options = ['Remove outliers','Smoothing','Interpolation'])
+    # Main data preparation method radio selector
+    dp_method = st.radio(label = 'Filtering Method', options = ['Remove outliers','Smoothing','Interpolation'])
     
+    # Selected 'Remove outliers'
     if dp_method == 'Remove outliers':
+
+        # Specifying remove outliers submethods
         rmo_radio = st.radio(label = 'Remove outliers method',
                              options = ['Std','Q','Z'])
 
+        # Standard deviation method selected
         if rmo_radio == 'Std':
 
-
+            # Standard deviation method main
             with st.container():
                 st.subheader('Remove outliers using standard deviation')
 
                 cc1, cc2, cc3, cc4 = st.columns(4)
+
+                # Input settings
                 with cc1:
                     columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
                     std_coeff = st.number_input("Enter standard deviation coefficient (multiplier): ", 0.0, 3.1, 2.0, 0.1)
@@ -134,33 +127,36 @@ def data_preparation_run(data_obj):
                     scatter_plot = st.button('Scatter plot')
                     bp = st.button("Boxplot")
                     hist = st.button("Histogram")
-
                 with cc3:
                     scatter_column2 = st.selectbox('Select 2nd column for the scatter plot', [s for s in columns_list if s != selected_column])
-
                 with cc4:
                     st.write(" ")
                     st.write(" ")
                     st.warning(f'If applied, {current_df.shape[0]-rm_outlier.shape[0]} rows will be removed.')
                 
+                # Plotting
                 if scatter_plot:
                     ScatterPlot(data_obj.df, rm_outlier.reset_index(drop=True), selected_column, scatter_column2)
-
                 if bp:
                     DoubleBoxPlot(data_obj.df, rm_outlier.reset_index(drop=True), selected_column)
                 if hist:
                     Histogram(rm_outlier.reset_index(drop=True), selected_column)
 
-                if st.button("Save remove outlier results"):
+                # Save results to csv
+                if st.button("Save intermediate remove outlier results (std)"):
                     current_df = rm_outlier.reset_index(drop=True)
-                    current_df.to_csv("Prepared Dataset.csv", index=False)
+                    current_df.to_csv("Filtered Dataset.csv", index=False)
 
+        # Quantile range method selected
         if rmo_radio == 'Q':
 
+            # Quantile range method main
             with st.container():
                 st.subheader('Remove outliers using quantiles')
 
-                cc1, cc2, cc3 = st.columns(3)
+                cc1, cc2, cc3, cc4 = st.columns(4)
+
+                # Input settings
                 with cc1:
                     columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
                     q_values = st.slider('Select a range of quantiles',
@@ -170,56 +166,71 @@ def data_preparation_run(data_obj):
                 with cc2:
                     st.write(" ")
                     st.write(" ")
+                    scatter_plot = st.button('Scatter plot')
                     bp = st.button("Boxplot")
                     hist = st.button("Histogram")
                 with cc3:
+                    scatter_column2 = st.selectbox('Select 2nd column for the scatter plot', [s for s in columns_list if s != selected_column])
+                with cc4:
                     st.write(" ")
                     st.write(" ")
                     st.warning(f'If applied, {current_df.shape[0]-q_outlier.shape[0]} rows will be removed.')
                         
+                # Plotting
+                if scatter_plot:
+                    ScatterPlot(data_obj.df, q_outlier.reset_index(drop=True), selected_column, scatter_column2)
                 if bp:
                     DoubleBoxPlot(data_obj.df, q_outlier.reset_index(drop=True), selected_column)
                 if hist:
                     Histogram(q_outlier.reset_index(drop=True), selected_column)
 
-                #current_df = rm_outlier.reset_index(drop=True)
-                if st.button("Save remove outlier results"):
+                # Save results to csv
+                if st.button("Save intermediate remove outlier results (Q)"):
                     current_df = q_outlier.reset_index(drop=True)
-                    current_df.to_csv("Prepared Dataset.csv", index=False)
+                    current_df.to_csv("Filtered Dataset.csv", index=False)
 
+        # Z-score method selected
         if rmo_radio == 'Z':
 
+            # Z-score method main
             with st.container():
                 st.subheader('Remove outliers using Z-score')
 
-                cc1, cc2, cc3 = st.columns(3)
+                cc1, cc2, cc3, cc4 = st.columns(4)
+
+                # Input settings
                 with cc1:
                     columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
                     std_coeff = st.number_input("Enter standard deviation coefficient: ", 0.0, 3.1, 2.0, 0.1)
-                    #ask Marina about min and max values
                     selected_column = st.selectbox("Select a column:", columns_list)
                     z_outlier = removeOutlier_z(current_df, selected_column, std_coeff)
-                    
                 with cc2:
                     st.write(" ")
                     st.write(" ")
+                    scatter_plot = st.button('Scatter plot')
                     bp = st.button("Boxplot")
                     hist = st.button("Histogram")
                 with cc3:
+                    scatter_column2 = st.selectbox('Select 2nd column for the scatter plot', [s for s in columns_list if s != selected_column])
+                with cc4:
                     st.write(" ")
                     st.write(" ")
                     st.warning(f'If applied, {current_df.shape[0]-z_outlier.shape[0]} rows will be removed.')
                         
+                # Plotting
+                if scatter_plot:
+                    ScatterPlot(data_obj.df, z_outlier.reset_index(drop=True), selected_column, scatter_column2)
                 if bp:
                     DoubleBoxPlot(data_obj.df, z_outlier.reset_index(drop=True), selected_column)
-
                 if hist:
                     Histogram(z_outlier.reset_index(drop=True), selected_column)
 
-                #current_df = rm_outlier.reset_index(drop=True)
-                if st.button("Save remove outlier results"):
+                # Save results to csv
+                if st.button("Save intermediate remove outlier results (Z)"):
                     current_df = z_outlier.reset_index(drop=True)
-                    current_df.to_csv("Prepared Dataset.csv", index=False)
+                    current_df.to_csv("Filtered Dataset.csv", index=False)
+
+
 
     if dp_method == 'Smoothing':
         smooth_radio = st.radio(label = 'Smoothing',
@@ -230,13 +241,12 @@ def data_preparation_run(data_obj):
                 st.subheader('Median filter')
 
                 cc1, cc2, cc3 = st.columns(3)
+
                 with cc1:
                     columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
                     filter_len = st.slider('Length of the window', 3, 7, 5, 2)
                     selected_column = st.selectbox("Select a column:", columns_list)
                     median_filt = median_filter(current_df, selected_column, filter_len)
-                
-                    
                 with cc2:
                     st.write(" ")
                     st.write(" ")
@@ -257,30 +267,27 @@ def data_preparation_run(data_obj):
                     # l = {'col1': medfilt(data_obj.df[selected_column], filter_len)}
                     # lf = pd.DataFrame(data=l)
                     # st.write(lf.value_counts(ascending=False))
-
-
                 if bp:
                     DoubleBoxPlot(data_obj.df, median_filt.reset_index(drop=True), selected_column)
-
                 if hist:
                     Histogram(median_filt.reset_index(drop=True), selected_column)
 
-                #current_df = rm_outlier.reset_index(drop=True)
-                if st.button("Save remove outlier results"):
+                if st.button("Save intermediate smoothing results (median filter)"):
                     current_df = median_filt.reset_index(drop=True)
-                    current_df.to_csv("Prepared Dataset.csv", index=False)
+                    current_df.to_csv("Filtered Dataset.csv", index=False)
+
         if smooth_radio == 'Moving average':
             with st.container():
                 st.subheader('Moving average')
 
                 cc1, cc2, cc3 = st.columns(3)
+
                 with cc1:
                     columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
                     filter_len = st.slider('Length of the window', 3, 7, 5, 2)
                     selected_column = st.selectbox("Select a column:", columns_list)
                     # median_filt = median_filter(current_df, selected_column, filter_len)
                     moving_ave = moving_average(current_df, selected_column, filter_len)
-                    
                 with cc2:
                     st.write(" ")
                     st.write(" ")
@@ -301,26 +308,26 @@ def data_preparation_run(data_obj):
                     # l = {'col1': medfilt(data_obj.df[selected_column], filter_len)}
                     # lf = pd.DataFrame(data=l)
                     # st.write(lf.value_counts(ascending=False))
-
-
                 if bp:
                     DoubleBoxPlot(data_obj.df, moving_ave.reset_index(drop=True), selected_column)
-
                 if hist:
                     Histogram(moving_ave.reset_index(drop=True), selected_column)
 
-                #current_df = rm_outlier.reset_index(drop=True)
                 if st.button("Save remove outlier results"):
                     current_df = moving_ave.reset_index(drop=True)
-                    current_df.to_csv("Prepared Dataset.csv", index=False)
+                    current_df.to_csv("Filtered Dataset.csv", index=False)
 
+    # Current dataframe display
     with col2:
         st.subheader('Current dataframe')
         st.dataframe(current_df)
         st.write(current_df.shape)
 
+    # Resulting dataframe display
     with col3:
         st.subheader('Resulting dataframe')
+
+        # For each 'Remove outliers' case
         if dp_method == 'Remove outliers' and rmo_radio == 'Std':
             st.dataframe(rm_outlier.reset_index(drop=True))
             st.write(rm_outlier.shape)
@@ -330,11 +337,63 @@ def data_preparation_run(data_obj):
         if dp_method == 'Remove outliers' and rmo_radio == 'Z':
             st.dataframe(z_outlier.reset_index(drop=True))
             st.write(z_outlier.shape)
+
+        # For each 'Smoothing' case
         if dp_method == 'Smoothing' and smooth_radio == 'Median filter':
             st.dataframe(median_filt.reset_index(drop=True))
             st.write(median_filt.shape)
         if dp_method == 'Smoothing' and smooth_radio == 'Moving average':
             st.dataframe(moving_ave.reset_index(drop=True))
             st.write(moving_ave.shape)
-            
 
+
+    try:
+        a = pd.read_csv('Filtered Dataset.csv')
+        if a.equals(current_df):
+            st.sidebar.warning("Currently saved results are equal to the current dataframe")
+        else:
+            st.dataframe(a.dtypes.astype(str))
+            st.dataframe(current_df.dtypes.astype(str))
+    except:
+        st.sidebar.success("You haven't made any changes to the original dataframe yet")
+    
+
+    
+    st.sidebar.subheader("Finalize smoothing & filtering changes:")
+    if st.sidebar.button("Finalize!"):
+        current_df.to_csv("Preprocessing dataset.csv", index=False)
+        if os.path.isfile("Filtered Dataset.csv"):
+            os.remove("Filtered Dataset.csv")
+        st.sidebar.success("Saved!")
+    else:
+        st.sidebar.error("You have unsaved changes")
+
+    # try:
+    #     b = pd.read_csv('Preprocessing dataset.csv')
+    #     if b.equals(current_df):
+    #         st.sidebar.success("Your changes are finalized")
+    #     else:
+    #         st.sidebar.error("Your changes are not finalized.")
+    # except:
+    #     st.sidebar.warning("Bleh")
+
+
+
+    # st.sidebar.subheader("Finalize changes:")
+    # if st.sidebar.button("Finalize!"):
+    #     current_df.to_csv("Preprocessing dataset.csv", index=False)
+    #     if os.path.isfile("Filtered Dataset.csv"):
+    #         os.remove("Filtered Dataset.csv")
+    #     st.sidebar.success("Saved!")
+    # else:
+    #     st.sidebar.error("You have unsaved changes")
+
+    # try:
+    #     a = pd.read_csv('Filtered Dataset.csv')
+    #     if a.equals(current_df):
+    #         st.sidebar.write("Filtered equals current")
+    #     else:
+    #         st.dataframe(a.dtypes.astype(str))
+    #         st.dataframe(current_df.dtypes.astype(str))
+    # except:
+    #     st.sidebar.write("")

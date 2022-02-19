@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 from io import StringIO
 from data_preview import data_preview_run
-from data_preparation import data_preparation_run
+from smoothing_and_filtering import smoothing_and_filtering_run
 
 @st.cache(hash_funcs={StringIO: StringIO.getvalue})
 def load_data(file_uploaded):
@@ -80,7 +80,7 @@ class Interface():
 
 
         if navigation == 'Data Preparation':
-          data_preparation_run(dt_obj)
+          smoothing_and_filtering_run(dt_obj)
         
         if navigation == 'Classification':
           st.header("CLASSIFICATION")
