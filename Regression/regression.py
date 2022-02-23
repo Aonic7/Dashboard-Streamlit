@@ -6,3 +6,11 @@ import streamlit as st
 import seaborn as sns
 from io import StringIO
 from pandas.api.types import is_numeric_dtype
+
+def main():
+    st.header('Regression Header')
+
+
+
+if __name__ == "__main__":
+   main()

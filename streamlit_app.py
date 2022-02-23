@@ -4,10 +4,14 @@ import streamlit as st #streamlit backend
 from io import StringIO #to read data files as .csv correctly
 
 # Dashboard apps
-from data_preview import data_preview_run #page 1: Data Preview
-from smoothing_and_filtering import smoothing_and_filtering_run #page 2: Smoothing and Filtering
-from dp_scaler_split import scaler_split_run #page 3: Scaling and Train-test split
 
+#App import
+#from Data_Preview import data_preview
+import Data_Preview
+import Smoothing_and_Filtering
+import Scaling
+import Regression
+import Classification
 # Data object class
 class DataObject():
     """
@@ -70,23 +74,23 @@ class Interface():
         # Runs 'Data Preview' app
         if navigation == 'Data Preview':
           with st.container():
-           data_preview_run(dt_obj)
+           Data_Preview.data_preview(dt_obj)
 
         # Runs 'Smoothing and filtering' app
         if navigation == 'Smoothing and filtering':
-          smoothing_and_filtering_run(dt_obj)
+          Smoothing_and_Filtering.smoothing_and_filtering(dt_obj)
 
         # Runs 'Data Preparation' app
         if navigation == 'Data Preparation':
-          scaler_split_run(dt_obj)
+          Scaling.scaler(dt_obj)
         
         # Runs 'Classification' app
         if navigation == 'Classification':
-          st.header("CLASSIFICATION")
+          Classification.classification()  
 
         # Runs 'Regression' app
         if navigation == 'Regression':
-          st.header('REGRESSION')
+          Regression.regression()
          
 
 def main():

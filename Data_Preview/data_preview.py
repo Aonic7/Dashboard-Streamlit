@@ -6,9 +6,9 @@ import streamlit as st #streamlit backend
 import seaborn as sns #for plotting
 import matplotlib.pyplot as plt #to configure plots
 # Importing specific plots
-from visualization import Heatmap
+from Visualization.visualization import Heatmap
 
-def data_preview_run(data_obj):
+def main(data_obj):
     """Data Preview main
 
     Args:
@@ -38,3 +38,7 @@ def data_preview_run(data_obj):
     # Correlation matrix
     st.subheader("Correlation heatmap")
     Heatmap(data_obj)
+
+
+if __name__ == "__main__":
+   main()

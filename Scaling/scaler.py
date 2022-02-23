@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split #for splitting the data int
 from sklearn.preprocessing import StandardScaler #for feature scaling
 from sklearn.preprocessing import MinMaxScaler
 
-def scaler_split_run(data_obj):
+def main(data_obj):
     st.header("Scaling and Train-test split")
     st.subheader("Select the dataset to work with:")
 
@@ -19,7 +19,7 @@ def scaler_split_run(data_obj):
 
     if dp_method == 'Smoothed and filtered':
         try:
-            current_df = pd.read_csv('Preprocessing dataset.csv', index_col = None)
+            current_df = pd.read_csv('Smoothing_and_Filtering//Preprocessing dataset.csv', index_col = None)
         except:
             st.error("""You did not smooth of filter the data.
                         Please go to 'Smoothing and filtering' and finalize your results.
@@ -71,6 +71,8 @@ def scaler_split_run(data_obj):
         st.write('No scaler method will be applied, proceed to the next step.')
 
 
+if __name__ == "__main__":
+   main()
 
 
     

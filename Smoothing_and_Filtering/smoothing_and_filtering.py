@@ -8,14 +8,14 @@ from io import StringIO
 from scipy.signal import medfilt
 
 # Visualization import section
-from visualization import doubleLinePlot, DoubleBoxPlot, Histogram, ScatterPlot
+from Visualization.visualization import doubleLinePlot, DoubleBoxPlot, Histogram, ScatterPlot
 
 # Remove outliers import
-from dp_remove_outliers import removeOutlier, removeOutlier_q, removeOutlier_z
+from .smoothing_and_filtering_functions import removeOutlier, removeOutlier_q, removeOutlier_z
 
 def import_dset(data_obj):
     try:
-        a = pd.read_csv('Filtered Dataset.csv', index_col = None)
+        a = pd.read_csv('Smoothing_and_Filtering//Filtered Dataset.csv', index_col = None)
         if a.equals(data_obj.df) == False:
             current_df = a
             #st.sidebar.write("1")
@@ -59,7 +59,7 @@ def median_filter(dataframe, column, filter_length):
 
 
 
-def smoothing_and_filtering_run(data_obj):
+def main(data_obj):
     st.header("Smoothing and filtering")
 
     # A button to circumvent loading the dataset using in the last session
@@ -145,7 +145,7 @@ def smoothing_and_filtering_run(data_obj):
                 # Save results to csv
                 if st.button("Save intermediate remove outlier results (std)"):
                     current_df = rm_outlier.reset_index(drop=True)
-                    current_df.to_csv("Filtered Dataset.csv", index=False)
+                    current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
 
         # Quantile range method selected
         if rmo_radio == 'Q':
@@ -187,7 +187,7 @@ def smoothing_and_filtering_run(data_obj):
                 # Save results to csv
                 if st.button("Save intermediate remove outlier results (Q)"):
                     current_df = q_outlier.reset_index(drop=True)
-                    current_df.to_csv("Filtered Dataset.csv", index=False)
+                    current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
 
         # Z-score method selected
         if rmo_radio == 'Z':
@@ -228,7 +228,7 @@ def smoothing_and_filtering_run(data_obj):
                 # Save results to csv
                 if st.button("Save intermediate remove outlier results (Z)"):
                     current_df = z_outlier.reset_index(drop=True)
-                    current_df.to_csv("Filtered Dataset.csv", index=False)
+                    current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
 
 
 
@@ -274,7 +274,7 @@ def smoothing_and_filtering_run(data_obj):
 
                 if st.button("Save intermediate smoothing results (median filter)"):
                     current_df = median_filt.reset_index(drop=True)
-                    current_df.to_csv("Filtered Dataset.csv", index=False)
+                    current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
 
         if smooth_radio == 'Moving average':
             with st.container():
@@ -315,7 +315,7 @@ def smoothing_and_filtering_run(data_obj):
 
                 if st.button("Save remove outlier results"):
                     current_df = moving_ave.reset_index(drop=True)
-                    current_df.to_csv("Filtered Dataset.csv", index=False)
+                    current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
 
     # Current dataframe display
     with col2:
@@ -348,7 +348,7 @@ def smoothing_and_filtering_run(data_obj):
 
 
     try:
-        a = pd.read_csv('Filtered Dataset.csv')
+        a = pd.read_csv("Smoothing_and_Filtering//Filtered Dataset.csv")
         if a.equals(current_df):
             st.sidebar.warning("Currently saved results are equal to the current dataframe")
         else:
@@ -361,9 +361,9 @@ def smoothing_and_filtering_run(data_obj):
     
     st.sidebar.subheader("Finalize smoothing & filtering changes:")
     if st.sidebar.button("Finalize!"):
-        current_df.to_csv("Preprocessing dataset.csv", index=False)
-        if os.path.isfile("Filtered Dataset.csv"):
-            os.remove("Filtered Dataset.csv")
+        current_df.to_csv("Smoothing_and_Filtering//Preprocessing dataset.csv", index=False)
+        if os.path.isfile("Smoothing_and_Filtering//Filtered Dataset.csv"):
+            os.remove("Smoothing_and_Filtering//Filtered Dataset.csv")
         st.sidebar.success("Saved!")
     else:
         st.sidebar.error("You have unsaved changes")
@@ -397,3 +397,6 @@ def smoothing_and_filtering_run(data_obj):
     #         st.dataframe(current_df.dtypes.astype(str))
     # except:
     #     st.sidebar.write("")
+
+if __name__ == "__main__":
+    main()
