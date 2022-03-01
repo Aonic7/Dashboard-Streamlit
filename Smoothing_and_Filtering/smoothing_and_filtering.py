@@ -1,9 +1,8 @@
 # General import section
 import pandas as pd #to work with dataframes
 import streamlit as st #streamlit backend
-import numpy as np #to work with arrays and series
 import os
-from io import StringIO
+import numpy as np
 
 from scipy.signal import medfilt
 
@@ -11,7 +10,8 @@ from scipy.signal import medfilt
 from Visualization.visualization import doubleLinePlot, DoubleBoxPlot, Histogram, ScatterPlot
 
 # Remove outliers import
-from .smoothing_and_filtering_functions import removeOutlier, removeOutlier_q, removeOutlier_z
+# from .smoothing_and_filtering_functions import removeOutlier, removeOutlier_q, removeOutlier_z
+from .smoothing_and_filtering_functions import Remove_Outliers, Smoothing
 
 def import_dset(data_obj):
     try:
@@ -29,33 +29,7 @@ def import_dset(data_obj):
 
     return current_df
 
-def moving_average(dataframe, column, filter_length):
-    df_prep = dataframe.copy()
-    tair_moving_average = np.convolve(dataframe[column], np.ones((filter_length)), mode ="same")
-    tair_moving_average /= filter_length
-    tair_moving_average= tair_moving_average[round(filter_length/2): round(len(dataframe[column])-filter_length/2)]
-    df_prep[column] = tair_moving_average
 
-
-    return df_prep
-
-def median_filter(dataframe, column, filter_length):
-    """
-    data: function that will be filtered
-    filter_length: length of the window
-    """
-    s = dataframe.copy()
-    # medfilt_tair = medfilt(dataframe[column], filter_lenght)
-    # filtered = dataframe[(dataframe[column] == medfilt_tair)] 
-    # # s = pd.DataFrame(medfilt_tair)
-    # # s.columns=[column]
-    # return filtered
-
-    medfilt_tair = medfilt(dataframe[column], filter_length)
-    s[column] = medfilt_tair
-    #s = pd.DataFrame(medfilt_tair)
-    #s.columns=[column]
-    return s
 
 
 
@@ -64,7 +38,7 @@ def main(data_obj):
 
     # A button to circumvent loading the dataset using in the last session
     if st.sidebar.button("Reset dataframe to the initial one"):
-        data_obj.df.to_csv("Filtered Dataset.csv", index=False)
+        data_obj.df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
 
     # 1
     # Loading the appropriate dataset
@@ -120,7 +94,7 @@ def main(data_obj):
                     columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
                     std_coeff = st.number_input("Enter standard deviation coefficient (multiplier): ", 0.0, 3.1, 2.0, 0.1)
                     selected_column = st.selectbox("Select a column:", columns_list)
-                    rm_outlier = removeOutlier(current_df, selected_column, std_coeff)
+                    rm_outlier = Remove_Outliers.removeOutlier(current_df, selected_column, std_coeff)
                 with cc2:
                     st.write(" ")
                     st.write(" ")
@@ -162,7 +136,7 @@ def main(data_obj):
                     q_values = st.slider('Select a range of quantiles',
                                         0.00, 1.00, (0.25, 0.75))
                     selected_column = st.selectbox("Select a column:", columns_list)
-                    q_outlier = removeOutlier_q(current_df, selected_column, q_values[0], q_values[1])
+                    q_outlier = Remove_Outliers.removeOutlier_q(current_df, selected_column, q_values[0], q_values[1])
                 with cc2:
                     st.write(" ")
                     st.write(" ")
@@ -203,7 +177,7 @@ def main(data_obj):
                     columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
                     std_coeff = st.number_input("Enter standard deviation coefficient: ", 0.0, 3.1, 2.0, 0.1)
                     selected_column = st.selectbox("Select a column:", columns_list)
-                    z_outlier = removeOutlier_z(current_df, selected_column, std_coeff)
+                    z_outlier = Remove_Outliers.removeOutlier_z(current_df, selected_column, std_coeff)
                 with cc2:
                     st.write(" ")
                     st.write(" ")
@@ -246,7 +220,7 @@ def main(data_obj):
                     columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
                     filter_len = st.slider('Length of the window', 3, 7, 5, 2)
                     selected_column = st.selectbox("Select a column:", columns_list)
-                    median_filt = median_filter(current_df, selected_column, filter_len)
+                    median_filt = Smoothing.median_filter(current_df, selected_column, filter_len)
                 with cc2:
                     st.write(" ")
                     st.write(" ")
@@ -260,13 +234,7 @@ def main(data_obj):
                 
                 if plot_basic:
                     doubleLinePlot(data_obj.df, median_filt.reset_index(drop=True), selected_column)
-                    # st.dataframe(median_filt)
-                    # st.write(data_obj.df[selected_column].value_counts(ascending=False))
-                    # st.write(median_filt[selected_column].value_counts(ascending=False))
-                    # st.write("Blah")
-                    # l = {'col1': medfilt(data_obj.df[selected_column], filter_len)}
-                    # lf = pd.DataFrame(data=l)
-                    # st.write(lf.value_counts(ascending=False))
+
                 if bp:
                     DoubleBoxPlot(data_obj.df, median_filt.reset_index(drop=True), selected_column)
                 if hist:
@@ -284,10 +252,11 @@ def main(data_obj):
 
                 with cc1:
                     columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
-                    filter_len = st.slider('Length of the window', 3, 7, 5, 2)
+                    filter_len = st.slider('Length of the window', 1, 10, 5, 1)
                     selected_column = st.selectbox("Select a column:", columns_list)
                     # median_filt = median_filter(current_df, selected_column, filter_len)
-                    moving_ave = moving_average(current_df, selected_column, filter_len)
+                    moving_ave = Smoothing.moving_average(current_df, selected_column, filter_len)
+
                 with cc2:
                     st.write(" ")
                     st.write(" ")
@@ -301,20 +270,50 @@ def main(data_obj):
                 
                 if plot_basic:
                     doubleLinePlot(data_obj.df, moving_ave.reset_index(drop=True), selected_column)
-                    # st.dataframe(median_filt)
-                    # st.write(data_obj.df[selected_column].value_counts(ascending=False))
-                    # st.write(median_filt[selected_column].value_counts(ascending=False))
-                    # st.write("Blah")
-                    # l = {'col1': medfilt(data_obj.df[selected_column], filter_len)}
-                    # lf = pd.DataFrame(data=l)
-                    # st.write(lf.value_counts(ascending=False))
+
                 if bp:
                     DoubleBoxPlot(data_obj.df, moving_ave.reset_index(drop=True), selected_column)
                 if hist:
                     Histogram(moving_ave.reset_index(drop=True), selected_column)
 
-                if st.button("Save remove outlier results"):
+                if st.button("Save intermediate smoothing results (moving average)"):
                     current_df = moving_ave.reset_index(drop=True)
+                    current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
+
+        if smooth_radio == 'Savitzky Golay':
+            with st.container():
+                st.subheader('Savitzky Golay')
+
+                cc1, cc2, cc3 = st.columns(3)
+
+                with cc1:
+                    columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
+                    filter_len = st.slider('Length of the window', 1, 11    , 5, 2)
+                    order = st.slider('Polynomial order', 1, 3, 2, 1)
+                    selected_column = st.selectbox("Select a column:", columns_list)
+                    sg = Smoothing.savitzky_golay(current_df, selected_column, filter_len, order)
+
+                with cc2:
+                    st.write(" ")
+                    st.write(" ")
+                    plot_basic = st.button('Plot')
+                    bp = st.button("Boxplot")
+                    hist = st.button("Histogram")
+                with cc3:
+                    st.write(" ")
+                    st.write(" ")
+                    st.warning(f'If applied, {current_df.shape[0]-sg.shape[0]} rows will be removed.')
+                
+                if plot_basic:
+                    doubleLinePlot(data_obj.df, sg.reset_index(drop=True), selected_column)
+
+                if bp:
+                    DoubleBoxPlot(data_obj.df, sg.reset_index(drop=True), selected_column)
+                if hist:
+                    Histogram(sg.reset_index(drop=True), selected_column)
+
+                if st.button("Save intermediate smoothing results (Savitzky Golay)"):
+                    current_df = sg.reset_index(drop=True)
                     current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
 
     # Current dataframe display
@@ -345,6 +344,12 @@ def main(data_obj):
         if dp_method == 'Smoothing' and smooth_radio == 'Moving average':
             st.dataframe(moving_ave.reset_index(drop=True))
             st.write(moving_ave.shape)
+        if dp_method == 'Smoothing' and smooth_radio == 'Savitzky Golay':
+            st.dataframe(sg.reset_index(drop=True))
+            st.write(sg.shape)
+
+        
+        
 
 
     try:
