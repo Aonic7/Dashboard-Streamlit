@@ -41,6 +41,32 @@ def doubleLinePlot(initdf, dataframe, column):
     sns.lineplot(y = column, x = [i for i in range(len(dataframe[column]))], data = dataframe)
     st.pyplot(fig)
 
+# Data Preparation: Interpolation
+def interpolation_subplot(initdf, dataframe, column, method):
+    error = 0
+    plt.rcParams.update({'xtick.bottom': False})
+    #fig, axes = plt.subplots(1, 1, sharex=True, figsize=(20, 20))
+    fig = plt.figure(figsize=(10, 4))
+    if  method=='linear_fill':
+        #initdf[column].plot(title='Actual', ax=axes[0], label='Actual', color='green', style=".-")
+        dataframe[column].plot(title="{} (MSE: ".format(method) + str(error) + ")",  label='{}'.format(method),
+                                  color='deeppink',
+                                   style=".-")
+        st.pyplot(fig)   
+    elif method=='cubic_fill':
+        #initdf[column].plot(title='Actual', ax=axes[0], label='Actual', color='green', style=".-")
+        dataframe[column].plot(title="{} (MSE: ".format(method) + str(error) + ")",  label='{}'.format(method),
+                                  color='deeppink',
+                                   style=".-")
+        st.pyplot(fig)                                                    
+    else:
+        #initdf[column].plot(title='Actual', ax=axes[0],  label='Actual', color='green', style=".-")
+        dataframe[column].plot(title="{} (MSE: ".format(method) + str(error) + ")", label='{}'.format(method),
+                                  color='deeppink',
+                                   style=".-")
+        st.pyplot(fig)        
+
+
 # Unused
 def linePlot_Out_recogn(dataframe, column):
     fig = plt.figure(figsize=(10, 4))

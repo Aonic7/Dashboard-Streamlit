@@ -60,12 +60,12 @@ class Interface():
 
 
         # Attempts to convert all numerical columns to 'datetime' format. Relevant for timeseries.
-        # for col in dt_obj.df.columns:
-        #   if dt_obj.df[col].dtype == 'object':
-        #     try:
-        #       dt_obj.df[col] = pd.to_datetime(dt_obj.df[col])
-        #     except ValueError:
-        #       pass
+        for col in dt_obj.df.columns:
+          if dt_obj.df[col].dtype == 'object':
+            try:
+              dt_obj.df[col] = pd.to_datetime(dt_obj.df[col])
+            except ValueError:
+              pass
       
         # Side bar navigation menu with a select box
         menu = ['Data Preview', 'Smoothing and filtering', 'Data Preparation', 'Classification', 'Regression']
