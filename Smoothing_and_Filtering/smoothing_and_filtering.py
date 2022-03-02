@@ -1,5 +1,5 @@
 # General import section
-from tkinter import E
+#from tkinter import E
 import pandas as pd #to work with dataframes
 import streamlit as st #streamlit backend
 import os
