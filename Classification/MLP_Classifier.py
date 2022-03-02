@@ -152,6 +152,7 @@ class NN_Classifier:
             except Exception as e:
                 self.NN_Outputs.Error_message= 'Error in Regressor Creation: ' + str(e)
                 self.NN_Outputs.flag=True
+                self.NN_Outputs.Report = "Vasya"
         else:
             self.NN_Outputs.Train_score= 'Refer To error in Handling Method'
             self.NN_Outputs.test_score= 'Refer To error in Handling Method'
@@ -164,7 +165,7 @@ class NN_Classifier:
             self.NN_Outputs.length = 'Refer To error in Handling Method'
             
             #Mean squared error and accuracy
-            self.NN_Outputs.Report = 'Refer To error in Handling Method'  
+            self.NN_Outputs.Report = 'Refer To error in Handling Method 1'  
     
 
 
@@ -177,11 +178,11 @@ class NN_Classifier:
         
         print('Error Message           ', self.NN_Outputs.Error_message)
         print('expected output:        ', self.NN_Outputs.y_actual)
-        print('Predicted Output:       ', self.NN_Outputs.y_pred)
+        #st.write('Predicted Output:       ', self.NN_Outputs.y_pred)
         print('Model Train_score on the Training Data:                   ',  self.NN_Outputs.Train_score)
         print('Model Train_score on the Testing Data:                   ',  self.NN_Outputs.test_score)
         print('length of output array: ',  self.NN_Outputs.length)
-        print(f'Classification Report:\n {self.NN_Outputs.Report}')
+        st.write(f'Classification Report:\n {self.NN_Outputs.Report}')
 
         
     def Conf(self):
@@ -207,14 +208,14 @@ class classifier_inputs(NamedTuple):
     Normalize:              bool   # flag to normalize X data or not
 
 # data2 = pd.read_csv("D:\MAIT\OOP\Datasets/transfusion.csv",',')
-data = pd.read_csv("C:\\Users\\Beats\\Desktop\\Python_OOP\\transfusion.csv", ',')
+# data = pd.read_csv("D:\\TH Koeln\\Wolf\\Project\\Data\\Classification.data", ',')
 
-activation_fun1 = ("identity", "logistic", "tanh", "relu")
-solver_fun1 = ("lbfgs", "sgd", "adam")
-hidden_layers2=(20,5)
-inputs=classifier_inputs(0.2,activation_fun1[1],hidden_layers2,solver_fun1[2],500,False)
+# activation_fun1 = ("identity", "logistic", "tanh", "relu")
+# solver_fun1 = ("lbfgs", "sgd", "adam")
+# hidden_layers2=(20,5)
+# inputs=classifier_inputs(0.2,activation_fun1[1],hidden_layers2,solver_fun1[2],500,False)
 
-Classifier = NN_Classifier(data,inputs,4)
-Classifier.Classify()
-Classifier.printing()
-Classifier.Conf()
+# Classifier = NN_Classifier(data,inputs,4)
+# Classifier.Classify()
+# Classifier.printing()
+#Classifier.Conf()

@@ -8,6 +8,8 @@ from io import StringIO
 from pandas.api.types import is_numeric_dtype
 from .MLP_Classifier import NN_Classifier, classifier_inputs
 
+
+from typing import NamedTuple
 from sklearn.metrics import classification_report
 
 
@@ -75,7 +77,7 @@ def main(data_obj):
                 a = []
 
                 for i in range(number_hl):
-                    a.append(st.number_input(f'Number of neurons in hidden layer {i+1}:', 1, 10, 1, 1, key=i))
+                    a.append(st.number_input(f'Number of neurons in hidden layer {i+1}:', 1, 20, 1, 1, key=i))
 
 
                
@@ -87,14 +89,32 @@ def main(data_obj):
                                        iteration_num,
                                        norm_bool
                                        )
+            st.write(type(tt_proportion))
 
             Classifier = NN_Classifier(cl_df, NN_inputs, col_idx)
 
             # st.write(Classifier.NN_Outputs.Report)
-            Classifier.Classify()
-            # Classifier.printing()
+            #Classifier.Classify()
+            st.write(Classifier.Classify()[52])
+            Classifier.printing()
             # Classifier.Conf()
             # st.write(classification_report(getattr(Classifier, 'NN_Outputs.NN_Inputs')))
+
+            class boris(NamedTuple):
+                test_size:  str
+
+            inputs1 = boris("Sasay kudasai")
+
+            st.write(inputs1[0])
+            st.write(Classifier.NN_Outputs['y_pred'])
+            st.write(getattr(Classifier.classifier_outputs, 'X_test'))
+            st.write(getattr(Classifier.classifier_outputs, 'Error_message'))
+            st.write(getattr(Classifier.classifier_outputs, 'Report'))
+            print(getattr(Classifier.classifier_outputs, 'Report'))
+
+            from operator import itemgetter as _itemgetter
+            f = _itemgetter(1)
+            st.write(Classifier.NN_Outputs[0])
                  
 
 if __name__ == "__main__":
