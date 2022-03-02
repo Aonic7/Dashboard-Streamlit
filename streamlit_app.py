@@ -86,7 +86,7 @@ class Interface():
         
         # Runs 'Classification' app
         if navigation == 'Classification':
-          Classification.classification()  
+          Classification.classification(dt_obj)  
 
         # Runs 'Regression' app
         if navigation == 'Regression':
