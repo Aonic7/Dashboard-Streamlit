@@ -62,8 +62,6 @@ class Remove_Outliers():
         filtered = df[(z < n)] #apply the filtering formula to the column
         return filtered
 
-
-
 class Smoothing():
     def __init__(self):
         pass
@@ -147,9 +145,10 @@ class TimeSeriesOOP():
         # 4. Linear Interpolation ------------------
         self.df['rownum'] = np.arange(self.df.shape[0])  # df.shape[0]-gives number of row count
         df_nona = self.df.dropna(subset=[column_of_interest])  # df.dropna- Remove missing values.
+        st.write(df_nona)
         f = interp1d(df_nona['rownum'], df_nona[column_of_interest], kind='linear')
         self.df[column_of_interest] = f(self.df['rownum'])
-        #self.df = self.df.dropna() 
+        self.df = self.df.drop(columns=['rownum'])
         return self.df
 
     def make_interpolation_cubic(self, column_of_interest):
