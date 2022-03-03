@@ -12,13 +12,14 @@ from Visualization.visualization import doubleLinePlot, DoubleBoxPlot, Histogram
 
 # Remove outliers import
 # from .smoothing_and_filtering_functions import removeOutlier, removeOutlier_q, removeOutlier_z
-from .smoothing_and_filtering_functions import Remove_Outliers, Smoothing, TimeSeriesOOP
+from .smoothing_and_filtering_functions import Remove_Outliers, Smoothing, TimeSeriesOOP, Converter
 
 def import_dset(data_obj):
     try:
         a = pd.read_csv('Smoothing_and_Filtering//Filtered Dataset.csv', index_col = None)
         if a.equals(data_obj.df) == False:
-            current_df = a
+            current_df1 = a
+            current_df = Converter.dateTime_converter(current_df1)
             #st.sidebar.write("1")
             #st.sidebar.write(a.equals(data_obj.df))
         else:
@@ -31,16 +32,15 @@ def import_dset(data_obj):
     return current_df
 
 
-
-
-
 def main(data_obj):
     st.header("Smoothing and filtering")
 
     # A button to circumvent loading the dataset using in the last session
     if st.sidebar.button("Reset dataframe to the initial one"):
+        st.write('skip')
         data_obj.df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
-
+        # st.dataframe(data_obj.df)
+        #st.write(data_obj.df.shape)
     # 1
     # Loading the appropriate dataset
     #if pd.read_csv('Filtered Dataset.csv').shape[0] < data_obj.df.shape[0]:
@@ -58,8 +58,8 @@ def main(data_obj):
     #     current_df = data_obj.df
 
     current_df = import_dset(data_obj)
-
     # Overview of the dataframes
+    
     col1, col2, col3 = st.columns(3)
 
     # Original dataframe display
@@ -371,11 +371,10 @@ def main(data_obj):
                 st.subheader('Linear interpolation')
 
                 cc1, cc2, cc3 = st.columns(3)
-               
-                columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
+            
                 try:
                     with cc1:
-                        columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
+                        columns_list = list(current_df.select_dtypes(exclude=['datetime', 'object']).columns)
                         columns_list1 = list(current_df.select_dtypes(include=['datetime']).columns)
                         selected_column = st.selectbox("Select a column:", columns_list)
                         time_column = st.selectbox("Select a time column:", columns_list1)
@@ -385,8 +384,7 @@ def main(data_obj):
                         st.write(" ")
                         st.write(" ")
                         plot_basic = st.button('Plot')
-                        #bp = st.button("Boxplot")
-                        #hist = st.button("Histogram")
+                        
                     with cc3:
                         st.write(" ")
                         st.write(" ")
@@ -399,9 +397,8 @@ def main(data_obj):
                             current_df = linear_df.reset_index()
                             current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)  
                 except:
-                        st.warning("Selected datafrane is not appropriate for this method, please upload a different one")
+                        st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
                         st.stop()   
-                    #st.warning("Selected datafrane is not appropriate for this method, please upload a different one")
 
                     
     
@@ -412,7 +409,7 @@ def main(data_obj):
             try:
                 cc1, cc2, cc3 = st.columns(3)
                 with cc1:
-                    columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
+                    columns_list = list(current_df.select_dtypes(exclude=['datetime', 'object']).columns)
                     columns_list1 = list(current_df.select_dtypes(include=['datetime']).columns)
                     selected_column = st.selectbox("Select a column:", columns_list)
                     time_column = st.selectbox("Select a time column:", columns_list1)
@@ -434,9 +431,9 @@ def main(data_obj):
     
                 if st.button("Save intermediate cubic results"):
                     current_df = Cubic_df.reset_index()
-                    current_df.to_csv("Cubic_data.csv", index=False)   
+                    current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)   
             except: 
-                   st.warning("Selected datafrane is not appropriate for this method, please upload a different one")
+                   st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
                    st.stop()        
         
         if interpolation_radio == 'Forward Fill':
@@ -446,7 +443,7 @@ def main(data_obj):
             try:
                 cc1, cc2, cc3 = st.columns(3)
                 with cc1:
-                    columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
+                    columns_list = list(current_df.select_dtypes(exclude=['datetime', 'object']).columns)
                     columns_list1 = list(current_df.select_dtypes(include=['datetime']).columns)
                     selected_column = st.selectbox("Select a column:", columns_list)
                     time_column = st.selectbox("Select a time column:", columns_list1)
@@ -470,7 +467,7 @@ def main(data_obj):
                     current_df = df_ffill.reset_index()
                     current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False) 
             except: 
-                 st.warning("Selected datafrane is not appropriate for this method, please upload a different one")
+                 st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
                  st.stop()   
 
         if interpolation_radio == 'Backward Fill':
@@ -480,7 +477,7 @@ def main(data_obj):
             try:
                 cc1, cc2, cc3 = st.columns(3)
                 with cc1:
-                    columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
+                    columns_list = list(current_df.select_dtypes(exclude=['datetime', 'object']).columns)
                     columns_list1 = list(current_df.select_dtypes(include=['datetime']).columns)
                     selected_column = st.selectbox("Select a column:", columns_list)
                     time_column = st.selectbox("Select a time column:", columns_list1)
@@ -504,7 +501,7 @@ def main(data_obj):
                     current_df = df_bfill.reset_index()
                     current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)           
             except:
-                st.warning("Selected datafrane is not appropriate for this method, please upload a different one")
+                st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
                 st.stop()   
                 
     # Current dataframe display
@@ -552,7 +549,6 @@ def main(data_obj):
         if dp_method == 'Interpolation' and  interpolation_radio == 'Backward Fill':
             st.dataframe(df_bfill.reset_index())
             st.write(df_bfill.shape)          
-
 
 
     try:

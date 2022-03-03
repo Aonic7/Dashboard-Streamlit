@@ -62,7 +62,16 @@ class Remove_Outliers():
         filtered = df[(z < n)] #apply the filtering formula to the column
         return filtered
 
-
+class Converter():
+   
+    def dateTime_converter(df):
+      for col in df.columns:
+           if df[col].dtype == 'object':
+                try:
+                    df[col] = pd.to_datetime(df[col])
+                    return df
+                except ValueError:
+                    pass   
 
 class Smoothing():
     def __init__(self):
