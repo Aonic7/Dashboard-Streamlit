@@ -136,6 +136,7 @@ class NN_Classifier:
                 x2,y2 = self.handle2(df1)
                 #print(shape(x2))
                 #print(shape(y2))
+                
 
                 
                 self.NN_Outputs.model.fit(x2, y2)
