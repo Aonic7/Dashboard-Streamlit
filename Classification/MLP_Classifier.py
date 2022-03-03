@@ -181,7 +181,7 @@ class NN_Classifier:
         print('Model Train_score on the Training Data:                   ',  self.NN_Outputs.Train_score)
         print('Model Train_score on the Testing Data:                   ',  self.NN_Outputs.test_score)
         print('length of output array: ',  self.NN_Outputs.length)
-        print(f'Classification Report:\n {self.NN_Outputs.Report}')
+        st.write(f'Classification Report:\n {self.NN_Outputs.Report}')
 
         
     def Conf(self):
@@ -207,14 +207,14 @@ class classifier_inputs(NamedTuple):
     Normalize:              bool   # flag to normalize X data or not
 
 # data2 = pd.read_csv("D:\MAIT\OOP\Datasets/transfusion.csv",',')
-data = pd.read_csv("C:\\Users\\Beats\\Desktop\\Python_OOP\\transfusion.csv", ',')
+# data = pd.read_csv("C:\\Users\\Legion\\Downloads\\iris.data_neu.csv", ',')
 
-activation_fun1 = ("identity", "logistic", "tanh", "relu")
-solver_fun1 = ("lbfgs", "sgd", "adam")
-hidden_layers2=(20,5)
-inputs=classifier_inputs(0.2,activation_fun1[1],hidden_layers2,solver_fun1[2],500,False)
+# activation_fun1 = ("identity", "logistic", "tanh", "relu")
+# solver_fun1 = ("lbfgs", "sgd", "adam")
+# hidden_layers2=(20,5)
+# inputs=classifier_inputs(0.2,activation_fun1[1],hidden_layers2,solver_fun1[2],500,False)
 
-Classifier = NN_Classifier(data,inputs,4)
-Classifier.Classify()
-Classifier.printing()
-Classifier.Conf()
+# Classifier = NN_Classifier(data,inputs,4)
+# Classifier.Classify()
+# Classifier.printing()
+# Classifier.Conf()

@@ -17,21 +17,21 @@ from .smoothing_and_filtering_functions import Remove_Outliers, Smoothing, TimeS
 def import_dset(data_obj):
     try:
         a = pd.read_csv('Smoothing_and_Filtering//Filtered Dataset.csv', index_col = None)
+        st.write(a)
+        st.write(data_obj.df)
         if a.equals(data_obj.df) == False:
             current_df = a
-            #st.sidebar.write("1")
+            st.sidebar.write("1")
             #st.sidebar.write(a.equals(data_obj.df))
         else:
             current_df = data_obj.df
-            #st.sidebar.write("2")
+            st.sidebar.write("2")
     except:
         current_df = data_obj.df
-        #st.sidebar.write("3")
+        st.dataframe(current_df.dtypes.astype(str))
+        st.sidebar.write("3")
 
     return current_df
-
-
-
 
 
 def main(data_obj):
@@ -371,8 +371,6 @@ def main(data_obj):
                 st.subheader('Linear interpolation')
 
                 cc1, cc2, cc3 = st.columns(3)
-               
-                columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
                 try:
                     with cc1:
                         columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
@@ -385,8 +383,6 @@ def main(data_obj):
                         st.write(" ")
                         st.write(" ")
                         plot_basic = st.button('Plot')
-                        #bp = st.button("Boxplot")
-                        #hist = st.button("Histogram")
                     with cc3:
                         st.write(" ")
                         st.write(" ")
@@ -399,8 +395,8 @@ def main(data_obj):
                             current_df = linear_df.reset_index()
                             current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)  
                 except:
-                        st.warning("Selected datafrane is not appropriate for this method, please upload a different one")
-                        st.stop()   
+                        st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
+                        #st.stop()   
                     #st.warning("Selected datafrane is not appropriate for this method, please upload a different one")
 
                     
@@ -408,7 +404,7 @@ def main(data_obj):
         if interpolation_radio == 'Cubic':
             
             with st.container():
-                st.subheader('Cubic interpolation')
+                 st.subheader('Cubic interpolation')
             try:
                 cc1, cc2, cc3 = st.columns(3)
                 with cc1:
@@ -434,7 +430,7 @@ def main(data_obj):
     
                 if st.button("Save intermediate cubic results"):
                     current_df = Cubic_df.reset_index()
-                    current_df.to_csv("Cubic_data.csv", index=False)   
+                    current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)   
             except: 
                    st.warning("Selected datafrane is not appropriate for this method, please upload a different one")
                    st.stop()        
@@ -506,11 +502,11 @@ def main(data_obj):
             except:
                 st.warning("Selected datafrane is not appropriate for this method, please upload a different one")
                 st.stop()   
-                
+
     # Current dataframe display
     with col2:
         st.subheader('Current dataframe')
-        st.dataframe(current_df)
+        st.write(current_df)
         st.write(current_df.shape)
 
     # Resulting dataframe display

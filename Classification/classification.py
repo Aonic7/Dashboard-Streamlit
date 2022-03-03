@@ -1,5 +1,7 @@
 from ast import Not
 from code import interact
+from typing import Collection
+from collections import namedtuple
 import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
@@ -92,7 +94,7 @@ def main(data_obj):
 
             # st.write(Classifier.NN_Outputs.Report)
             Classifier.Classify()
-            # Classifier.printing()
+            Classifier.printing()
             # Classifier.Conf()
             # st.write(classification_report(getattr(Classifier, 'NN_Outputs.NN_Inputs')))
                  
