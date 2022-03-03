@@ -1,7 +1,5 @@
 from ast import Not
 from code import interact
-from typing import Collection
-from collections import namedtuple
 import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
