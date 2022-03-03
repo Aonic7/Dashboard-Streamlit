@@ -6,7 +6,8 @@ import streamlit as st
 import seaborn as sns
 from io import StringIO
 from pandas.api.types import is_numeric_dtype
-#from .MLP_Classifier import NN_Classifier, classifier_inputs
+from .MLP_Classifier import NN_Classifier, classifier_inputs
+from typing import NamedTuple
 
 import numpy as np
 
@@ -160,82 +161,84 @@ def main(data_obj):
                     a.append(st.number_input(f'Number of neurons in hidden layer {i+1}:', 1, 20, 1, 1, key=i))
 
 
-        with st.container():
-            # Splitting the data into training and test sets
-            train_df, test_df = train_test_split(cl_df, test_size=tt_proportion, random_state=109)
-
-            # Using numpy to create arrays of lables and features
-            train_labels = np.array(train_df.pop(selected_column))
-            test_labels = np.array(test_df.pop(selected_column))
-            train_features = np.array(train_df)
-            test_features = np.array(test_df)
-
-            # Scaling the features using Standard Scaler
-            if norm_bool == True:
-                scaler = MinMaxScaler()
-                train_features = scaler.fit_transform(train_features)
-                test_features = scaler.transform(test_features)
-
-            # Having a look at the results
-            st.write('Training labels shape:', train_labels.shape)
-            st.write('Test labels shape:', test_labels.shape)
-            st.write('Training features shape:', train_features.shape)
-            st.write('Test features shape:', test_features.shape)
-
-            sme = SMOTEENN(random_state=109, sampling_strategy=0.48)
-            X_res, y_res = sme.fit_resample(train_features, train_labels)
-
-            clf_NN = MLPClassifier(hidden_layer_sizes = tuple(a), 
-                               activation = selected_function,
-                               solver = selected_solver, 
-                               learning_rate = 'adaptive',
-                               max_iter = 500,
-                               random_state = 109,
-                               shuffle=True,
-                               batch_size=15,
-                               alpha=0.0005
-                               )
-
-            clf_NN = clf_NN.fit(X_res, y_res)
-
-            y_pred_NN = clf_NN.predict(test_features)
-            st.markdown(classification_report(test_labels,y_pred_NN), unsafe_allow_html=True)
-
-
         # with st.container():
-        #     NN_inputs = classifier_inputs(tt_proportion,
-        #                                selected_function,
-        #                                tuple(a),
-        #                                selected_solver,
-        #                                iteration_num,
-        #                                norm_bool
-        #                                )
-        #     st.write(type(tt_proportion))
+        #     # Splitting the data into training and test sets
+        #     train_df, test_df = train_test_split(cl_df, test_size=tt_proportion, random_state=109)
 
-        #     Classifier = NN_Classifier(cl_df, NN_inputs, col_idx)
+        #     # Using numpy to create arrays of lables and features
+        #     train_labels = np.array(train_df.pop(selected_column))
+        #     test_labels = np.array(test_df.pop(selected_column))
+        #     train_features = np.array(train_df)
+        #     test_features = np.array(test_df)
 
-            # st.write(Classifier.NN_Outputs.Report)
-            #Classifier.Classify()
-            ##st.write(Classifier.Classify()[52])
-            ##Classifier.printing()
-            # Classifier.Conf()
-            # st.write(classification_report(getattr(Classifier, 'NN_Outputs.NN_Inputs')))
+        #     # Scaling the features using Standard Scaler
+        #     if norm_bool == True:
+        #         scaler = MinMaxScaler()
+        #         train_features = scaler.fit_transform(train_features)
+        #         test_features = scaler.transform(test_features)
 
-            # class boris(NamedTuple):
-            #     test_size:  str
+        #     # Having a look at the results
+        #     st.write('Training labels shape:', train_labels.shape)
+        #     st.write('Test labels shape:', test_labels.shape)
+        #     st.write('Training features shape:', train_features.shape)
+        #     st.write('Test features shape:', test_features.shape)
 
-            # inputs1 = boris("Sasay kudasai")
+        #     sme = SMOTEENN(random_state=109, sampling_strategy=0.48)
+        #     X_res, y_res = sme.fit_resample(train_features, train_labels)
 
-            ##st.write(inputs1[0])
-            ##st.write(Classifier.NN_Outputs['y_pred'])
-            ##st.write(getattr(Classifier.classifier_outputs, 'X_test'))
-            ##st.write(getattr(Classifier.classifier_outputs, 'Error_message'))
-            ##st.write(getattr(Classifier.classifier_outputs, 'Report'))
-            ##print(getattr(Classifier.classifier_outputs, 'Report'))
+        #     clf_NN = MLPClassifier(hidden_layer_sizes = tuple(a), 
+        #                        activation = selected_function,
+        #                        solver = selected_solver, 
+        #                        learning_rate = 'adaptive',
+        #                        max_iter = 500,
+        #                        random_state = 109,
+        #                        shuffle=True,
+        #                        batch_size=15,
+        #                        alpha=0.0005
+        #                        )
 
-            ##from operator import itemgetter as _itemgetter
-            ##f = _itemgetter(1)
-            ##st.write(Classifier.NN_Outputs[0])
+        #     clf_NN = clf_NN.fit(X_res, y_res)
+
+        #     y_pred_NN = clf_NN.predict(test_features)
+        #     st.markdown(classification_report(test_labels,y_pred_NN), unsafe_allow_html=True)
+
+
+        with st.container():
+            NN_inputs = classifier_inputs(tt_proportion,
+                                       selected_function,
+                                       tuple(a),
+                                       selected_solver,
+                                       iteration_num,
+                                       norm_bool
+                                       )
+            st.write(type(tt_proportion))
+
+            Classifier = NN_Classifier(cl_df, NN_inputs, col_idx)
+
+            st.write(Classifier.NN_Outputs.Report)
+            Classifier.Classify()
+            st.write(Classifier.Classify()[52])
+            Classifier.printing()
+            Classifier.Conf()
+            #st.write(classification_report(getattr(Classifier, 'NN_Outputs.NN_Inputs')))
+
+            class boris(NamedTuple):
+                test_size:  str
+
+            inputs1 = boris("Sasay kudasai")
+
+            st.write(inputs1[0])
+            st.write(Classifier.NN_Outputs['y_pred'])
+            st.write("Blah")
+            st.write(Classifier.NN_Outputs.y_pred)
+            st.write(getattr(Classifier.classifier_outputs, 'X_test'))
+            st.write(getattr(Classifier.classifier_outputs, 'Error_message'))
+            st.write(getattr(Classifier.classifier_outputs, 'Report'))
+            print(getattr(Classifier.classifier_outputs, 'Report'))
+
+            from operator import itemgetter as _itemgetter
+            f = _itemgetter(1)
+            st.write(Classifier.NN_Outputs[0])
                  
 
 if __name__ == "__main__":
