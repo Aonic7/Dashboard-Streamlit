@@ -4,4 +4,4 @@ streamlit
 matplotlib
 seaborn
 scikit-learn
-smoteenn
+imblearncombine
