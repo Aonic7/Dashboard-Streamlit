@@ -90,7 +90,7 @@ class Interface():
 
         # Runs 'Regression' app
         if navigation == 'Regression':
-          Regression.regression()
+          Regression.regression(dt_obj)
          
 
 def main():

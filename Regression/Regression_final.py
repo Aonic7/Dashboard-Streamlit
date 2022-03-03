@@ -5,10 +5,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import r2_score
 from sklearn.model_selection import GridSearchCV
-import statsmodels.api as sm
+# import statsmodels.api as sm
 from sklearn.model_selection import train_test_split,GridSearchCV
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error as MSE
+import streamlit as st #streamlit backend
 
 # Class variables: Y_test, Y_pred,reg, X_train,Y_train
 
@@ -45,7 +46,7 @@ class Regressor:
         self.estimator=estimator 
         self.test_size=test_size  
         # Split the data into training set and testing set
-        X_train,X_test,Y_train,self.Y_test=train_test_split(X,Y,test_size=test_size,random_state=123)      
+        X_train,X_test,Y_train,self.Y_test=train_test_split(self.X,self.Y,test_size=test_size,random_state=123)      
         
         # Create a model
         reg=RandomForestRegressor(n_estimators=estimator)
@@ -67,9 +68,9 @@ class Regressor:
     def result(self,Y_test, Y_pred): 
         # To compute R-squared score+
         r2 = r2_score(Y_test, Y_pred)
-        print('R-squared score: ', round(r2, 5))
+        st.write('R-squared score: ', round(r2, 5))
         # To compute root mean squared error
-        print('RMSE: ',MSE(Y_test,Y_pred)**(0.5))
+        st.write('RMSE: ',MSE(Y_test,Y_pred)**(0.5))
         # To compute adjusted R-squared error 
         # r_adj = 1 - ((1-r2)*((Y_test.shape[0])-1))/(Y_test.shape[0]-X_test.shape[1]-1)
         # print('R-squared adjusted:',r_adj)
@@ -77,11 +78,12 @@ class Regressor:
     def prediction_plot(self,Y_test, Y_pred):
         # To display the 2D-plot for the actual vs predicted values
         df=pd.DataFrame({'y_test':Y_test,'y_pred':Y_pred})
+        fig = plt.figure(figsize=(10, 4))
         sns.scatterplot(x='y_test',y='y_pred',data=df,label='Real Prediction')
         sns.lineplot(x='y_test',y='y_test',data=df,color='red',alpha=0.5,label='Optimal Prediction')
         plt.title('y_test vs y_pred')
         plt.legend()
-        plt.show()
+        st.pyplot(fig)
 
     def gridSearchCV(self,reg,X_train, y_train):
         # Find the best parameters for the model using Grid search optimisation
@@ -103,22 +105,22 @@ class Regressor:
        
 
 # Read data and converting it to dataframe
-df=pd.read_csv("Y:/MAIT/Object Oriented Programming - Wolf/Data for the Software Development Project/Regression - Dataset/Regression/SynchronousMachine.csv")
-df.rename(columns = {'I_y':'Load Current', 'PF':'Power Factor',
-                              'e_PF':'Power Factor Error','d_if':'Excitation Current Change','I_f':'Excitation Current'}, inplace = True)
+# df=pd.read_csv("Y:/MAIT/Object Oriented Programming - Wolf/Data for the Software Development Project/Regression - Dataset/Regression/SynchronousMachine.csv")
+# df.rename(columns = {'I_y':'Load Current', 'PF':'Power Factor',
+#                               'e_PF':'Power Factor Error','d_if':'Excitation Current Change','I_f':'Excitation Current'}, inplace = True)
 
 
-# To initialize the features and target 
-X=df.iloc[:,:-1]
-Y= df.iloc[:,-1]
+# # To initialize the features and target 
+# X=df.iloc[:,:-1]
+# Y= df.iloc[:,-1]
 
-# object for the class Regressor
-obj = Regressor(X,Y)
+# # object for the class Regressor
+# obj = Regressor(X,Y)
 
-# calling the methods using object 'obj'
-obj.model(900,0.3)
-obj.result(obj.Y_test,obj.Y_pred)
-obj.prediction_plot(obj.Y_test,obj.Y_pred)
+# # calling the methods using object 'obj'
+# obj.model(900,0.3)
+# obj.result(obj.Y_test,obj.Y_pred)
+# obj.prediction_plot(obj.Y_test,obj.Y_pred)
 
 
 

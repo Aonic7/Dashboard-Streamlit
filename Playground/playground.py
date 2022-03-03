@@ -190,7 +190,7 @@ def main(data_obj):
         st.write('Test features shape:', test_features.shape)
 
 
-        sme = SMOTEENN(random_state=42, sampling_strategy=0.48)
+        sme = SMOTEENN(random_state=109, sampling_strategy=0.48)
         X_res, y_res = sme.fit_resample(train_features, train_labels)
 
         clf_NN = MLPClassifier(hidden_layer_sizes = (150,100,50), 
@@ -198,7 +198,7 @@ def main(data_obj):
                                solver = 'adam', 
                                learning_rate = 'adaptive',
                                max_iter = 500,
-                               random_state = 42,
+                               random_state = 109,
                                shuffle=True,
                                batch_size=15,
                                alpha=0.0005
