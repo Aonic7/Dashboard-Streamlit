@@ -1,22 +1,10 @@
-__pycache__/data_preview.cpython-39.pyc
+*.pyc 
 .vscode/settings.json
-__pycache__/data_preparation.cpython-39.pyc
-__pycache__/streamlit_app.cpython-39.pyc
-__pycache__/dp_remove_outliers.cpython-39.pyc
-__pycache__/visualization.cpython-39.pyc
-__pycache__/smoothing_and_filtering.cpython-39.pyc
-__pycache__/dp_scaler_split.cpython-39.pyc
-Smoothing_and_Filtering/__pycache__/__init__.cpython-39.pyc
 .gitignore
-Smoothing_and_Filtering/__pycache__/smoothing_and_filtering_functions.cpython-39.pyc
-Smoothing_and_Filtering/__pycache__/dp_remove_outliers.cpython-39.pyc
-Smoothing_and_Filtering/__pycache__/smoothing_and_filtering.cpython-39.pyc
-Data_Preview/__pycache__/__init__.cpython-39.pyc
-Data_Preview/__pycache__/data_preview.cpython-39.pyc
-Classification/__pycache__/__init__.cpython-39.pyc
-Classification/__pycache__/classification.cpython-39.pyc
-Regression/__pycache__/__init__.cpython-39.pyc
-Regression/__pycache__/regression.cpython-39.pyc
-Scaling/__pycache__/__init__.cpython-39.pyc
-Scaling/__pycache__/scaler.cpython-39.pyc
-Visualization/__pycache__/visualization.cpython-39.pyc
+Smoothing_and_Filtering/Preprocessing dataset.csv
+Smoothing_and_Filtering/Preprocessing dataset.csv
+catboost_info/learn_error.tsv
+logs.log
+catboost_info/catboost_training.json
+catboost_info/time_left.tsv
+catboost_info/learn/events.out.tfevents

@@ -136,6 +136,7 @@ class NN_Classifier:
                 x2,y2 = self.handle2(df1)
                 #print(shape(x2))
                 #print(shape(y2))
+                
 
                 
                 self.NN_Outputs.model.fit(x2, y2)
@@ -152,6 +153,7 @@ class NN_Classifier:
             except Exception as e:
                 self.NN_Outputs.Error_message= 'Error in Regressor Creation: ' + str(e)
                 self.NN_Outputs.flag=True
+                self.NN_Outputs.Report = "Vasya"
         else:
             self.NN_Outputs.Train_score= 'Refer To error in Handling Method'
             self.NN_Outputs.test_score= 'Refer To error in Handling Method'
@@ -164,7 +166,7 @@ class NN_Classifier:
             self.NN_Outputs.length = 'Refer To error in Handling Method'
             
             #Mean squared error and accuracy
-            self.NN_Outputs.Report = 'Refer To error in Handling Method'  
+            self.NN_Outputs.Report = 'Refer To error in Handling Method 1'  
     
 
 
@@ -177,7 +179,7 @@ class NN_Classifier:
         
         print('Error Message           ', self.NN_Outputs.Error_message)
         print('expected output:        ', self.NN_Outputs.y_actual)
-        print('Predicted Output:       ', self.NN_Outputs.y_pred)
+        #st.write('Predicted Output:       ', self.NN_Outputs.y_pred)
         print('Model Train_score on the Training Data:                   ',  self.NN_Outputs.Train_score)
         print('Model Train_score on the Testing Data:                   ',  self.NN_Outputs.test_score)
         print('length of output array: ',  self.NN_Outputs.length)
@@ -207,7 +209,7 @@ class classifier_inputs(NamedTuple):
     Normalize:              bool   # flag to normalize X data or not
 
 # data2 = pd.read_csv("D:\MAIT\OOP\Datasets/transfusion.csv",',')
-# data = pd.read_csv("C:\\Users\\Legion\\Downloads\\iris.data_neu.csv", ',')
+# data = pd.read_csv("D:\\TH Koeln\\Wolf\\Project\\Data\\Classification.data", ',')
 
 # activation_fun1 = ("identity", "logistic", "tanh", "relu")
 # solver_fun1 = ("lbfgs", "sgd", "adam")
@@ -217,4 +219,4 @@ class classifier_inputs(NamedTuple):
 # Classifier = NN_Classifier(data,inputs,4)
 # Classifier.Classify()
 # Classifier.printing()
-# Classifier.Conf()
+#Classifier.Conf()
