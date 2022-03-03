@@ -9,7 +9,7 @@ from io import StringIO #to read data files as .csv correctly
 #from Data_Preview import data_preview
 import Data_Preview
 import Smoothing_and_Filtering
-import Scaling
+import Playground
 import Regression
 import Classification
 # Data object class
@@ -68,7 +68,7 @@ class Interface():
               pass
       
         # Side bar navigation menu with a select box
-        menu = ['Data Preview', 'Smoothing and filtering', 'Data Preparation', 'Classification', 'Regression']
+        menu = ['Data Preview', 'Smoothing and filtering', 'Classification', 'Regression', 'Playground']
         navigation = st.sidebar.selectbox(label="Select menu", options=menu)
 
         # Runs 'Data Preview' app
@@ -81,8 +81,8 @@ class Interface():
           Smoothing_and_Filtering.smoothing_and_filtering(dt_obj)
 
         # Runs 'Data Preparation' app
-        if navigation == 'Data Preparation':
-          Scaling.scaler(dt_obj)
+        if navigation == 'Playground':
+          Playground.playground(dt_obj)
         
         # Runs 'Classification' app
         if navigation == 'Classification':
