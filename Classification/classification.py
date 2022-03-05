@@ -215,30 +215,31 @@ def main(data_obj):
 
             Classifier = NN_Classifier(cl_df, NN_inputs, col_idx)
 
-            st.write(Classifier.NN_Outputs.Report)
             Classifier.Classify()
-            st.write(Classifier.Classify()[52])
+            # st.write(Classifier.Classify()[52])
             Classifier.printing()
+            
+
             Classifier.Conf()
-            #st.write(classification_report(getattr(Classifier, 'NN_Outputs.NN_Inputs')))
+            # #st.write(classification_report(getattr(Classifier, 'NN_Outputs.NN_Inputs')))
 
-            class boris(NamedTuple):
-                test_size:  str
+            # class boris(NamedTuple):
+            #     test_size:  str
 
-            inputs1 = boris("Sasay kudasai")
+            # inputs1 = boris("Sasay kudasai")
 
-            st.write(inputs1[0])
-            st.write(Classifier.NN_Outputs['y_pred'])
-            st.write("Blah")
-            st.write(Classifier.NN_Outputs.y_pred)
-            st.write(getattr(Classifier.classifier_outputs, 'X_test'))
-            st.write(getattr(Classifier.classifier_outputs, 'Error_message'))
-            st.write(getattr(Classifier.classifier_outputs, 'Report'))
-            print(getattr(Classifier.classifier_outputs, 'Report'))
+            # st.write(inputs1[0])
+            # st.write(Classifier.NN_Outputs['y_pred'])
+            # st.write("Blah")
+            # st.write(Classifier.NN_Outputs.y_pred)
+            # st.write(getattr(Classifier.classifier_outputs, 'X_test'))
+            # st.write(getattr(Classifier.classifier_outputs, 'Error_message'))
+            # st.write(getattr(Classifier.classifier_outputs, 'Report'))
+            # print(getattr(Classifier.classifier_outputs, 'Report'))
 
-            from operator import itemgetter as _itemgetter
-            f = _itemgetter(1)
-            st.write(Classifier.NN_Outputs[0])
+            # from operator import itemgetter as _itemgetter
+            # f = _itemgetter(1)
+            # st.write(Classifier.NN_Outputs[0])
                  
 
 if __name__ == "__main__":
