@@ -1,98 +1,16 @@
-from ast import Not
-from code import interact
 import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
 import seaborn as sns
-from io import StringIO
-from pandas.api.types import is_numeric_dtype
-from .MLP_Classifier import NN_Classifier, classifier_inputs
-from typing import NamedTuple
-
 import numpy as np
 
 from imblearn.combine import SMOTEENN
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import precision_recall_fscore_support
-from sklearn.utils.multiclass import unique_labels
-from tabulate import tabulate
 
-def classification_report(y_true, y_pred, labels=None, target_names=None,
-                          sample_weight=None, digits=4, tablfmt='pipe'):
-    """  Better format for sklearn's classification report
-    Based on tabulate package
-    ----------
-    y_true : 1d array-like, or label indicator array / sparse matrix
-        Ground truth (correct) target values.
-    y_pred : 1d array-like, or label indicator array / sparse matrix
-        Estimated targets as returned by a classifier.
-    labels : array, shape = [n_labels]
-        Optional list of label indices to include in the report.
-    target_names : list of strings
-        Optional display names matching the labels (same order).
-    sample_weight : array-like of shape = [n_samples], optional
-        Sample weights.
-    digits : int
-        Number of digits for formatting output floating point values
-    Returns
-    -------
-    report : string
-        Text summary of the precision, recall, F1 score for each class.
-        The reported averages are a prevalence-weighted macro-average across
-        classes (equivalent to :func:`precision_recall_fscore_support` with
-        ``average='weighted'``).
-        Note that in binary classification, recall of the positive class
-        is also known as "sensitivity"; recall of the negative class is
-        "specificity".
-    Examples
-    --------
-    >>> from sklearn.metrics import classification_report
-    >>> y_true = [0, 1, 2, 2, 2]
-    >>> y_pred = [0, 0, 2, 2, 1]
-    >>> target_names = ['class 0', 'class 1', 'class 2']
-    >>> print(classification_report(y_true, y_pred, target_names=target_names))
-                 precision    recall  f1-score   support
-    """
-    floatfmt = '.{:}f'.format(digits)
-    if labels is None:
-        labels = unique_labels(y_true, y_pred)
-    else:
-        labels = np.asarray(labels)
-
-    if target_names is not None and len(labels) != len(target_names):
-        print(
-            "labels size, {0}, does not match size of target_names, {1}"
-            .format(len(labels), len(target_names))
-        )
-
-    last_line_heading = 'avg / total'
-
-    if target_names is None:
-        target_names = [u'%s' % l for l in labels]
-
-    headers = ["precision", "recall", "f1-score", "support"]
-
-    p, r, f1, s = precision_recall_fscore_support(y_true, y_pred,
-                                                  labels=labels,
-                                                  average=None,
-                                                  sample_weight=sample_weight)
-
-    rows = zip(target_names, p, r, f1, s)
-    tbl_rows = []
-    for row in rows:
-        tbl_rows.append(row)
-
-    # compute averages
-    last_row = (last_line_heading,
-                np.average(p, weights=s),
-                np.average(r, weights=s),
-                np.average(f1, weights=s),
-                np.sum(s))
-    tbl_rows.append(last_row)
-    return tabulate(tbl_rows, headers=headers,
-                    tablefmt=tablfmt, floatfmt=floatfmt)
+from .MLP_Classifier import NN_Classifier, classifier_inputs
+from .ClassificationClass_Noah import Classification
 
 def import_dset(data_obj):
     try:
@@ -120,9 +38,9 @@ def main(data_obj):
 
     # Main data classification method radio selector
     cl_method = st.radio(label='Classification Method', options=[
-                         'Neural Networks', 'Button 1', 'Button 2'])
+                         'Neural Networks', 'Classification (Noah)', 'Button 2'])
 
-    # Selected 'Remove outliers'
+    # Selected 'Neural Networks'
     if cl_method == 'Neural Networks':
 
         st.dataframe(cl_df)
@@ -211,35 +129,52 @@ def main(data_obj):
                                        iteration_num,
                                        norm_bool
                                        )
-            st.write(type(tt_proportion))
 
             Classifier = NN_Classifier(cl_df, NN_inputs, col_idx)
 
-            st.write(Classifier.NN_Outputs.Report)
             Classifier.Classify()
-            st.write(Classifier.Classify()[52])
+
+            #st.write(getattr(Classifier.classifier_outputs, 'Report'))
             Classifier.printing()
             Classifier.Conf()
-            #st.write(classification_report(getattr(Classifier, 'NN_Outputs.NN_Inputs')))
 
-            class boris(NamedTuple):
-                test_size:  str
+    if cl_method == 'Classification (Noah)':
+        
+        st.dataframe(cl_df)
+        st.write(cl_df.shape)
 
-            inputs1 = boris("Sasay kudasai")
+        with st.container():
+            st.subheader('Select input settings')
 
-            st.write(inputs1[0])
-            st.write(Classifier.NN_Outputs['y_pred'])
-            st.write("Blah")
-            st.write(Classifier.NN_Outputs.y_pred)
-            st.write(getattr(Classifier.classifier_outputs, 'X_test'))
-            st.write(getattr(Classifier.classifier_outputs, 'Error_message'))
-            st.write(getattr(Classifier.classifier_outputs, 'Report'))
-            print(getattr(Classifier.classifier_outputs, 'Report'))
+            cc1, cc2, cc3 = st.columns(3)
+            
+            with cc1:
+                tt_proportion = st.slider('Portion of test data', 0.0, 1.0, 0.2, 0.05)
+                upsample = st.checkbox('Upsample data?')
+                scale = st.checkbox('Scale data?')
+                del_na = st.checkbox('Get rid of N/A values?')
 
-            from operator import itemgetter as _itemgetter
-            f = _itemgetter(1)
-            st.write(Classifier.NN_Outputs[0])
-                 
+            with cc2:
+                columns_list = list(cl_df.columns)
+                selected_column = st.selectbox("Column to classify:", columns_list)
+
+            with cc3:
+                classifier_list = ["KNN", "SVM", "LR"]
+                selected_classifier = st.selectbox("Select a classifier:", classifier_list)
+                if selected_classifier == "KNN":
+                    k_value = st.number_input('"k" value:', 1, 10, 5, 1)
+                if selected_classifier == "SVM":
+                    kernel_list = ['linear', 'polynomial', 'rbf', 'sigmoid']
+                    selected_kernel = st.selectbox("Kernel:", kernel_list)
+                if selected_classifier == "LR":
+                    solver_list = ['liblinear', 'newton-cg', 'lbfgs', 'sag', 'saga']
+                    selected_solver = st.selectbox("Solver:", solver_list)
+
+        with st.container():
+            class_obj=Classification(cl_df)
+            st.dataframe(class_obj.describe_dataframe())
+
+        
 
 if __name__ == "__main__":
     main()

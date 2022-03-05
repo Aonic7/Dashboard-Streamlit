@@ -1,27 +1,93 @@
-from cProfile import label
-from collections import namedtuple
-from email import message
-from lib2to3.pgen2.pgen import DFAState
-from pickle import TRUE
-from xmlrpc.client import Boolean
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import sklearn 
 import seaborn as sn
-from sklearn import model_selection
 from sklearn import metrics,preprocessing
-from sklearn.preprocessing import StandardScaler
-from sklearn.neural_network import MLPRegressor
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import f1_score, classification_report
-from imblearn.over_sampling import SMOTE,ADASYN
-from imblearn.combine import SMOTEENN,SMOTETomek
+from imblearn.combine import SMOTEENN
 from typing import NamedTuple
-from numpy.core.fromnumeric import shape, size
+from numpy.core.fromnumeric import shape
 import streamlit as st #streamlit backend
+
+from sklearn.metrics import precision_recall_fscore_support
+from sklearn.utils.multiclass import unique_labels
+from tabulate import tabulate
+
+def classification_report(y_true, y_pred, labels=None, target_names=None,
+                          sample_weight=None, digits=4, tablfmt='pipe'):
+    """  Better format for sklearn's classification report
+    Based on tabulate package
+    ----------
+    y_true : 1d array-like, or label indicator array / sparse matrix
+        Ground truth (correct) target values.
+    y_pred : 1d array-like, or label indicator array / sparse matrix
+        Estimated targets as returned by a classifier.
+    labels : array, shape = [n_labels]
+        Optional list of label indices to include in the report.
+    target_names : list of strings
+        Optional display names matching the labels (same order).
+    sample_weight : array-like of shape = [n_samples], optional
+        Sample weights.
+    digits : int
+        Number of digits for formatting output floating point values
+    Returns
+    -------
+    report : string
+        Text summary of the precision, recall, F1 score for each class.
+        The reported averages are a prevalence-weighted macro-average across
+        classes (equivalent to :func:`precision_recall_fscore_support` with
+        ``average='weighted'``).
+        Note that in binary classification, recall of the positive class
+        is also known as "sensitivity"; recall of the negative class is
+        "specificity".
+    Examples
+    --------
+    >>> from sklearn.metrics import classification_report
+    >>> y_true = [0, 1, 2, 2, 2]
+    >>> y_pred = [0, 0, 2, 2, 1]
+    >>> target_names = ['class 0', 'class 1', 'class 2']
+    >>> print(classification_report(y_true, y_pred, target_names=target_names))
+                 precision    recall  f1-score   support
+    """
+    floatfmt = '.{:}f'.format(digits)
+    if labels is None:
+        labels = unique_labels(y_true, y_pred)
+    else:
+        labels = np.asarray(labels)
+
+    if target_names is not None and len(labels) != len(target_names):
+        print(
+            "labels size, {0}, does not match size of target_names, {1}"
+            .format(len(labels), len(target_names))
+        )
+
+    last_line_heading = 'avg / total'
+
+    if target_names is None:
+        target_names = [u'%s' % l for l in labels]
+
+    headers = ["precision", "recall", "f1-score", "support"]
+
+    p, r, f1, s = precision_recall_fscore_support(y_true, y_pred,
+                                                  labels=labels,
+                                                  average=None,
+                                                  sample_weight=sample_weight)
+
+    rows = zip(target_names, p, r, f1, s)
+    tbl_rows = []
+    for row in rows:
+        tbl_rows.append(row)
+
+    # compute averages
+    last_row = (last_line_heading,
+                np.average(p, weights=s),
+                np.average(r, weights=s),
+                np.average(f1, weights=s),
+                np.sum(s))
+    tbl_rows.append(last_row)
+    return tabulate(tbl_rows, headers=headers,
+                    tablefmt=tablfmt, floatfmt=floatfmt)
 
 class NN_Classifier:
         
@@ -47,6 +113,8 @@ class NN_Classifier:
     def __init__(self,df,NN_Inputs,dependant_var_index):
         self.df=df
         self.NN_Inputs=NN_Inputs
+        self.NN_Outputs.flag = False
+        self.NN_Outputs.Error_message = 'No errors found.'
         
         self.k=dependant_var_index
         self.handle()
@@ -153,7 +221,7 @@ class NN_Classifier:
             except Exception as e:
                 self.NN_Outputs.Error_message= 'Error in Regressor Creation: ' + str(e)
                 self.NN_Outputs.flag=True
-                self.NN_Outputs.Report = "Vasya"
+
         else:
             self.NN_Outputs.Train_score= 'Refer To error in Handling Method'
             self.NN_Outputs.test_score= 'Refer To error in Handling Method'
@@ -175,27 +243,34 @@ class NN_Classifier:
     def printing(self):
         
         if (self.NN_Outputs.flag) != True:
-            self.NN_Outputs.Error_message= ' No Error Occurred during prcoessing of the code'
+            self.NN_Outputs.Error_message= ' No Error Occurred during processing of the code'
         
-        print('Error Message           ', self.NN_Outputs.Error_message)
-        print('expected output:        ', self.NN_Outputs.y_actual)
-        #st.write('Predicted Output:       ', self.NN_Outputs.y_pred)
-        print('Model Train_score on the Training Data:                   ',  self.NN_Outputs.Train_score)
-        print('Model Train_score on the Testing Data:                   ',  self.NN_Outputs.test_score)
-        print('length of output array: ',  self.NN_Outputs.length)
-        st.write(f'Classification Report:\n {self.NN_Outputs.Report}')
+
+        st.warning(self.NN_Outputs.Error_message)
+        cc1, cc2 = st.columns(2)
+        with cc1:
+            # st.metric('Expected output:        ', self.NN_Outputs.y_actual)
+            # st.write('Predicted Output:       ', self.NN_Outputs.y_pred)
+            st.metric('Model Train_score on the Training Data:',  round(self.NN_Outputs.Train_score, 4))
+            st.metric('Model Train_score on the Testing Data:',  round(self.NN_Outputs.test_score, 4))
+            st.metric('Length of output array: ',  self.NN_Outputs.length)
+        with cc2:
+            st.write('Classification Report: ')
+            st.write(self.NN_Outputs.Report)
+            st.write("")
 
         
     def Conf(self):
         fig = plt.figure()
         if (self.NN_Outputs.flag) !=True:
+            fig = plt.figure(figsize=(10, 4))
             conf_matrix=metrics.confusion_matrix(self.NN_Outputs.y_actual, self.NN_Outputs.y_pred)
             df_conf=pd.DataFrame(conf_matrix,range(2),range(2))
             sn.set(font_scale=1.4)
             sn.heatmap(df_conf, annot=True, annot_kws={"size":16})
-            plt.show()
+            st.pyplot(fig)
         else:
-            print('Error occurred in previous methods, Refer to Error Message Field')
+            st.write('Error occurred in previous methods, Refer to Error Message Field')
 
 
 class classifier_inputs(NamedTuple):

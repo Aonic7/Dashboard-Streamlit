@@ -68,9 +68,9 @@ class Regressor:
     def result(self,Y_test, Y_pred): 
         # To compute R-squared score+
         r2 = r2_score(Y_test, Y_pred)
-        st.write('R-squared score: ', round(r2, 5))
+        st.metric('R-squared score: ', round(r2, 4))
         # To compute root mean squared error
-        st.write('RMSE: ',MSE(Y_test,Y_pred)**(0.5))
+        st.metric('RMSE: ', round((MSE(Y_test,Y_pred)**(0.5)), 4))
         # To compute adjusted R-squared error 
         # r_adj = 1 - ((1-r2)*((Y_test.shape[0])-1))/(Y_test.shape[0]-X_test.shape[1]-1)
         # print('R-squared adjusted:',r_adj)
