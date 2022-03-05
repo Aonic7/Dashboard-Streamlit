@@ -8,6 +8,7 @@ from io import StringIO #to read data files as .csv correctly
 #App import
 #from Data_Preview import data_preview
 import Data_Preview
+import Data_Preparation
 import Smoothing_and_Filtering
 import Playground
 import Regression
@@ -68,7 +69,7 @@ class Interface():
               pass
       
         # Side bar navigation menu with a select box
-        menu = ['Data Preview', 'Smoothing and filtering', 'Classification', 'Regression', 'Playground']
+        menu = ['Data Preview', 'Data Preparation', 'Smoothing and filtering', 'Classification', 'Regression', 'Playground']
         navigation = st.sidebar.selectbox(label="Select menu", options=menu)
 
         # Runs 'Data Preview' app
@@ -76,11 +77,16 @@ class Interface():
           with st.container():
            Data_Preview.data_preview(dt_obj)
 
+        # Runs 'Data Preparation' app
+        if navigation == 'Data Preparation':
+          with st.container():
+           Data_Preparation.data_prep(dt_obj)
+
         # Runs 'Smoothing and filtering' app
         if navigation == 'Smoothing and filtering':
           Smoothing_and_Filtering.smoothing_and_filtering(dt_obj)
 
-        # Runs 'Data Preparation' app
+        # Runs 'Playground' app
         if navigation == 'Playground':
           Playground.playground(dt_obj)
         
