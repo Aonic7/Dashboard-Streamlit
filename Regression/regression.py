@@ -38,6 +38,10 @@ def main(data_obj):
         # st.write('Try execution')
     except:
         rg_df = data_obj.df
+        st.error("""You did not smooth of filter the data.
+                     Please go to 'Smoothing and filtering' and finalize your results.
+                     Otherwise, the default dataset would be used!
+                     """)   
         # st.write('Where is money, Lebovskiy?')
 
     st.write(
