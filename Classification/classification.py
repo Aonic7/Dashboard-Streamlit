@@ -31,7 +31,19 @@ def main(data_obj):
 
     st.header("Classification")
 
-    cl_df = import_dset(data_obj)
+    # cl_df = import_dset(data_obj)
+    try:
+        st.write('Try execution')
+        cl_df = pd.read_csv('Smoothing_and_Filtering//Preprocessing Dataset.csv', index_col=None)
+
+    except:
+        st.write('Exception execution')
+        cl_df = data_obj.df
+        st.error("""You did not smooth of filter the data.
+                    Please go to 'Smoothing and filtering' and finalize your results.
+                    Otherwise, the default dataset would be used!
+                    """)    
+    
 
     st.write(
         '<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;}</style>', unsafe_allow_html=True)
