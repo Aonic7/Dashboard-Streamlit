@@ -150,7 +150,7 @@ def main(data_obj):
             
             with cc1:
                 tt_proportion = st.slider('Portion of test data', 0.0, 1.0, 0.2, 0.05)
-                upsample = st.checkbox('Upsample data?')
+                upsample_cl = st.checkbox('Upsample data?')
                 scale = st.checkbox('Scale data?')
                 del_na = st.checkbox('Get rid of N/A values?')
 
@@ -161,19 +161,61 @@ def main(data_obj):
             with cc3:
                 classifier_list = ["KNN", "SVM", "LR"]
                 selected_classifier = st.selectbox("Select a classifier:", classifier_list)
+
                 if selected_classifier == "KNN":
                     k_value = st.number_input('"k" value:', 1, 10, 5, 1)
+
                 if selected_classifier == "SVM":
-                    kernel_list = ['linear', 'polynomial', 'rbf', 'sigmoid']
+                    kernel_list = ['linear', 'poly', 'rbf', 'sigmoid']
                     selected_kernel = st.selectbox("Kernel:", kernel_list)
+
                 if selected_classifier == "LR":
                     solver_list = ['liblinear', 'newton-cg', 'lbfgs', 'sag', 'saga']
                     selected_solver = st.selectbox("Solver:", solver_list)
 
         with st.container():
+            
             class_obj=Classification(cl_df)
             st.dataframe(class_obj.describe_dataframe())
 
+            with st.form(key="Noah"):
+                submit_button = st.form_submit_button(label='Submit')
+
+                if submit_button:
+                    with st.spinner("Training models..."):
+                            
+                        
+                        if selected_classifier == "KNN":
+                            class_obj.split_train_test(y_column_name = selected_column, 
+                                                    test_size = tt_proportion,
+                                                    random_state = 0, 
+                                                    upsample = upsample_cl, 
+                                                    scaling = scale, 
+                                                    deleting_na = del_na)
+                            class_obj.build_classifier('KNN', k_value)
+                            class_obj.show_classifier_accuracy()
+
+                        if selected_classifier == "SVM":
+                            class_obj.split_train_test(y_column_name = selected_column, 
+                                                    test_size = tt_proportion,
+                                                    random_state = 0, 
+                                                    upsample = upsample_cl, 
+                                                    scaling = scale, 
+                                                    deleting_na = del_na)
+                            class_obj.build_classifier('SVM', selected_kernel)
+                            class_obj.show_classifier_accuracy()
+
+                        if selected_classifier == "LR":
+                            class_obj.split_train_test(y_column_name = selected_column, 
+                                                    test_size = tt_proportion,
+                                                    random_state = 0, 
+                                                    upsample = upsample_cl, 
+                                                    scaling = scale, 
+                                                    deleting_na = del_na)
+                            class_obj.build_classifier('LR', selected_solver)
+                            class_obj.show_classifier_accuracy()
+
+                    
         
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import streamlit as st
 
 class Classification:
     #TO DO:
@@ -15,7 +16,7 @@ class Classification:
         if isinstance(dataframe, pd.DataFrame):
             self.data = dataframe
             data_shape = self.data.shape
-            print("Classification-Object with",str(data_shape[0]),"samples and",str(data_shape[1]),"columns was created")
+            st.write("Classification-Object with",str(data_shape[0]),"samples and",str(data_shape[1]),"columns was created")
         else:
             raise Exception("No pandas dataframe was given!")
 
@@ -23,7 +24,7 @@ class Classification:
             self.data.columns = column_names
             #Try Catch if not enough column names were given
         elif not column_names:
-            print("No column names were given")
+            st.write("No column names were given")
         else:
             raise Exception("Number of column names dont match with number of columns!")
     
@@ -41,7 +42,7 @@ class Classification:
             
             if deleting_na:
                 self.data = self.data.dropna(how='all')
-                print("Data has been preprocessed!")
+                st.write("Data has been preprocessed!")
             
             self.data_splitted = True
             self._x_data = self.data.copy()
@@ -56,14 +57,14 @@ class Classification:
             
 
             self._y_train.value_counts().plot(kind="bar",title="Distribution of classification values in the train data set",colormap="gray")
-            print("Train data shape:\t"+str(self._x_train.shape)+"\ttrain label shape:\t"+str(self._y_train.shape))
-            print("Test data shape:\t"+str(self._x_test.shape)+" \ttest label shape:\t"+str(self._y_test.shape))
+            st.write("Train data shape:\t"+str(self._x_train.shape)+"\ttrain label shape:\t"+str(self._y_train.shape))
+            st.write("Test data shape:\t"+str(self._x_test.shape)+" \ttest label shape:\t"+str(self._y_test.shape))
             
             if scaling:
                 scaler = StandardScaler()
                 self._x_train = scaler.fit_transform(self._x_train)
                 self._x_test = scaler.transform(self._x_test)
-                print("Data has been rescalled!")
+                st.write("Data has been rescalled!")
             
             
 
@@ -111,9 +112,9 @@ class Classification:
             else:
                 raise Exception("Classifier was not found! Avialable options are KNN (K-Nearest Neighbor), SVM (Support Vector Machine), LR (Logistic Regression)")
             self._y_pred = self.classifier.predict(self._x_test)
-            print("A",self.classifier," has been build with an overall accuracy of", round(metrics.accuracy_score(self._y_test, self._y_pred),2))
+            st.write("A",self.classifier," has been build with an overall accuracy of", round(metrics.accuracy_score(self._y_test, self._y_pred),2))
         else:
-            print("The data has to be splitted in train and test data befor a classifier can be build (use the split_train_test command)")
+            st.write("The data has to be splitted in train and test data befor a classifier can be build (use the split_train_test command)")
                     
     def _build_knn_classifier(self,k=5):
         from sklearn.neighbors import KNeighborsClassifier
@@ -139,7 +140,7 @@ class Classification:
         
         for dim in range(cnf_matrix.shape[0]):
             accuracy = cnf_matrix[dim][dim]/sum(cnf_matrix[dim])
-            print("Accuracy for the ",dim,"class:", accuracy)
+            st.write("Accuracy for the ",dim,"class:", accuracy)
             
         #plot the confusion matrix
         # not felxibale !!!
@@ -148,22 +149,25 @@ class Classification:
         tick_marks = np.arange(len(class_names))
         plt.xticks(tick_marks, class_names)
         plt.yticks(tick_marks, class_names)
+        # st.pyplot(fig)
         
         # create heatmap
+        fig1 = plt.figure(figsize=(10, 4))        
         sns.heatmap(pd.DataFrame(cnf_matrix), annot=True, cmap="YlGnBu" ,fmt='g')
         ax.xaxis.set_label_position("top")
         plt.tight_layout()
         plt.title(self.classifier,y=1.1)
         plt.ylabel('Actual')
         plt.xlabel('Predicted')
+        st.pyplot(fig1)
         
         #raise Error if no classifier was build yet
         
     def drop_dataframe_column(self, column_name):
         if column_name in self.data.columns:
             self.data.drop([column_name], axis=1, inplace=True)
-            print("Column",str(column_name),"was dropped, new dataframe:")
-            print(self.data.head())
+            st.write("Column",str(column_name),"was dropped, new dataframe:")
+            st.write(self.data.head())
         else:
             raise Exception("Given column name was not found in the dataset")
     
@@ -189,6 +193,6 @@ class Classification:
     
     def show_unique_values(self):
         for column_name in self.data.columns:
-            print(column_name)
-            print(sorted(self.data[column_name].unique()))
-            print()
+            st.write(column_name)
+            st.write(sorted(self.data[column_name].unique()))
+            st.write()
