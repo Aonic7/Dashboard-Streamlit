@@ -36,6 +36,18 @@ def import_dset(data_obj):
 
 def main(data_obj):
     st.header("Smoothing and filtering")
+    with st.expander(label="How to use", expanded=True):
+        st.info("""
+                On this page you will see three dataframes.
+                \n1) Original dataframe as it looked when you uploaded it
+                \n2) Current dataframe is the one the is used at the moment
+                \n3) Resulting dataframe is the one you will get after applying the changes. If will become a current dataframe then.
+                \n
+                \n To apply changes in-between intermediate steps do not forget to press 'Save intermediate results' button!
+                \n
+                \n If you mess up you dataset during 'Smoothing and Filtering', you can always reset it using the button on the (left) sidebar.
+                """)
+        st.warning("**No matter in you did any changes or not do not forget to press 'Finalize' button after you are done with 'Smoothing and filtering'!**")    
 
     # A button to circumvent loading the dataset using in the last session
     if st.sidebar.button("Reset dataframe to the initial one"):

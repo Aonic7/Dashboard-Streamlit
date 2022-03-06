@@ -56,7 +56,7 @@ def main(data_obj):
 
                 iteration_num = st.slider('Number of iterations', 100, 500, 200, 50)
 
-                norm_bool = st.select_slider('Normalize data?', [False, True], False)              
+                norm_bool = st.checkbox('Normalize data?')              
                 
             
             with cc2:

@@ -22,6 +22,10 @@ def import_dset(data_obj):
 
 def main(data_obj):
     st.header("Data Preparation")
+    st.info("""
+               Here you can rename and/or drop columns.
+               \nDon't forget to press 'Submit' each time to apply changes!
+            """)
     current_df = import_dset(data_obj)
 
     if st.sidebar.button("Reset dataframe to the initial one"):
