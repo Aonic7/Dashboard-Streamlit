@@ -23,9 +23,7 @@ def import_dset(data_obj):
         st.error("""You did not smooth of filter the data.
                     Please go to 'Smoothing and filtering' and finalize your results.
                     Otherwise, the default dataset would be used!
-                    """)
-        
-
+                    """)    
     return cl_df1
 
 
