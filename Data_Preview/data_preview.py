@@ -36,8 +36,8 @@ def main(data_obj):
         st.subheader("Correlation")
         st.dataframe(data_obj.df.corr())
 
-    # if os.path.isfile("Smoothing_and_Filtering//Preprocessing dataset.csv"):
-    #     os.remove("Smoothing_and_Filtering//Preprocessing dataset.csv")
+    if os.path.isfile("Smoothing_and_Filtering//Preprocessing dataset.csv"):
+        os.remove("Smoothing_and_Filtering//Preprocessing dataset.csv")
 
     # Correlation matrix
     st.subheader("Correlation heatmap")

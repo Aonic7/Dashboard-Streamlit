@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
-from pathlib import Path
+# from pathlib import Path
 
 from sklearn.model_selection import train_test_split
 from .MLP_Classifier import NN_Classifier, classifier_inputs
@@ -34,10 +34,10 @@ def main(data_obj):
         var_read = pd.read_csv("Smoothing_and_Filtering//Preprocessing dataset.csv")
         cl_df = var_read
         st.dataframe(cl_df)
-        st.write('Try execution')
+        # st.write('Try execution')
     except:
         cl_df = data_obj.df
-        st.write('Where is money, Lebovskiy?')
+        # st.write('Where is money, Lebovskiy?')
 
     # except:
     #     st.write('Exception execution')
