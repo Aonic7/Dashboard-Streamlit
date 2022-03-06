@@ -29,7 +29,8 @@ def main(data_obj):
     # cl_df = import_dset(data_obj)
     # try:
     st.write('Try execution')
-    cl_df = pd.read_csv('.//Smoothing_and_Filtering//Preprocessing Dataset.csv', index_col=None)
+    var_read = pd.read_csv("Smoothing_and_Filtering//Preprocessing dataset.csv")
+    cl_df = var_read
     st.dataframe(cl_df)
     st.write('Where is money, Lebovskiy?')
 
