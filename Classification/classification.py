@@ -28,11 +28,16 @@ def main(data_obj):
 
     # cl_df = import_dset(data_obj)
     # try:
-    st.write('Try execution')
-    var_read = pd.read_csv("Smoothing_and_Filtering//Preprocessing dataset.csv")
-    cl_df = var_read
-    st.dataframe(cl_df)
-    st.write('Where is money, Lebovskiy?')
+    
+
+    try:
+        var_read = pd.read_csv("Smoothing_and_Filtering//Preprocessing dataset.csv")
+        cl_df = var_read
+        st.dataframe(cl_df)
+        st.write('Try execution')
+    except:
+        cl_df = data_obj.df
+        st.write('Where is money, Lebovskiy?')
 
     # except:
     #     st.write('Exception execution')
