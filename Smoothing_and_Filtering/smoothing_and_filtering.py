@@ -581,7 +581,7 @@ def main(data_obj):
             os.remove("Smoothing_and_Filtering//Filtered Dataset.csv")
         st.sidebar.success("Saved!")
         var_read = pd.read_csv("Smoothing_and_Filtering//Preprocessing dataset.csv")
-        st.dataframe(var_read)
+        # st.dataframe(var_read)
     else:
         st.sidebar.error("You have unsaved changes")
 
