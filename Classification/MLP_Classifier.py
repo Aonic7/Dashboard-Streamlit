@@ -206,8 +206,8 @@ class NN_Classifier:
             with cc1:
                 # st.metric('Expected output:        ', self.NN_Outputs.y_actual)
                 # st.write('Predicted Output:       ', self.NN_Outputs.y_pred)
-                st.metric('Model Train_score on the Training Data:',  round(self.Train_score, 4))
-                st.metric('Model Train_score on the Testing Data:',  round(self.test_score, 4))
+                st.metric('Model score on the Training Data:',  round(self.Train_score, 4))
+                st.metric('Model score on the Testing Data:',  round(self.test_score, 4))
                 st.metric('Length of output array: ',  self.length)
             with cc2:
                 st.write('Classification Report: ')
