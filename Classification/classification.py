@@ -14,14 +14,17 @@ from .ClassificationClass_Noah import Classification
 
 def import_dset(data_obj):
     try:
+        st.write('Try execution')
         cl_df1 = pd.read_csv('Smoothing_and_Filtering//Preprocessing Dataset.csv', index_col=None)
 
     except:
+        st.write('Exception execution')
+        cl_df1 = data_obj.df
         st.error("""You did not smooth of filter the data.
                     Please go to 'Smoothing and filtering' and finalize your results.
                     Otherwise, the default dataset would be used!
                     """)
-        cl_df1 = data_obj.df
+        
 
     return cl_df1
 
