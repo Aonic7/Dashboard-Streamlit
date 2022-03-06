@@ -1,14 +1,8 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
-import seaborn as sns
-import numpy as np
 
-from imblearn.combine import SMOTEENN
-from sklearn.neural_network import MLPClassifier
-from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
-
 from .MLP_Classifier import NN_Classifier, classifier_inputs
 from .ClassificationClass_Noah import Classification
 
@@ -32,19 +26,19 @@ def main(data_obj):
     st.header("Classification")
 
     # cl_df = import_dset(data_obj)
-    try:
-        st.write('Try execution')
-        cl_df = pd.read_csv('Smoothing_and_Filtering//Preprocessing Dataset.csv', index_col=None)
-        st.dataframe(cl_df)
-        st.write('Where is money, Lebovskiy?')
+    # try:
+    st.write('Try execution')
+    cl_df = pd.read_csv('Smoothing_and_Filtering//Preprocessing Dataset.csv', index_col=None)
+    st.dataframe(cl_df)
+    st.write('Where is money, Lebovskiy?')
 
-    except:
-        st.write('Exception execution')
-        cl_df = data_obj.df
-        st.error("""You did not smooth of filter the data.
-                    Please go to 'Smoothing and filtering' and finalize your results.
-                    Otherwise, the default dataset would be used!
-                    """)    
+    # except:
+    #     st.write('Exception execution')
+    #     cl_df = data_obj.df
+    #     st.error("""You did not smooth of filter the data.
+    #                 Please go to 'Smoothing and filtering' and finalize your results.
+    #                 Otherwise, the default dataset would be used!
+    #                 """)    
     
 
     st.write(
