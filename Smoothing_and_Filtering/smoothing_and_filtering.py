@@ -555,9 +555,6 @@ def main(data_obj):
         a = pd.read_csv("Smoothing_and_Filtering//Filtered Dataset.csv")
         if a.equals(current_df):
             st.sidebar.warning("Currently saved results are equal to the current dataframe")
-        else:
-            st.dataframe(a.dtypes.astype(str))
-            st.dataframe(current_df.dtypes.astype(str))
     except:
         st.sidebar.success("You haven't made any changes to the original dataframe yet")
     
