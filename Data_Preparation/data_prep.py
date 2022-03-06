@@ -2,27 +2,26 @@ import pandas as pd
 import streamlit as st
 import numpy as np
 import os
+from streamlit_autorefresh import st_autorefresh #https://libraries.io/pypi/streamlit-autorefresh
+
 
 def import_dset(data_obj):
     try:
         a = pd.read_csv('Smoothing_and_Filtering//Filtered Dataset.csv', index_col = None)
         if a.equals(data_obj.df) == False:
             current_df = a
-            #st.sidebar.write("1")
-            #st.sidebar.write(a.equals(data_obj.df))
         else:
             current_df = data_obj.df
             current_df.to_csv("Smoothing_and_Filtering//initial.csv", index=False)
-            #st.sidebar.write("2")
     except:
         current_df = data_obj.df
         current_df.to_csv("Smoothing_and_Filtering//initial.csv", index=False)
-        #st.sidebar.write("3")
 
     return current_df
 
 
 def main(data_obj):
+    st.header("Data Preparation")
     current_df = import_dset(data_obj)
 
     if st.sidebar.button("Reset dataframe to the initial one"):
@@ -33,27 +32,36 @@ def main(data_obj):
           
     cc1, cc2, cc3 = st.columns(3)
     with cc1:
+        st.write("Dataframe display:")
         st.write(current_df)    
     with cc2:
         with st.form(key="form"):
             col_to_change = st.selectbox("Column to change", current_df.columns)
             new_col_name = st.text_input("New name", value="")
             submit_button = st.form_submit_button(label='Submit changes')
+            #st_autorefresh(interval=500, limit=2, key="fizzbuzzcounter1")
           
         if submit_button:
+                
             current_df = current_df.rename(columns={col_to_change: new_col_name})
             current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
-            st.write(current_df) 
+            st_autorefresh(interval=50, limit=2, key="fizzbuzzcounter")      
+            
+             
     with cc3:
         with st.form(key="form1"):
-            col_to_delete = st.selectbox("Column to delete", current_df.columns)
+            #col_to_delete = st.selectbox("Column to delete", current_df.columns)
+            col_to_delete  = st.multiselect('Columns to delete', current_df.columns)
             submit_button1 = st.form_submit_button(label='Submit changes')
+            #st_autorefresh(interval=500, limit=2, key="fizzbuzzcounter2")
 
         if submit_button1:
-            current_df = current_df.drop(col_to_delete)
+        
+            current_df = current_df.drop(columns=col_to_delete)
             current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
-            st.write(current_df) 
-
+            st_autorefresh(interval=50, limit=2, key="fizzbuzzcounter")
+                               
+             
 if __name__ == "__main__":
     main()
 
