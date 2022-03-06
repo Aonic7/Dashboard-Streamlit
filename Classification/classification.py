@@ -35,6 +35,7 @@ def main(data_obj):
     try:
         st.write('Try execution')
         cl_df = pd.read_csv('Smoothing_and_Filtering//Preprocessing Dataset.csv', index_col=None)
+        st.dataframe(cl_df)
 
     except:
         st.write('Exception execution')
