@@ -28,7 +28,17 @@ def main(data_obj):
 
     st.header('Regression')
 
-    rg_df = import_dset(data_obj)
+    # rg_df = import_dset(data_obj)
+
+
+    try:
+        var_read = pd.read_csv("Smoothing_and_Filtering//Preprocessing dataset.csv")
+        rg_df = var_read
+        # st.dataframe(cl_df)
+        # st.write('Try execution')
+    except:
+        rg_df = data_obj.df
+        # st.write('Where is money, Lebovskiy?')
 
     st.write(
         '<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;}</style>', unsafe_allow_html=True)

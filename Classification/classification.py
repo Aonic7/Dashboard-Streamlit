@@ -33,7 +33,7 @@ def main(data_obj):
     try:
         var_read = pd.read_csv("Smoothing_and_Filtering//Preprocessing dataset.csv")
         cl_df = var_read
-        st.dataframe(cl_df)
+        # st.dataframe(cl_df)
         # st.write('Try execution')
     except:
         cl_df = data_obj.df
