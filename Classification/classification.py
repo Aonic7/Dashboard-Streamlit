@@ -12,16 +12,21 @@ from sklearn.model_selection import train_test_split
 from .MLP_Classifier import NN_Classifier, classifier_inputs
 from .ClassificationClass_Noah import Classification
 
-def import_dset(data_obj):
-    try:
-        cl_df = pd.read_csv('Smoothing_and_Filtering//Preprocessing Dataset.csv', index_col=None)
+# def import_dset(data_obj):
+#     try:
+#         cl_df = pd.read_csv('Smoothing_and_Filtering//Preprocessing Dataset.csv', index_col=None)
 
-    except:
-        st.error("""You did not smooth of filter the data.
-                    Please go to 'Smoothing and filtering' and finalize your results.
-                    Otherwise, the default dataset would be used!
-                    """)
-        cl_df = data_obj.df
+#     except:
+#         st.error("""You did not smooth of filter the data.
+#                     Please go to 'Smoothing and filtering' and finalize your results.
+#                     Otherwise, the default dataset would be used!
+#                     """)
+#         cl_df = data_obj.df
+
+#     return cl_df
+
+def import_dset(data_obj):
+    cl_df = pd.read_csv('Smoothing_and_Filtering//Preprocessing Dataset.csv', index_col=None)
 
     return cl_df
 
