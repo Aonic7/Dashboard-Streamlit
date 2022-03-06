@@ -122,15 +122,6 @@ def main(data_obj):
 
 
 
-
-
-
-
-
-
-
-    
-
     label_column = 'Select column that contains labels (no scaling will be applied to it)'
     columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
     selected_column = st.selectbox(label_column, columns_list)
