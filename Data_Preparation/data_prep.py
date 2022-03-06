@@ -35,6 +35,9 @@ def main(data_obj):
         st.write("Dataframe display:")
         st.write(current_df)    
     with cc2:
+        st.write(" ")
+        st.write(" ")
+        st.write(" ")
         with st.form(key="form"):
             col_to_change = st.selectbox("Column to change", current_df.columns)
             new_col_name = st.text_input("New name", value="")
@@ -49,6 +52,9 @@ def main(data_obj):
             
              
     with cc3:
+        st.write(" ")
+        st.write(" ")
+        st.write(" ")
         with st.form(key="form1"):
             #col_to_delete = st.selectbox("Column to delete", current_df.columns)
             col_to_delete  = st.multiselect('Columns to delete', current_df.columns)

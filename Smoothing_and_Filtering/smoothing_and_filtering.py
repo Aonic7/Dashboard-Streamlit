@@ -20,14 +20,16 @@ def import_dset(data_obj):
         if a.equals(data_obj.df) == False:
             current_df1 = a
             current_df = Converter.dateTime_converter(current_df1)
-            #st.sidebar.write("1")
+            # st.sidebar.write("1")
             #st.sidebar.write(a.equals(data_obj.df))
         else:
             current_df = data_obj.df
-            #st.sidebar.write("2")
+            current_df = Converter.dateTime_converter(current_df)
+            # st.sidebar.write("2")
     except:
         current_df = data_obj.df
-        #st.sidebar.write("3")
+        current_df = Converter.dateTime_converter(current_df)
+        # st.sidebar.write("3")
 
     return current_df
 
@@ -37,7 +39,6 @@ def main(data_obj):
 
     # A button to circumvent loading the dataset using in the last session
     if st.sidebar.button("Reset dataframe to the initial one"):
-        st.write('skip')
         data_obj.df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
         # st.dataframe(data_obj.df)
         #st.write(data_obj.df.shape)
@@ -58,6 +59,7 @@ def main(data_obj):
     #     current_df = data_obj.df
 
     current_df = import_dset(data_obj)
+      
     # Overview of the dataframes
     
     col1, col2, col3 = st.columns(3)
@@ -393,10 +395,10 @@ def main(data_obj):
                     if plot_basic:
                             interpolation_subplot(data_obj.df, linear_df, selected_column, 'linear_fill')
                         
-                    if st.button("Save intermediate liner results"):
+                    if st.button("Save intermediate linear results"):
                             current_df = linear_df.reset_index()
                             current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)  
-                except:
+                except KeyError as e:
                         st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
                         st.stop()   
 
@@ -432,7 +434,7 @@ def main(data_obj):
                 if st.button("Save intermediate cubic results"):
                     current_df = Cubic_df.reset_index()
                     current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)   
-            except: 
+            except KeyError as e: 
                    st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
                    st.stop()        
         
@@ -466,7 +468,7 @@ def main(data_obj):
                 if st.button("Save intermediate Forward Fill results"):
                     current_df = df_ffill.reset_index()
                     current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False) 
-            except: 
+            except KeyError as e: 
                  st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
                  st.stop()   
 
@@ -500,7 +502,7 @@ def main(data_obj):
                 if st.button("Save intermediate Backward Fill results"):
                     current_df = df_bfill.reset_index()
                     current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)           
-            except:
+            except KeyError as e:
                 st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
                 st.stop()   
                 

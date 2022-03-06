@@ -65,13 +65,16 @@ class Remove_Outliers():
 class Converter():
    
     def dateTime_converter(df):
-      for col in df.columns:
-           if df[col].dtype == 'object':
+
+        for col in df.columns:
+            if df[col].dtype == 'object':
                 try:
                     df[col] = pd.to_datetime(df[col])
-                    return df
-                except ValueError:
-                    pass   
+                except:
+                    pass
+            else:
+                df[col] = df[col]
+        return df
 
 class Smoothing():
     def __init__(self):

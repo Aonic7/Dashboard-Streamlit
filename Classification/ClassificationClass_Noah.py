@@ -24,7 +24,8 @@ class Classification:
             self.data.columns = column_names
             #Try Catch if not enough column names were given
         elif not column_names:
-            st.write("No column names were given")
+            #st.write("No column names were given")
+            pass
         else:
             raise Exception("Number of column names dont match with number of columns!")
     
@@ -57,8 +58,8 @@ class Classification:
             
 
             self._y_train.value_counts().plot(kind="bar",title="Distribution of classification values in the train data set",colormap="gray")
-            st.write("Train data shape:\t"+str(self._x_train.shape)+"\ttrain label shape:\t"+str(self._y_train.shape))
-            st.write("Test data shape:\t"+str(self._x_test.shape)+" \ttest label shape:\t"+str(self._y_test.shape))
+            st.write("Train data shape:\t"+str(self._x_train.shape)+"\ttrain label shape:\t"+str(self._y_train.shape[0]))
+            st.write("Test data shape:\t"+str(self._x_test.shape)+" \ttest label shape:\t"+str(self._y_test.shape[0]))
             
             if scaling:
                 scaler = StandardScaler()
@@ -140,7 +141,9 @@ class Classification:
         
         for dim in range(cnf_matrix.shape[0]):
             accuracy = cnf_matrix[dim][dim]/sum(cnf_matrix[dim])
-            st.write("Accuracy for the ",dim,"class:", accuracy)
+            # st.write("Accuracy for the ",dim,"class:", accuracy)
+            #st.write(f"Accuracy for the {dim} class:")
+            st.metric(f"Accuracy for the {dim} class:", round(accuracy, 4))
             
         #plot the confusion matrix
         # not felxibale !!!

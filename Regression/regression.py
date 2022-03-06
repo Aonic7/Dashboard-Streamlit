@@ -81,7 +81,6 @@ def main(data_obj):
                     with cc11:
                         with st.spinner("Training models..."):
                             reg_inst.model(tree_size, tt_proportion)
-                        st.success('Done!')
 
                     reg_inst.result(reg_inst.Y_test, reg_inst.Y_pred)
                     reg_inst.prediction_plot(reg_inst.Y_test, reg_inst.Y_pred)

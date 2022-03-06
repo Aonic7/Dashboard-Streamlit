@@ -38,7 +38,7 @@ def main(data_obj):
 
     # Main data classification method radio selector
     cl_method = st.radio(label='Classification Method', options=[
-                         'Neural Networks', 'Classification (Noah)', 'Button 2'])
+                         'Neural Networks', 'Classification (Noah)'])
 
     # Selected 'Neural Networks'
     if cl_method == 'Neural Networks':
@@ -174,7 +174,7 @@ def main(data_obj):
                     selected_solver = st.selectbox("Solver:", solver_list)
 
         with st.container():
-            
+            st.subheader("Model")
             class_obj=Classification(cl_df)
             st.dataframe(class_obj.describe_dataframe())
 
@@ -184,36 +184,38 @@ def main(data_obj):
                 if submit_button:
                     with st.spinner("Training models..."):
                             
-                        
-                        if selected_classifier == "KNN":
-                            class_obj.split_train_test(y_column_name = selected_column, 
-                                                    test_size = tt_proportion,
-                                                    random_state = 0, 
-                                                    upsample = upsample_cl, 
-                                                    scaling = scale, 
-                                                    deleting_na = del_na)
-                            class_obj.build_classifier('KNN', k_value)
-                            class_obj.show_classifier_accuracy()
+                        try: 
+                            if selected_classifier == "KNN":
+                                class_obj.split_train_test(y_column_name = selected_column, 
+                                                        test_size = tt_proportion,
+                                                        random_state = 0, 
+                                                        upsample = upsample_cl, 
+                                                        scaling = scale, 
+                                                        deleting_na = del_na)
+                                class_obj.build_classifier('KNN', k_value)
+                                class_obj.show_classifier_accuracy()
 
-                        if selected_classifier == "SVM":
-                            class_obj.split_train_test(y_column_name = selected_column, 
-                                                    test_size = tt_proportion,
-                                                    random_state = 0, 
-                                                    upsample = upsample_cl, 
-                                                    scaling = scale, 
-                                                    deleting_na = del_na)
-                            class_obj.build_classifier('SVM', selected_kernel)
-                            class_obj.show_classifier_accuracy()
+                            if selected_classifier == "SVM":
+                                class_obj.split_train_test(y_column_name = selected_column, 
+                                                        test_size = tt_proportion,
+                                                        random_state = 0, 
+                                                        upsample = upsample_cl, 
+                                                        scaling = scale, 
+                                                        deleting_na = del_na)
+                                class_obj.build_classifier('SVM', selected_kernel)
+                                class_obj.show_classifier_accuracy()
 
-                        if selected_classifier == "LR":
-                            class_obj.split_train_test(y_column_name = selected_column, 
-                                                    test_size = tt_proportion,
-                                                    random_state = 0, 
-                                                    upsample = upsample_cl, 
-                                                    scaling = scale, 
-                                                    deleting_na = del_na)
-                            class_obj.build_classifier('LR', selected_solver)
-                            class_obj.show_classifier_accuracy()
+                            if selected_classifier == "LR":
+                                class_obj.split_train_test(y_column_name = selected_column, 
+                                                        test_size = tt_proportion,
+                                                        random_state = 0, 
+                                                        upsample = upsample_cl, 
+                                                        scaling = scale, 
+                                                        deleting_na = del_na)
+                                class_obj.build_classifier('LR', selected_solver)
+                                class_obj.show_classifier_accuracy()
+                        except ValueError as e:
+                            st.error("Please check if you selected a dataset and column suitable for binary classification. \nAlternatively, your labels should be one-hot encoded.")
 
                     
         
