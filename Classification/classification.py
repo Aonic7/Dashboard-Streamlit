@@ -14,9 +14,7 @@ from .ClassificationClass_Noah import Classification
 
 def import_dset(data_obj):
     try:
-        cl_df = pd.read_csv(
-            'Smoothing_and_Filtering//Preprocessing Dataset.csv', index_col=None)
-        st.info("File not found")
+        cl_df = pd.read_csv('Smoothing_and_Filtering//Preprocessing Dataset.csv', index_col=None)
 
     except:
         st.error("""You did not smooth of filter the data.
