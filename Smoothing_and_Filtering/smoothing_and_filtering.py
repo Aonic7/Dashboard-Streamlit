@@ -580,8 +580,13 @@ def main(data_obj):
         if os.path.isfile("Smoothing_and_Filtering//Filtered Dataset.csv"):
             os.remove("Smoothing_and_Filtering//Filtered Dataset.csv")
         st.sidebar.success("Saved!")
+        var_read = pd.read_csv("Smoothing_and_Filtering//Preprocessing dataset.csv")
+        st.dataframe(var_read)
     else:
         st.sidebar.error("You have unsaved changes")
+
+
+    
 
     # try:
     #     b = pd.read_csv('Preprocessing dataset.csv')
