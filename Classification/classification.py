@@ -3,9 +3,12 @@ import pandas as pd
 import streamlit as st
 # from pathlib import Path
 
+from sklearn.preprocessing import MinMaxScaler
+
 from sklearn.model_selection import train_test_split
 from .MLP_Classifier import NN_Classifier, classifier_inputs
 from .ClassificationClass_Noah import Classification
+from .RF_classfication import Sample
 
 def import_dset(data_obj):
     try:
@@ -57,7 +60,7 @@ def main(data_obj):
 
     # Main data classification method radio selector
     cl_method = st.radio(label='Classification Method', options=[
-                         'Neural Networks', 'Classification (Noah)'])
+                         'Neural Networks', 'Classification (Noah)', 'Random Forest (Sneha)'])
 
     # Selected 'Neural Networks'
     if cl_method == 'Neural Networks':
@@ -236,7 +239,54 @@ def main(data_obj):
                         except ValueError as e:
                             st.error("Please check if you selected a dataset and column suitable for binary classification. \nAlternatively, your labels should be one-hot encoded.")
 
-                    
+    if cl_method == 'Random Forest (Sneha)':
+
+        st.dataframe(cl_df)
+        st.write(cl_df.shape)
+
+        with st.container():
+            st.subheader('Select input settings')
+
+            cc1, cc2, cc3 = st.columns(3)
+            
+            with cc1:
+                tt_proportion = st.slider('Portion of test data', 0.0, 1.0, 0.2, 0.05)
+                estimator_value = st.slider('Estimator:', 0, 1000, 500, 10)
+                maxim_depth = st.slider('Maximal depth:', 0, 15, 5, 1)
+
+
+            with cc2:
+                columns_list = list(cl_df.columns)
+                selected_column = st.selectbox("Column to classify:", columns_list)
+
+            with cc3:
+                criterion_list = ["gini", "entropy"]
+                selected_criterion = st.selectbox("Select a criterion:", criterion_list)
+
+                minimum_leaf = st.slider('Min samples leaf:', 0, 15, 3, 1)
+
+                min_split = st.slider('Min samples split:', 0, 15, 2, 1)
+
+            with st.container():
+                st.subheader("Model")
+                scaler = MinMaxScaler()
+                features = [s for s in cl_df.columns if s != selected_column]
+                scaled_Dataframe = pd.DataFrame(data = cl_df)
+                scaled_Dataframe[features] = scaler.fit_transform(cl_df[features])
+
+                X = scaled_Dataframe[features]  # contains the features
+                Y = scaled_Dataframe[selected_column]  # contains the target column 
+
+                obj = Sample(X, Y)
+
+                with st.form(key="Noah"):
+                    submit_button = st.form_submit_button(label='Submit')
+
+                    if submit_button:
+                        with st.spinner("Training models..."):
+                            obj.model(estimator_value, tt_proportion)
+                            obj.report(obj.Y_test, obj.Y_pred)
+                            obj.accuracy(obj.Y_test, obj.Y_pred)
         
 
 if __name__ == "__main__":
