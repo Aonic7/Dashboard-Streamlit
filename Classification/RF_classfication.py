@@ -13,7 +13,7 @@ from sklearn.metrics import f1_score
 
 import streamlit as st
 
-# Class variables: Y_test, Y_pred
+# Class variables: Y_test, Y_pred 
 
 # Methods:
 #          model() -- Splits the data into train and test dataset, fits the training data to the model and uses classifier to get the prediction for testing data
@@ -42,14 +42,18 @@ class Sample:
 
     # random= Sample('estimator','test_size')
 
-    def model(self,estimator, test_size):
+    def model(self,estimator, test_size, criteria, depth, minimum_leaf, min_split):
         self.estimator=estimator 
         self.test_size=test_size
+        self.criteria = criteria
+        self.depth = depth
+        self.min_split = min_split
+        self.minimum_leaf = minimum_leaf
         # Split the data into training set and testing set
         X_train, X_test, Y_train, self.Y_test = train_test_split(self.X, self.Y, test_size=test_size, random_state = 123,stratify=self.Y)
         
         #create a model
-        classifier=RandomForestClassifier(n_estimators=estimator,criterion = 'gini', max_depth = 5, min_samples_leaf = 3,min_samples_split = 2)
+        classifier=RandomForestClassifier(n_estimators=estimator,criterion = self.criteria, max_depth = self.depth, min_samples_leaf = self.minimum_leaf, min_samples_split = self.min_split)
 
         #fitting training data to the model
         classifier.fit(X_train,Y_train)

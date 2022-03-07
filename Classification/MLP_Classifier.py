@@ -190,7 +190,7 @@ class NN_Classifier:
         
         try:
             st.warning(self.Error_message)
-            cc1, cc2 = st.columns(2)
+            cc1, cc2 = st.columns([1,2])
             with cc1:
                 # st.metric('Expected output:        ', self.NN_Outputs.y_actual)
                 # st.write('Predicted Output:       ', self.NN_Outputs.y_pred)
