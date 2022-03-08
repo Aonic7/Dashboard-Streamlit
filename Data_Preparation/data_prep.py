@@ -24,6 +24,7 @@ def main(data_obj):
     st.header("Data Preparation")
     st.info("""
                Here you can rename and/or drop columns.
+               \nA field "Column to delete" is a multi-selector. You can choose more than one column to delete at once. 
                \nDon't forget to press 'Submit' each time to apply changes!
             """)
     current_df = import_dset(data_obj)

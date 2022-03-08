@@ -170,6 +170,7 @@ class TimeSeriesOOP():
         df_nona1 = self.df.dropna(subset=[column_of_interest]) 
         f2 = interp1d(df_nona1['rownum'], df_nona1[column_of_interest], kind='cubic')
         self.df[column_of_interest] = f2(self.df['rownum'])
+        self.df[column_of_interest][self.df[column_of_interest] < 0] = 0
         return self.df
     
     def make_interpolations(self, column_of_interest):
