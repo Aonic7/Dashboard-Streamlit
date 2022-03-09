@@ -221,7 +221,6 @@ def main(data_obj):
                                                 )
 
                         Classifier = NN_Classifier(cl_df, NN_inputs, col_idx)
-
                         Classifier.Classify()
                         Classifier.printing()
                         Classifier.Conf()
