@@ -7,7 +7,7 @@ import pandas as pd
 import sklearn 
 import seaborn as sn
 from sklearn import model_selection
-from sklearn import metrics
+from sklearn import metrics,preprocessing
 from sklearn.preprocessing import StandardScaler
 from sklearn.neural_network import MLPRegressor
 from sklearn.neural_network import MLPClassifier
@@ -16,6 +16,7 @@ from sklearn.metrics import mean_squared_error,r2_score
 from typing import NamedTuple
 from numpy.core.fromnumeric import shape, size
 import streamlit as st #streamlit backend
+
 class NN_Regressor:
     
     
@@ -24,11 +25,10 @@ class NN_Regressor:
     y_actual:                   float # expected output
     length:                     int   # length of y_test
     mean_squared_error:         float # mean square error
-    R2:                         float #R2 Score
-    Train_score:                float
+    Train_score:                float # Model Score (R^2) on the Training data  
     X_test:                     float
-    test_score:                 float
-    model:                      MLPRegressor
+    test_score:                 float # Model Score (R^2) on the Testing data
+    model:                      MLPRegressor # 
     Error_message:              str
     flag:                       bool
 
@@ -48,6 +48,17 @@ class NN_Regressor:
         
         self.k=dependant_var_index
         self.handle()
+        #After initial Handling of the data we check to see if the user wants to normalize the X values prior to training the model
+        if self.NN_Inputs.Normalize:
+            self.preprocess()
+        elif self.flag!=True:
+            #if Normalization is not checked, the X values fed into the regressor are the same as the output from the initial handle method
+            self.x_n=self.X
+    
+    def preprocess(self):
+        #Simple Normalization method for X Data
+        scaler=preprocessing.MinMaxScaler()
+        self.x_n = scaler.fit_transform(self.X)
 
     #Data handling method, creates the X and Y arrays that go into the Train_test_split method
     #Called when the object is instantiated within the constructor 
@@ -81,7 +92,7 @@ class NN_Regressor:
         
         if (self.flag) !=True:
             try:
-                X_train, self.X_test, y_train, self.y_actual= train_test_split(self.X,self.y,test_size=self.NN_Inputs.test_size,shuffle=False, random_state=40)
+                X_train, self.X_test, y_train, self.y_actual= train_test_split(self.x_n,self.y,test_size=self.NN_Inputs.test_size,shuffle=False, random_state=40)
                 self.model = MLPRegressor(hidden_layer_sizes = self.NN_Inputs.hidden_layers, 
                                     activation = self.NN_Inputs.activation_fun, solver = self.NN_Inputs.solver_fun, 
                                     learning_rate = 'adaptive', max_iter = self.NN_Inputs.Max_iterations, random_state = 109,shuffle=True )
@@ -101,7 +112,7 @@ class NN_Regressor:
                 #Mean squared error and accuracy
                 self.mean_squared_error = mean_squared_error(self.y_actual, 
                 self.y_pred)
-                self.R2=r2_score(self.y_actual, self.y_pred)
+                
             except Exception as e:
                 self.Error_message= 'Error in Regressor Creation: ' + str(e)
                 self.flag=True
@@ -117,7 +128,6 @@ class NN_Regressor:
                 
                 #Mean squared error and accuracy
                 self.mean_squared_error = 'Refer To error in Regressor Creation'
-                self.R2 = 'Refer To error in Regressor Creation'
         else:
             self.Train_score= 'Refer To error in Handling Method'
             self.test_score= 'Refer To error in Handling Method'
@@ -131,7 +141,6 @@ class NN_Regressor:
             
             #Mean squared error and accuracy
             self.mean_squared_error = 'Refer To error in Handling Method'
-            self.R2 = 'Refer To error in Handling Method'
 
 
         return self
@@ -162,7 +171,6 @@ class NN_Regressor:
             with cc2:
                 #st.write('Classification Report: ')
                 st.metric('RMSE: ',  round((self.mean_squared_error)**(0.5),8))
-                st.metric('R2 Score:', round(self.R2,8))
         except Exception as e:
             self.Error_message = 'Error while printing outputs: ' +str(e)
             self.flag=True
@@ -211,9 +219,10 @@ class Regressor_Inputs(NamedTuple):
         hidden_layers:          tuple  # size of hidden layer and number of neurons in each layer
         solver_fun:             tuple  # solver function
         Max_iterations:         int    # number of iterations
+        Normalize:              bool   # flag to normalize X data or not
 
 #Creating a tuple that will work with the method defined inside the class
-Inputs= Regressor_Inputs(0.2,activation_fun1[3],hidden_layers3,solver_fun1[0],500)
+Inputs= Regressor_Inputs(0.2,activation_fun1[3],hidden_layers3,solver_fun1[0],500,False)
 #print(Inputs)
 
 Regressor1=NN_Regressor(data,Inputs,4)

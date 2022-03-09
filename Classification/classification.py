@@ -137,8 +137,10 @@ def main(data_obj):
                 tt_proportion = st.slider('Portion of test data', 0.0, 1.0, 0.2, 0.05)
 
                 iteration_num = st.slider('Number of iterations', 100, 500, 200, 50)
-
-                norm_bool = st.select_slider('Normalize data?', [False, True], False)              
+               
+                norm_bool = st.checkbox('Normalize data?')  
+                
+                resample_bool = st.checkbox('Resample data?')                
                 
             
             with cc2:
@@ -203,24 +205,27 @@ def main(data_obj):
         #     st.markdown(classification_report(test_labels,y_pred_NN), unsafe_allow_html=True)
 
 
-        with st.container():
-            NN_inputs = classifier_inputs(tt_proportion,
-                                       selected_function,
-                                       tuple(a),
-                                       selected_solver,
-                                       iteration_num,
-                                       norm_bool
-                                       )
-            st.write(type(tt_proportion))
+        with st.form(key="Youssef"):
+                submit_button = st.form_submit_button(label='Submit')
 
-            Classifier = NN_Classifier(cl_df, NN_inputs, col_idx)
+                if submit_button:
+                    with st.spinner("Training models..."):
+                        
+                        NN_inputs = classifier_inputs(tt_proportion,
+                                                selected_function,
+                                                tuple(a),
+                                                selected_solver,
+                                                iteration_num,
+                                                norm_bool,
+                                                resample_bool
+                                                )
 
-            Classifier.Classify()
-            # st.write(Classifier.Classify()[52])
-            Classifier.printing()
-            
+                        Classifier = NN_Classifier(cl_df, NN_inputs, col_idx)
 
-            Classifier.Conf()
+                        Classifier.Classify()
+                        Classifier.printing()
+                        Classifier.Conf()
+
             # #st.write(classification_report(getattr(Classifier, 'NN_Outputs.NN_Inputs')))
 
             # class boris(NamedTuple):

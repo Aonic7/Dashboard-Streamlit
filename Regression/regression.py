@@ -100,7 +100,7 @@ def main(data_obj):
 
                 iteration_num = st.slider('Number of iterations', 100, 500, 200, 50)
 
-                #norm_bool = st.select_slider('Normalize data?', [False, True], False)              
+                norm_bool = st.checkbox('Normalize data?')               
                 
             
             with cc2:
@@ -121,24 +121,30 @@ def main(data_obj):
 
                 for i in range(number_hl):
                     a.append(st.number_input(f'Number of neurons in hidden layer {i+1}:', 1, 20, 1, 1, key=i))
+ 
+                       
 
-        with st.container():
-            NN_inputs = Regressor_Inputs(tt_proportion,
-                                       selected_function,
-                                       tuple(a),
-                                       selected_solver,
-                                       iteration_num
-                                       #norm_bool
-                                       )
-            st.write(type(tt_proportion))
+        with st.form(key="Youssef"):
+                submit_button = st.form_submit_button(label='Submit')
 
-            MLP_Regressor = NN_Regressor(rg_df, NN_inputs, col_idx)
+                if submit_button:
+                    with st.spinner("Training models..."):
+                        NN_inputs = Regressor_Inputs(tt_proportion,
+                                                selected_function,
+                                                tuple(a),
+                                                selected_solver,
+                                                iteration_num,
+                                                norm_bool
+                                                )
+                        st.write(type(tt_proportion))
 
-            MLP_Regressor.Regressor()
-            # st.write(Classifier.Classify()[52])
-            MLP_Regressor.printing()
-            
-            MLP_Regressor.plotting()
+                        MLP_Regressor = NN_Regressor(rg_df, NN_inputs, col_idx)
+
+                        MLP_Regressor.Regressor()
+                        # st.write(Classifier.Classify()[52])
+                        MLP_Regressor.printing()
+                        
+                        MLP_Regressor.plotting()
 
 if __name__ == "__main__":
    main()
