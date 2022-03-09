@@ -45,13 +45,22 @@ def main(data_obj):
 
     # Main data classification method radio selector
     cl_method = st.radio(label='Classification Method', options=[
-                         'Neural Networks', 'Classification (Noah)', 'Random Forest (Sneha)'])
+                         'Neural Networks (Youssef)', 'Classification (Noah)', 'Random Forest (Sneha)'])
+
+    st.dataframe(cl_df)
+    st.write(cl_df.shape)
+    st.download_button(label="Download data as CSV",
+                    data=cl_df.to_csv(index=False),
+                    file_name='Preprocessed Dataset.csv',
+                    mime='text/csv',
+                                                )
 
     # Selected 'Neural Networks'
-    if cl_method == 'Neural Networks':
+    if cl_method == 'Neural Networks (Youssef)':
 
-        st.dataframe(cl_df)
-        st.write(cl_df.shape)
+        #st.dataframe(cl_df)
+        #st.write(cl_df.shape)
+
 
         with st.container():
             st.subheader('Select input settings')
@@ -61,9 +70,9 @@ def main(data_obj):
             with cc1:
                 tt_proportion = st.slider('Portion of test data', 0.0, 1.0, 0.2, 0.05)
 
-                iteration_num = st.slider('Number of iterations', 100, 500, 200, 50)
-
-                norm_bool = st.checkbox('Normalize data?')              
+                iteration_num = st.slider('Number of iterations', 100, 5000, 200, 50)
+                norm_bool = st.checkbox('Normalize data?')
+                bool_placeholder = st.checkbox('BOOLEAN PLACEHOLDER')              
                 
             
             with cc2:
@@ -83,7 +92,7 @@ def main(data_obj):
                 a = []
 
                 for i in range(number_hl):
-                    a.append(st.number_input(f'Number of neurons in hidden layer {i+1}:', 1, 20, 1, 1, key=i))
+                    a.append(st.number_input(f'Number of neurons in hidden layer {i+1}:', 1, 100, 1, 1, key=i))
         
         with st.container():
             
@@ -109,8 +118,8 @@ def main(data_obj):
 
     if cl_method == 'Classification (Noah)':
         
-        st.dataframe(cl_df)
-        st.write(cl_df.shape)
+        # st.dataframe(cl_df)
+        # st.write(cl_df.shape)
 
         with st.container():
             st.subheader('Select input settings')
@@ -190,8 +199,8 @@ def main(data_obj):
 
     if cl_method == 'Random Forest (Sneha)':
 
-        st.dataframe(cl_df)
-        st.write(cl_df.shape)
+        # st.dataframe(cl_df)
+        # st.write(cl_df.shape)
 
         with st.container():
             st.subheader('Select input settings')

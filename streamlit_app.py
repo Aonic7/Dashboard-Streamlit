@@ -2,11 +2,19 @@
 import pandas as pd #to work with dataframes
 import streamlit as st #streamlit backend
 from io import StringIO #to read data files as .csv correctly
+import os
+
+st.set_page_config(page_title="MAIT 21/22 Data Analytics Dashboard",
+                    page_icon=None,
+                    layout="wide",
+                    initial_sidebar_state="expanded",
+                    menu_items=None)
 
 # Dashboard apps
 
 #App import
 #from Data_Preview import data_preview
+import Welcome_Page
 import Data_Preview
 import Data_Preparation
 import Smoothing_and_Filtering
@@ -37,6 +45,7 @@ class Interface():
       """The constructor for Interface class.
       """
       pass
+
     
     def side_bar(cls, dt_obj):
       """Sidebar configuration and file picker
@@ -69,8 +78,13 @@ class Interface():
         #       pass
       
         # Side bar navigation menu with a select box
-        menu = ['Data Preview', 'Data Preparation', 'Smoothing and filtering', 'Classification', 'Regression', 'Playground']
+        menu = ['Welcome Page','Data Preview', 'Data Preparation', 'Smoothing and filtering', 'Classification', 'Regression', 'Playground']
         navigation = st.sidebar.selectbox(label="Select menu", options=menu)
+
+        # Landing page
+        if navigation == 'Welcome Page':
+          with st.container():
+           Welcome_Page.welcome()
 
         # Runs 'Data Preview' app
         if navigation == 'Data Preview':
@@ -97,17 +111,22 @@ class Interface():
         # Runs 'Regression' app
         if navigation == 'Regression':
           Regression.regression(dt_obj)
-         
+        
+      else:
+        Welcome_Page.welcome()
+        st.image('https://images.alphacoders.com/224/thumb-1920-224763.jpg')
+        if os.path.isfile("Smoothing_and_Filtering//Preprocessing dataset.csv"):
+            os.remove("Smoothing_and_Filtering//Preprocessing dataset.csv")
 
 def main():
   """
   Main and its Streamlit configuration
   """
-  st.set_page_config(page_title="MAIT 21/22 Data Analytics Dashboard",
-                     page_icon=None,
-                     layout="wide",
-                     initial_sidebar_state="expanded",
-                     menu_items=None)
+  # st.set_page_config(page_title="MAIT 21/22 Data Analytics Dashboard",
+  #                    page_icon=None,
+  #                    layout="wide",
+  #                    initial_sidebar_state="expanded",
+  #                    menu_items=None)
   # Creating an instance of the original dataframe data object                   
   data_main = DataObject()
   # Creating an instance of the main interface

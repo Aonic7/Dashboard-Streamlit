@@ -1,5 +1,6 @@
 from ast import Not
 import time
+import datetime
 from code import interact
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -8,20 +9,33 @@ import seaborn as sns
 from io import StringIO
 from pandas.api.types import is_numeric_dtype
 from .Regression_final import Regressor
+from Smoothing_and_Filtering.smoothing_and_filtering_functions import Converter
 
-def import_dset(data_obj):
-    try:
-        rg_df = pd.read_csv(
-            'Smoothing_and_Filtering//Preprocessing Dataset.csv', index_col=None)
+dateparse = lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 
-    except:
-        st.error("""You did not smooth of filter the data.
-                    Please go to 'Smoothing and filtering' and finalize your results.
-                    Otherwise, the default dataset would be used!
-                    """)
-        rg_df = data_obj.df
 
-    return rg_df
+# def import_dset(data_obj):
+#     try:
+#         rg_df1 = pd.read_csv(
+#             'Smoothing_and_Filtering//Preprocessing Dataset.csv', index_col=None, parse_dates=True, date_parser = pd.to_datetime)
+#         #rg_df = Converter.dateTime_converter(rg_df1)
+
+#     except:
+#         st.error("""You did not smooth of filter the data.
+#                     Please go to 'Smoothing and filtering' and finalize your results.
+#                     Otherwise, the default dataset would be used!
+#                     """)
+#         rg_df1 = data_obj.df.copy()
+#         #rg_df = Converter.dateTime_converter(rg_df1)
+
+#         for col in rg_df1.columns:
+#             if rg_df1[col].dtype == 'object':
+#                 try:
+#                     rg_df1[col] = pd.to_datetime(rg_df1[col])
+#                 except ValueError:
+#                     pass
+
+#     return rg_df1
 
 
 def main(data_obj):
@@ -32,12 +46,33 @@ def main(data_obj):
 
 
     try:
-        var_read = pd.read_csv("Smoothing_and_Filtering//Preprocessing dataset.csv")
+        var_read = pd.read_csv("Smoothing_and_Filtering//Preprocessing dataset.csv", index_col=None, parse_dates=True, date_parser = pd.to_datetime)
         rg_df = var_read
+        for col in rg_df.columns:
+            if rg_df[col].dtype == 'object':
+                try:
+                    rg_df[col] = pd.to_datetime(rg_df[col])
+                except ValueError:
+                    pass
         # st.dataframe(cl_df)
         # st.write('Try execution')
     except:
-        rg_df = data_obj.df
+        rg_df = data_obj.df.copy()
+        for col in rg_df.columns:
+            if rg_df[col].dtype == 'object':
+                try:
+                    rg_df[col] = pd.to_datetime(rg_df[col])
+                except ValueError:
+                    pass
+
+        # for col in rg_df.columns:
+        #     if rg_df[col].dtype == 'datetime64':
+        #         try:
+        #             # rg_df[col] = rg_df[col].dt.strftime("%Y-%m-%d %H:%M:%S")
+        #             rg_df[col].apply(lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
+        #         except ValueError:
+        #             pass
+
         st.error("""You did not smooth of filter the data.
                      Please go to 'Smoothing and filtering' and finalize your results.
                      Otherwise, the default dataset would be used!
@@ -48,14 +83,23 @@ def main(data_obj):
         '<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;}</style>', unsafe_allow_html=True)
 
     # Main data classification method radio selector
-    rg_method = st.radio(label='Regression Method', options=[
-                         'Random Forest', 'Button 1', 'Button 2'])
+    rg_method = st.radio(label='Regression Method', options=['Youssef', 'Richard',
+                         'Random Forest'])
+
+    st.dataframe(rg_df)
+    st.write(rg_df.shape)
+    st.dataframe(rg_df.dtypes.astype(str))
+    st.download_button(label="Download data as CSV",
+                data=rg_df.to_csv(index=False),
+                file_name='Preprocessed Dataset.csv',
+                mime='text/csv',
+                                            )
 
     # Selected 'Remove outliers'
     if rg_method == 'Random Forest':
 
-        st.dataframe(rg_df)
-        st.write(rg_df.shape)
+        # st.dataframe(rg_df)
+        # st.write(rg_df.shape)
 
         
         with st.container():
@@ -66,15 +110,26 @@ def main(data_obj):
             
             with cc1:
                 tt_proportion = st.slider('Portion of test data', 0.0, 1.0, 0.3, 0.05)
+                tree_size = st.slider('Tree size', 100, 1000, 100, 100)
+                t_s = st.checkbox("Is this a time-series?")
 
             with cc2:
-                tree_size = st.slider('Tree size', 100, 1000, 100, 100)
-            
-            with cc3:
                 columns_list = list(rg_df.columns)
+                if t_s:
+                    column_uniques = st.selectbox("Select column with unique values:", columns_list)
+                    tm_columns_list = list(rg_df.select_dtypes(include=['datetime']).columns)
+                    time_column = st.selectbox("Select a time column:", tm_columns_list)
+
                 selected_column = st.selectbox("Select label column:", columns_list)
                 # x_list = columns_list.remove(selected_column)
                 x_list = [s for s in columns_list if s != selected_column]
+
+
+            with cc3:
+                if t_s:
+                    unique_val = st.selectbox("Select a unique:", list(rg_df[column_uniques].unique()))
+                    d = st.date_input("Date:", datetime.date(2022, 2, 24))
+                    t = st.time_input('Time:', datetime.time(13, 37))
 
        
         with st.container():
