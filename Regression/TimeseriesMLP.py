@@ -87,7 +87,7 @@ class NN_TimeSeries_Reg:
             #for l in range (0,6):
             for a in range(0,n):
 
-                date_time_obj = datetime.strptime(date_time_column.iloc[a,0], '%Y-%m-%d %H:%M:%S')
+                date_time_obj = date_time_column.iloc[a,0]
                 year=date_time_obj.year
                 month=date_time_obj.month
                 day=date_time_obj.day
@@ -139,7 +139,7 @@ class NN_TimeSeries_Reg:
 
                 self.model.fit(X_train_norm,y_train)
                 self.Train_score= self.model.score(X_train_norm,y_train)
-                test_score= self.model.score(X_test_norm,self.y_actual)
+                self.test_score= self.model.score(X_test_norm,self.y_actual)
                 #coeff=self.model.coefs_
 
 
@@ -264,7 +264,7 @@ Regressor1=NN_TimeSeries_Reg(parking_data,Inputs,2,3)
 #a=int(X)
 Regressor1.listing(1)
 #print(Regressor1.group_object.iloc[10,0])
-Regressor1.group(5)
+Regressor1.group(2)
 
 
 #Regressor1.Regressor()
