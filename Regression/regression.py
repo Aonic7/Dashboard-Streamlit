@@ -136,44 +136,51 @@ def main(data_obj):
 
             cc1, cc2, cc3 = st.columns(3)
             
+            
             # Input variables/widgets for the 1st column
-            with cc1:
-                tt_proportion = st.slider('Portion of test data', 0.0, 1.0, 0.2, 0.05)
-                
-                solver_fun1 = ("lbfgs", "sgd", "adam")
-                selected_solver = st.selectbox("Solver:", solver_fun1)
+            try:
+                with cc1:
+                    tt_proportion = st.slider('Portion of test data', 0.0, 1.0, 0.2, 0.05)
+                    
+                    solver_fun1 = ("lbfgs", "sgd", "adam")
+                    selected_solver = st.selectbox("Solver:", solver_fun1)
 
-                activation_fun1 = ("identity", "logistic", "tanh", "relu")
-                selected_function = st.selectbox("Activation function:", activation_fun1) 
+                    activation_fun1 = ("identity", "logistic", "tanh", "relu")
+                    selected_function = st.selectbox("Activation function:", activation_fun1) 
 
-                group_bool = st.checkbox('Group data?')
-                                         
-            # Input variables/widgets for the 2nd column
-            with cc2:
-                iteration_num = st.slider('Number of iterations', 100, 5000, 200, 50)
+                    group_bool = st.checkbox('Group data?')
+                                            
+                # Input variables/widgets for the 2nd column
+                with cc2:
+                    iteration_num = st.slider('Number of iterations', 100, 5000, 200, 50)
 
-                columns_list = list(rg_df.select_dtypes(exclude=['object', 'datetime']).columns)
-                selected_column = st.selectbox("Column to regress:", columns_list)
-                col_idx = rg_df.columns.get_loc(selected_column)
+                    columns_list = list(rg_df.select_dtypes(exclude=['object', 'datetime']).columns)
+                    selected_column = st.selectbox("Column to regress:", columns_list)
+                    col_idx = rg_df.columns.get_loc(selected_column)
 
-                unique_columns_list = list(rg_df.select_dtypes(exclude=['datetime']).columns)
-                unique_selected_column = st.selectbox("Filter uniques:", unique_columns_list)
-                unique_col_idx = rg_df.columns.get_loc(unique_selected_column)
+                    unique_columns_list = list(rg_df.select_dtypes(exclude=['datetime']).columns)
+                    unique_selected_column = st.selectbox("Filter uniques:", unique_columns_list)
+                    unique_col_idx = rg_df.columns.get_loc(unique_selected_column)
 
-                tm_columns_list = list(rg_df.select_dtypes(include=['datetime']).columns)
-                time_column = st.selectbox("Select a time column:", tm_columns_list)
-                tm_col_idx = rg_df.columns.get_loc(time_column)
+                    
+                    tm_columns_list = list(rg_df.select_dtypes(include=['datetime']).columns)
+                    time_column = st.selectbox("Select a time column:", tm_columns_list)
+                    tm_col_idx = rg_df.columns.get_loc(time_column)
 
-                            
-            # Input variables/widgets for the 3rd column
-            with cc3:
-                number_hl = st.slider('Hidden layers:', 1, 5, 3, 1)
+                                
+                # Input variables/widgets for the 3rd column
+                with cc3:
+                    number_hl = st.slider('Hidden layers:', 1, 5, 3, 1)
 
-                a = []
+                    a = []
 
-                for i in range(number_hl):
-                    a.append(st.number_input(f'Number of neurons in hidden layer {i+1}:', 1, 600, 10, 1, key=i))
-        
+                    for i in range(number_hl):
+                        a.append(st.number_input(f'Number of neurons in hidden layer {i+1}:', 1, 600, 10, 1, key=i))
+            except KeyError as e:
+                st.error("Are you sure this dataset has a time column?")
+                st.stop()
+
+
         with st.container():
             
             
@@ -265,13 +272,15 @@ def main(data_obj):
 
                 if submit_button:
 
-                    cc11, cc22, cc33 = st.columns(3)
-                    with cc11:
+                    try:
+
                         with st.spinner("Training models..."):
                             reg_inst.model(tree_size, tt_proportion)
 
-                    reg_inst.result(reg_inst.Y_test, reg_inst.Y_pred)
-                    reg_inst.prediction_plot(reg_inst.Y_test, reg_inst.Y_pred)
+                        reg_inst.result(reg_inst.Y_test, reg_inst.Y_pred)
+                        reg_inst.prediction_plot(reg_inst.Y_test, reg_inst.Y_pred)
+                    except:
+                        st.error("Something went wrong, Sneha...")
 
 
             

@@ -254,31 +254,39 @@ def main(data_obj):
                 # Section subheader
                 st.subheader("Model")
 
-                # Input data preparation
-                scaler = MinMaxScaler()
-                features = [s for s in cl_df.columns if s != selected_column]
-                scaled_Dataframe = pd.DataFrame(data = cl_df)
-                scaled_Dataframe[features] = scaler.fit_transform(cl_df[features])
 
-                X = scaled_Dataframe[features]  # contains the features
-                Y = scaled_Dataframe[selected_column]  # contains the target column 
 
-                # Instance creation
-                obj = Sample(X, Y)
+
 
                 # Submit button
-                with st.form(key="Noah"):
+                with st.form(key="Sneha"):
                     submit_button = st.form_submit_button(label='Submit')
+
+                    
 
                     if submit_button:
                         # Circle animation for code execution
                         with st.spinner("Training models..."):
                             
                             # Instance method call
-                            try:    
+                            try:   
+                                # Input data preparation
+                                scaler = MinMaxScaler()
+                                features = [s for s in cl_df.columns if s != selected_column]
+                                
+                                scaled_Dataframe = pd.DataFrame(data = cl_df)
+                                scaled_Dataframe[features] = scaler.fit_transform(cl_df[features])
+
+                                X = scaled_Dataframe[features]  # contains the features
+                                Y = scaled_Dataframe[selected_column]  # contains the target column 
+                                
+                                # Instance creation
+                                obj = Sample(X, Y)
+
                                 obj.model(estimator_value, tt_proportion, selected_criterion, depth, minimum_leaf, min_split)
                                 obj.report(obj.Y_test, obj.Y_pred)
                                 obj.accuracy(obj.Y_test, obj.Y_pred)
+
                             except ValueError as e:
                                 st.error('Something went wrong, Sneha...')
         
