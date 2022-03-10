@@ -193,17 +193,21 @@ class NN_Classifier:
         
         try:
             st.warning(self.Error_message)
-            cc1, cc2 = st.columns([1,2])
+            cc1, cc2 = st.columns(2)
             with cc1:
                 # st.metric('Expected output:        ', self.NN_Outputs.y_actual)
                 # st.write('Predicted Output:       ', self.NN_Outputs.y_pred)
-                st.metric('Model score on the Training Data:',  round(self.Train_score, 4))
-                st.metric('Model score on the Testing Data:',  round(self.test_score, 4))
+                st.metric('Model Accuracy on the Training Data:',  round(self.Train_score, 4))
+                st.metric('Model Accuracy on the Testing Data:',  round(self.test_score, 4))
+                st.write('Accuracy: it is simply a ratio of correctly predicted observations to the total observations')
                 st.metric('Length of output array: ',  self.length)
             with cc2:
                 st.write('Classification Report: ')
                 st.dataframe(self.Report)
-                st.write("")
+                st.write("Precision:  Precision is the ratio of correctly predicted positive observations to the total predicted positive observations. ")
+                st.write('Recall (Sensitivity) - Recall is the ratio of correctly predicted positive observations to the all observations in actual class')
+                st.write('The F1 score represents the balance of accuracy and recall. F1 Score is the weighted average of Precision and Recall. Good for Unbalanced dataset.')
+
         except Exception as e:
             self.Error_message = 'Error while printing outputs: ' +str(e)
             self.flag=True
