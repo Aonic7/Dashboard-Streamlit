@@ -71,6 +71,8 @@ class Interface():
                                                  'Classification', 'Regression']
         navigation = st.sidebar.selectbox(label="Select menu", options=menu)
 
+        # Apps
+
         # Landing page
         if navigation == 'Welcome Page':
           with st.container():
@@ -102,7 +104,7 @@ class Interface():
       else:
         Welcome_Page.welcome()
         st.image('https://images.alphacoders.com/224/thumb-1920-224763.jpg')
-        # It 
+        # It deletes the Preprocessing dataset from the last run
         if os.path.isfile("Smoothing_and_Filtering//Preprocessing dataset.csv"):
             os.remove("Smoothing_and_Filtering//Preprocessing dataset.csv")
 
@@ -110,11 +112,7 @@ def main():
   """
   Main and its Streamlit configuration
   """
-  # st.set_page_config(page_title="MAIT 21/22 Data Analytics Dashboard",
-  #                    page_icon=None,
-  #                    layout="wide",
-  #                    initial_sidebar_state="expanded",
-  #                    menu_items=None)
+
   # Creating an instance of the original dataframe data object                   
   data_main = DataObject()
   # Creating an instance of the main interface

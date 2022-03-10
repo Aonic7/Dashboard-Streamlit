@@ -1,49 +1,22 @@
-from ast import Not
-import time
 import datetime
 from code import interact
-import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
-import seaborn as sns
-from io import StringIO
 from pandas.api.types import is_numeric_dtype
 from .Regression_final import Regressor
-from Smoothing_and_Filtering.smoothing_and_filtering_functions import Converter
 
-dateparse = lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
+#dateparse = lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 
-
-# def import_dset(data_obj):
-#     try:
-#         rg_df1 = pd.read_csv(
-#             'Smoothing_and_Filtering//Preprocessing Dataset.csv', index_col=None, parse_dates=True, date_parser = pd.to_datetime)
-#         #rg_df = Converter.dateTime_converter(rg_df1)
-
-#     except:
-#         st.error("""You did not smooth of filter the data.
-#                     Please go to 'Smoothing and filtering' and finalize your results.
-#                     Otherwise, the default dataset would be used!
-#                     """)
-#         rg_df1 = data_obj.df.copy()
-#         #rg_df = Converter.dateTime_converter(rg_df1)
-
-#         for col in rg_df1.columns:
-#             if rg_df1[col].dtype == 'object':
-#                 try:
-#                     rg_df1[col] = pd.to_datetime(rg_df1[col])
-#                 except ValueError:
-#                     pass
-
-#     return rg_df1
 
 
 def main(data_obj):
+    """_summary_
+
+    Args:
+        data_obj (_type_): _description_
+    """
 
     st.header('Regression')
-
-    # rg_df = import_dset(data_obj)
-
 
     try:
         var_read = pd.read_csv("Smoothing_and_Filtering//Preprocessing dataset.csv", index_col=None, parse_dates=True, date_parser = pd.to_datetime)
@@ -54,8 +27,7 @@ def main(data_obj):
                     rg_df[col] = pd.to_datetime(rg_df[col])
                 except ValueError:
                     pass
-        # st.dataframe(cl_df)
-        # st.write('Try execution')
+
     except:
         rg_df = data_obj.df.copy()
         for col in rg_df.columns:
@@ -65,19 +37,10 @@ def main(data_obj):
                 except ValueError:
                     pass
 
-        # for col in rg_df.columns:
-        #     if rg_df[col].dtype == 'datetime64':
-        #         try:
-        #             # rg_df[col] = rg_df[col].dt.strftime("%Y-%m-%d %H:%M:%S")
-        #             rg_df[col].apply(lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
-        #         except ValueError:
-        #             pass
-
         st.error("""You did not smooth of filter the data.
                      Please go to 'Smoothing and filtering' and finalize your results.
                      Otherwise, the default dataset would be used!
                      """)   
-        # st.write('Where is money, Lebovskiy?')
 
     st.write(
         '<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;}</style>', unsafe_allow_html=True)
@@ -133,14 +96,12 @@ def main(data_obj):
 
        
         with st.container():
-            # Iy PF	e dIf If
-            # st.write(rg_df.columns)
             X= rg_df[x_list]
             Y= rg_df[selected_column]
 
             reg_inst = Regressor(X,Y)
 
-            # # calling the methods using object 'obj'
+            # calling the methods using object 'obj'
             with st.form(key="form"):
                 submit_button = st.form_submit_button(label='Submit')
 
@@ -153,8 +114,6 @@ def main(data_obj):
 
                     reg_inst.result(reg_inst.Y_test, reg_inst.Y_pred)
                     reg_inst.prediction_plot(reg_inst.Y_test, reg_inst.Y_pred)
-
-            # reg_inst.model(tree_size, tt_proportion)
             
 
 if __name__ == "__main__":

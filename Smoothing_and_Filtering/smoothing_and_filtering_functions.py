@@ -62,13 +62,22 @@ class Remove_Outliers():
         filtered = df[(z < n)] #apply the filtering formula to the column
         return filtered
 
+# Timeseries converter
 class Converter():
    
     def dateTime_converter(df):
+        """Timeseries converter 
+            Args:
+                df (pandas.core.frame.DataFrame): input dataframe
+            Returns:
+                pandas.core.frame.DataFrame: df 
+        """
 
         for col in df.columns:
+            # Checks if the column is a object 
             if df[col].dtype == 'object':
                 try:
+                    # Converting suitable columns into Datetime format 
                     df[col] = pd.to_datetime(df[col])
                 except:
                     pass
@@ -136,84 +145,78 @@ class Smoothing():
 
         return df_var
 
+
+# Interpolation class 
 class TimeSeriesOOP():
     def __init__(self, current_df, selected_column, time_column):
+        """Datatframe initialization 
+         Args:
+            current_df (pandas.core.frame.DataFrame): input dataframe
+            selected_column (str): a column of the input dataframe
+            time_column (DateTime): a column of the input dataframe 
+        Returns:
+            pandas.core.frame.DataFrame: df 
+        """
         current_df=current_df.set_index("{}".format(time_column))
         self.df = current_df
+        # Resampling the datframe 
         self.process_dataframe()
-        
-        #self.df_ffill = self.df.ffill( )  # df.ffill-pandas func to forward fill missing values
-        #self.df_bfill = self.df.bfill( )  # df.ffill-pandas func to backward fill missing values
-        
-    def process_dataframe(self):  # make separate func if you need more processing
+
+    # Resampling the datframe     
+    def process_dataframe(self):
+        """Resampling the dataframe  
+        Args:
+            
+        Returns:
+            pandas.core.frame.DataFrame: df 
+        """  
         self.df = self.df.resample('15min').mean( )
-        
-    
+
+    # Forward fill    
     def int_df_ffill(self):
-        return self.df.ffill()  
+        """Forward fill 
+        Args:
+            
+        Returns:
+            pandas.core.frame.DataFrame: df 
+        """  
+        return self.df.ffill()  #df.ffill-pandas func to forward fill missing values
     
+    # Backward fill  
     def int_df_bfill(self):
-        return self.df.bfill()  
+        """Backward fill 
+        Args:
+            
+        Returns:
+            pandas.core.frame.DataFrame: df 
+        """  
+        return self.df.bfill()   #df.bfill-pandas func to backward fill missing values
     
+    # Linear Interpolation 
     def make_interpolation_liner(self, column_of_interest):
-        # 4. Linear Interpolation ------------------
-        self.df['rownum'] = np.arange(self.df.shape[0])  # df.shape[0]-gives number of row count
-        df_nona = self.df.dropna(subset=[column_of_interest])  # df.dropna- Remove missing values.
+        """Linear Interpolation
+        Args:
+            column_of_interest (str): a column of the input dataframe
+        Returns:
+            pandas.core.frame.DataFrame: df 
+        """  
+        self.df['rownum'] = np.arange(self.df.shape[0])  #df.shape[0]-gives number of row count
+        df_nona = self.df.dropna(subset=[column_of_interest])  #df.dropna- Remove missing values.
         f = interp1d(df_nona['rownum'], df_nona[column_of_interest], kind='linear')
         self.df[column_of_interest] = f(self.df['rownum'])
-        #self.df = self.df.dropna() 
         return self.df
-
+    
+    # Cubic Interpolation
     def make_interpolation_cubic(self, column_of_interest):
-        # 5. Cubic Interpolation --------------------
+        """Cubic Interpolatio
+        Args:
+            column_of_interest (str): a column of the input dataframe
+        Returns:
+            pandas.core.frame.DataFrame: df 
+        """  
         self.df['rownum'] = np.arange(self.df.shape[0]) 
         df_nona1 = self.df.dropna(subset=[column_of_interest]) 
         f2 = interp1d(df_nona1['rownum'], df_nona1[column_of_interest], kind='cubic')
         self.df[column_of_interest] = f2(self.df['rownum'])
         self.df[column_of_interest][self.df[column_of_interest] < 0] = 0
         return self.df
-    
-    def make_interpolations(self, column_of_interest):
-        # 4. Linear Interpolation ------------------
-        self.df['rownum'] = np.arange(self.df.shape[0])  # df.shape[0]-gives number of row count
-        df_nona = self.df.dropna(subset=[column_of_interest])  # df.dropna- Remove missing values.
-        f = interp1d(df_nona['rownum'], df_nona[column_of_interest])
-        self.df[column_of_interest] = f(self.df['rownum'])
-        # 5. Cubic Interpolation --------------------
-        f2 = interp1d(df_nona['rownum'], df_nona[column_of_interest], kind='cubic')
-        self.df[column_of_interest] = f2(self.df['rownum'])
-
-    # def get_liner_data(self):
-    #     return self.df
-
-    # def draw_all(self, column_of_interest):
-    #     self.df_ffill = self.int_df_ffill() # df.ffill-pandas func to forward fill missing values
-    #     self.df_bfill = self.int_df_bfill() # df.ffill-pandas func to backward fill missing values
-    #     self.make_interpolations(column_of_interest)
-
-    #     fig, axes = plt.subplots(5, 1, sharex=True, figsize=(20, 20))
-    #     plt.rcParams.update({'xtick.bottom': False})
-    #     error = 0
-        
-    #     # 1. Actual -------------------------------
-    #     self.df[column_of_interest].plot(title='Actual', ax=axes[0], label='Actual', color='green', style=".-")
-       
-    #     # 2. Forward Fill --------------------------
-    #     self.df_ffill[column_of_interest].plot(title='Forward Fill (MSE: ' + str(error) + ")", ax=axes[1],
-    #                                             label='Forward Fill', style=".-")
-        
-    #     #3. Backward Fill -------------------------
-    #     self.df_bfill[column_of_interest].plot(title="Backward Fill (MSE: " + str(error) + ")", ax=axes[2],
-    #                                             label='Back Fill',
-    #                                            color='purple', style=".-")
-
-    #     # # # 4. Linear Interpolation ------------------
-    #     self.df[column_of_interest].plot(title="Linear Fill (MSE: " + str(error) + ")", ax=axes[3], label='Cubic Fill',
-    #                                  color='red',
-    #                                 style=".-")
-
-    #     # # 5. Cubic Interpolation --------------------
-    #     self.df[column_of_interest].plot(title="Cubic Fill (MSE: " + str(error) + ")", ax=axes[4], label='Cubic Fill',
-    #                               color='deeppink',
-    #                                style=".-")
-    #     st.pyplot(fig)         

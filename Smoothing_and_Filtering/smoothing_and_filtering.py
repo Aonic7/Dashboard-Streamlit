@@ -1,41 +1,58 @@
 # General import section
-#from tkinter import E
 import pandas as pd #to work with dataframes
 import streamlit as st #streamlit backend
-import os
-import numpy as np
-
-from scipy.signal import medfilt
+import os #to work with files
+import numpy as np #to work with numerical arrays
 
 # Visualization import section
 from Visualization.visualization import doubleLinePlot, DoubleBoxPlot, Histogram, ScatterPlot, interpolation_subplot
 
-# Remove outliers import
-# from .smoothing_and_filtering_functions import removeOutlier, removeOutlier_q, removeOutlier_z
+# S&F import
 from .smoothing_and_filtering_functions import Remove_Outliers, Smoothing, TimeSeriesOOP, Converter
 
 def import_dset(data_obj):
+    """Creates a current dataframe either from the original data object,
+       or from the Filtered dataset, depending on which one is 'fresher'.
+       Also, a datetime conversion is attempted in case of a time-
+       series dataset.
+
+    Args:
+        data_obj (__main__.DataObject): DataObject instance.
+
+    Returns:
+        pandas.core.frame.DataFrame: pandas dataframe object.
+    """
     try:
+        # Read Filtered dataset if it exists
         a = pd.read_csv('Smoothing_and_Filtering//Filtered Dataset.csv', index_col = None)
+        
+        # Compare if Filtered dataset and the original dataframe are equal
+        # If they are not equal then the .csv is taken
         if a.equals(data_obj.df) == False:
             current_df1 = a
             current_df = Converter.dateTime_converter(current_df1)
-            # st.sidebar.write("1")
-            #st.sidebar.write(a.equals(data_obj.df))
+        # If equal then the original dataframe is taken
         else:
             current_df = data_obj.df
             current_df = Converter.dateTime_converter(current_df)
-            # st.sidebar.write("2")
+    # If there is no Filtered dataset, the original is taken as the current
     except:
         current_df = data_obj.df
         current_df = Converter.dateTime_converter(current_df)
-        # st.sidebar.write("3")
-
+        
     return current_df
 
 
 def main(data_obj):
+    """Smoothing and Filtering main
+
+    Args:
+        data_obj (__main__.DataObject): DataObject instance.
+    """
+    
+    # Header
     st.header("Smoothing and filtering")
+    # Instruction
     with st.expander(label="How to use", expanded=True):
         st.info("""
                 On this page you will see three dataframes.
@@ -47,33 +64,16 @@ def main(data_obj):
                 \n
                 \n If you mess up you dataset during 'Smoothing and Filtering', you can always reset it using the button on the (left) sidebar.
                 """)
-        st.warning("**No matter in you did any changes or not do not forget to press 'Finalize' button after you are done with 'Smoothing and filtering'!**")    
+        st.warning("**No matter if you did any changes or not do not forget to press 'Finalize' button after you are done with 'Smoothing and filtering'!**")    
 
-    # A button to circumvent loading the dataset using in the last session
+    # A button to circumvent loading the dataset used in the last session
     if st.sidebar.button("Reset dataframe to the initial one"):
         data_obj.df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
-        # st.dataframe(data_obj.df)
-        #st.write(data_obj.df.shape)
-    # 1
-    # Loading the appropriate dataset
-    #if pd.read_csv('Filtered Dataset.csv').shape[0] < data_obj.df.shape[0]:
-        #current_df = pd.read_csv('Filtered Dataset.csv', index_col = None)
-    #else:
-        #current_df = data_obj.df
 
-    # 2
-    # try:
-    #     if pd.read_csv('Filtered Dataset.csv').shape[0] < data_obj.df.shape[0]:
-    #         current_df = pd.read_csv('Filtered Dataset.csv', index_col = None)
-    #     else:
-    #         current_df = data_obj.df
-    # except:
-    #     current_df = data_obj.df
-
+    # Create the current dataframe
     current_df = import_dset(data_obj)
-      
-    # Overview of the dataframes
     
+    # Overview of the dataframes
     col1, col2, col3 = st.columns(3)
 
     # Original dataframe display
@@ -102,6 +102,7 @@ def main(data_obj):
             with st.container():
                 st.subheader('Remove outliers using standard deviation')
 
+                # Settings layout
                 cc1, cc2, cc3, cc4 = st.columns(4)
 
                 # Input settings
@@ -143,6 +144,7 @@ def main(data_obj):
             with st.container():
                 st.subheader('Remove outliers using quantiles')
 
+                # Settings layout
                 cc1, cc2, cc3, cc4 = st.columns(4)
 
                 # Input settings
@@ -185,6 +187,7 @@ def main(data_obj):
             with st.container():
                 st.subheader('Remove outliers using Z-score')
 
+                # Settings layout
                 cc1, cc2, cc3, cc4 = st.columns(4)
 
                 # Input settings
@@ -220,17 +223,24 @@ def main(data_obj):
                     current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
 
 
-
+    # Selected smoothing
     if dp_method == 'Smoothing':
+
+        # Specifying smoothing submethods
         smooth_radio = st.radio(label = 'Smoothing',
                              options = ['Median filter','Moving average','Savitzky Golay'])
+
+        # Median filter method selected
         if smooth_radio == 'Median filter':
             
+            # Median filter method main
             with st.container():
                 st.subheader('Median filter')
 
+                # Settings layout
                 cc1, cc2, cc3 = st.columns(3)
 
+                # Input settings
                 with cc1:
                     columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
                     filter_len = st.slider('Length of the window', 3, 7, 5, 2)
@@ -242,36 +252,37 @@ def main(data_obj):
                     plot_basic = st.button('Plot')
                     bp = st.button("Boxplot")
                     hist = st.button("Histogram")
-                # with cc3:
-                #     st.write(" ")
-                #     st.write(" ")
-                #     st.warning(f'If applied, {current_df.shape[0]-median_filt.shape[0]} rows will be removed.')
                 
+                # Plotting
                 if plot_basic:
                     doubleLinePlot(data_obj.df, median_filt.reset_index(drop=True), selected_column)
-
                 if bp:
                     DoubleBoxPlot(data_obj.df, median_filt.reset_index(drop=True), selected_column)
                 if hist:
                     Histogram(median_filt.reset_index(drop=True), selected_column)
 
+                # Save results to csv
                 if st.button("Save intermediate smoothing results (median filter)"):
                     current_df = median_filt.reset_index(drop=True)
                     current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
 
+        # Moving average method selected
         if smooth_radio == 'Moving average':
+
+            # Moving average method main
             with st.container():
                 st.subheader('Moving average')
 
+                # Settings layout
                 cc1, cc2, cc3 = st.columns(3)
 
+                # Input settings
                 with cc1:
                     columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
                     filter_len = st.slider('Length of the window', 1, 10, 5, 1)
                     selected_column = st.selectbox("Select a column:", columns_list)
                     # median_filt = median_filter(current_df, selected_column, filter_len)
                     moving_ave = Smoothing.moving_average(current_df, selected_column, filter_len)
-
                 with cc2:
                     st.write(" ")
                     st.write(" ")
@@ -283,31 +294,36 @@ def main(data_obj):
                     st.write(" ")
                     st.warning(f'If applied, {current_df.shape[0]-moving_ave.shape[0]} rows will be removed.')
                 
+                # Plotting
                 if plot_basic:
                     doubleLinePlot(data_obj.df, moving_ave.reset_index(drop=True), selected_column)
-
                 if bp:
                     DoubleBoxPlot(data_obj.df, moving_ave.reset_index(drop=True), selected_column)
                 if hist:
                     Histogram(moving_ave.reset_index(drop=True), selected_column)
 
+                # Save results to csv
                 if st.button("Save intermediate smoothing results (moving average)"):
                     current_df = moving_ave.reset_index(drop=True)
                     current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
 
+        # Savitzky Golay method selected
         if smooth_radio == 'Savitzky Golay':
+
+            # Savitzky Golay method selected
             with st.container():
                 st.subheader('Savitzky Golay')
 
+                # Settings layout
                 cc1, cc2, cc3 = st.columns(3)
 
+                # Input settings
                 with cc1:
                     columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
                     filter_len = st.slider('Length of the window', 1, 11    , 5, 2)
                     order = st.slider('Polynomial order', 1, 3, 2, 1)
                     selected_column = st.selectbox("Select a column:", columns_list)
                     sg = Smoothing.savitzky_golay(current_df, selected_column, filter_len, order)
-
                 with cc2:
                     st.write(" ")
                     st.write(" ")
@@ -319,73 +335,38 @@ def main(data_obj):
                     st.write(" ")
                     st.warning(f'If applied, {current_df.shape[0]-sg.shape[0]} rows will be removed.')
                 
+                # Plotting
                 if plot_basic:
                     doubleLinePlot(data_obj.df, sg.reset_index(drop=True), selected_column)
-
                 if bp:
                     DoubleBoxPlot(data_obj.df, sg.reset_index(drop=True), selected_column)
                 if hist:
                     Histogram(sg.reset_index(drop=True), selected_column)
 
+                # Save results to csv
                 if st.button("Save intermediate smoothing results (Savitzky Golay)"):
                     current_df = sg.reset_index(drop=True)
                     current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
 
-
+    
+    # Selected 'Interpolation'
     if dp_method == 'Interpolation':
+
+        # Specifying interpolation submethods
         interpolation_radio = st.radio(label = 'Interpolation',
                              options = ['Linear','Cubic', 'Forward Fill', 'Backward Fill'])
-        # if interpolation_radio == 'All':
-            
-        #     with st.container():
-        #         st.subheader('All interpolations')
-
-        #         cc1, cc2, cc3 = st.columns(3)
-        #         with cc1:
-        #             columns_list = list(current_df.select_dtypes(exclude=['object']).columns)
-        #             columns_list1 = list(current_df.select_dtypes(include=['datetime']).columns)
-        #             selected_column = st.selectbox("Select a column:", columns_list)
-        #             time_column = st.selectbox("Select a time column:", columns_list1)
-        #             interpolation_all = TimeSeriesOOP(current_df, selected_column, time_column)
-                    
-        #         with cc2:
-        #             st.write(" ")
-        #             st.write(" ")
-        #             plot_basic = st.button('Plot')
-        #             #bp = st.button("Boxplot")
-        #             #hist = st.button("Histogram")
-        #         # with cc3:
-        #         #     st.write(" ")
-        #         #     st.write(" ")
-        #         #     st.warning(f'If applied, {current_df.shape[0]-median_filt.shape[0]} rows will be removed.')
-                
-        #         if plot_basic:
-        #             interpolation_all.draw_all(selected_column) 
-        #             #doubleLinePlot(data_obj.df, interpolation_all.draw_all(selected_column), selected_column)
-        #             # st.dataframe(median_filt)
-        #             # st.write(data_obj.df[selected_column].value_counts(ascending=False))
-        #             # st.write(median_filt[selected_column].value_counts(ascending=False))
-        #             #st.write("Blah")
-        #             # l = {'col1': medfilt(data_obj.df[selected_column], filter_len)}
-        #             # lf = pd.DataFrame(data=l)
-        #             # st.write(lf.value_counts(ascending=False))
-
-
-        #         #if bp:
-        #             #DoubleBoxPlot(data_obj.df, interpolation_all.draw_all().reset_index(drop=True), selected_column)
-
-        #         #if hist:
-        #             #Histogram(interpolation_all.draw_all().reset_index(drop=True), selected_column)
-
-        #         #current_df = rm_outlier.reset_index(drop=True)
     
+        # Linear method selected
         if interpolation_radio == 'Linear':
-                 
+            
+            # Linear interpolation method selected
             with st.container():
                 st.subheader('Linear interpolation')
 
+                # Settings layout
                 cc1, cc2, cc3 = st.columns(3)
             
+                # Input settings
                 try:
                     with cc1:
                         columns_list = list(current_df.select_dtypes(exclude=['datetime', 'object']).columns)
@@ -404,24 +385,31 @@ def main(data_obj):
                         st.write(" ")
                         st.warning(f'If applied, {current_df.shape[0]-linear_df.shape[0]} rows will be removed.')
                         
+                    # Plotting
                     if plot_basic:
                             interpolation_subplot(data_obj.df, linear_df, selected_column, 'linear_fill')
-                        
+                    
+                    # Save results to csv
                     if st.button("Save intermediate linear results"):
                             current_df = linear_df.reset_index()
                             current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)  
+                
+                # If not time-series compatible dataset
                 except KeyError as e:
                         st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
                         st.stop()   
 
                     
-    
+        # Cubic method selected
         if interpolation_radio == 'Cubic':
-            
+            # Cubic interpolation method selected
             with st.container():
                 st.subheader('Cubic interpolation')
+            # Settings layout    
+            cc1, cc2, cc3 = st.columns(3)
+
+            # Input settings
             try:
-                cc1, cc2, cc3 = st.columns(3)
                 with cc1:
                     columns_list = list(current_df.select_dtypes(exclude=['datetime', 'object']).columns)
                     columns_list1 = list(current_df.select_dtypes(include=['datetime']).columns)
@@ -440,22 +428,33 @@ def main(data_obj):
                      st.write(" ")
                      st.warning(f'If applied, {current_df.shape[0]-Cubic_df.shape[0]} rows will be removed.')
                 
+                # Plotting
                 if plot_basic: 
                    interpolation_subplot(current_df, Cubic_df, selected_column, 'cubic_fill')
-    
+                
+                # Save results to csv
                 if st.button("Save intermediate cubic results"):
                     current_df = Cubic_df.reset_index()
                     current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)   
+            
+            # If not time-series compatible dataset        
             except KeyError as e: 
                    st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
                    st.stop()        
         
+
+        # Forward Fill method selected
         if interpolation_radio == 'Forward Fill':
-            
+            # Forward Fill interpolation method selected
             with st.container():
                 st.subheader('Forward Fill interpolation')
+            
+            # Settings layout   
+            cc1, cc2, cc3 = st.columns(3)
+            
+            # Input settings
             try:
-                cc1, cc2, cc3 = st.columns(3)
+                
                 with cc1:
                     columns_list = list(current_df.select_dtypes(exclude=['datetime', 'object']).columns)
                     columns_list1 = list(current_df.select_dtypes(include=['datetime']).columns)
@@ -474,22 +473,31 @@ def main(data_obj):
                     st.write(" ")
                     st.warning(f'If applied, {current_df.shape[0]-df_ffill.shape[0]} rows will be removed.')
                 
+                # Plotting
                 if plot_basic:
                    interpolation_subplot(current_df, df_ffill, selected_column, 'Forward Fill')
                 
+                # Save results to csv
                 if st.button("Save intermediate Forward Fill results"):
                     current_df = df_ffill.reset_index()
                     current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False) 
+            # If not time-series compatible dataset        
             except KeyError as e: 
                  st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
                  st.stop()   
 
+        # Backward Fil method selected
         if interpolation_radio == 'Backward Fill':
-            
+            # Backward Fil interpolation method selected
             with st.container():
                 st.subheader('Backward Fill interpolation')
+            
+            # Settings layout   
+            cc1, cc2, cc3 = st.columns(3)
+            
+            # Input settings 
             try:
-                cc1, cc2, cc3 = st.columns(3)
+                
                 with cc1:
                     columns_list = list(current_df.select_dtypes(exclude=['datetime', 'object']).columns)
                     columns_list1 = list(current_df.select_dtypes(include=['datetime']).columns)
@@ -508,12 +516,16 @@ def main(data_obj):
                     st.write(" ")
                     st.warning(f'If applied, {current_df.shape[0]-df_bfill.shape[0]} rows will be removed.')
                 
+                # Plotting
                 if plot_basic: 
                    interpolation_subplot(current_df, df_bfill, selected_column, 'Backward Fill')
                 
+                # Save results to csv
                 if st.button("Save intermediate Backward Fill results"):
                     current_df = df_bfill.reset_index()
-                    current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)           
+                    current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
+
+            # If not time-series compatible dataset                    
             except KeyError as e:
                 st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
                 st.stop()   
@@ -550,7 +562,7 @@ def main(data_obj):
             st.dataframe(sg.reset_index(drop=True))
             st.write(sg.shape)
 
-        # For each 'interpolation' case   
+        # For each 'Interpolation' case   
         if dp_method == 'Interpolation' and  interpolation_radio == 'Linear':
             st.dataframe(linear_df.reset_index())
             st.write(linear_df.shape)
@@ -564,7 +576,7 @@ def main(data_obj):
             st.dataframe(df_bfill.reset_index())
             st.write(df_bfill.shape)          
 
-
+    # Changes tracker
     try:
         a = pd.read_csv("Smoothing_and_Filtering//Filtered Dataset.csv")
         if a.equals(current_df):
@@ -573,50 +585,19 @@ def main(data_obj):
         st.sidebar.success("You haven't made any changes to the original dataframe yet")
     
 
-    
+    # S&F finalizer
     st.sidebar.subheader("Finalize smoothing & filtering changes:")
+    # Create Preprocessing and delete Filtered datasets
     if st.sidebar.button("Finalize!"):
         current_df.to_csv("Smoothing_and_Filtering//Preprocessing dataset.csv", index=False)
         if os.path.isfile("Smoothing_and_Filtering//Filtered Dataset.csv"):
             os.remove("Smoothing_and_Filtering//Filtered Dataset.csv")
         st.sidebar.success("Saved!")
-        var_read = pd.read_csv("Smoothing_and_Filtering//Preprocessing dataset.csv")
-        # st.dataframe(var_read)
+
+    # Unfinalized changes tracker
     else:
         st.sidebar.error("You have unsaved changes")
 
-
-    
-
-    # try:
-    #     b = pd.read_csv('Preprocessing dataset.csv')
-    #     if b.equals(current_df):
-    #         st.sidebar.success("Your changes are finalized")
-    #     else:
-    #         st.sidebar.error("Your changes are not finalized.")
-    # except:
-    #     st.sidebar.warning("Bleh")
-
-
-
-    # st.sidebar.subheader("Finalize changes:")
-    # if st.sidebar.button("Finalize!"):
-    #     current_df.to_csv("Preprocessing dataset.csv", index=False)
-    #     if os.path.isfile("Filtered Dataset.csv"):
-    #         os.remove("Filtered Dataset.csv")
-    #     st.sidebar.success("Saved!")
-    # else:
-    #     st.sidebar.error("You have unsaved changes")
-
-    # try:
-    #     a = pd.read_csv('Filtered Dataset.csv')
-    #     if a.equals(current_df):
-    #         st.sidebar.write("Filtered equals current")
-    #     else:
-    #         st.dataframe(a.dtypes.astype(str))
-    #         st.dataframe(current_df.dtypes.astype(str))
-    # except:
-    #     st.sidebar.write("")
-
+# Main
 if __name__ == "__main__":
     main()
