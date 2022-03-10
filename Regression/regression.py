@@ -54,7 +54,7 @@ def main(data_obj):
 
     st.dataframe(rg_df)
     st.write(rg_df.shape)
-    st.dataframe(rg_df.dtypes.astype(str))
+    # st.dataframe(rg_df.dtypes.astype(str))
     st.download_button(label="Download data as CSV",
                 data=rg_df.to_csv(index=False),
                 file_name='Preprocessed Dataset.csv',
@@ -139,65 +139,85 @@ def main(data_obj):
             # Input variables/widgets for the 1st column
             with cc1:
                 tt_proportion = st.slider('Portion of test data', 0.0, 1.0, 0.2, 0.05)
-                iteration_num = st.slider('Number of iterations', 100, 5000, 200, 50)
-                norm_bool = st.checkbox('Normalize data?')           
                 
-            # Input variables/widgets for the 2nd column
-            with cc2:
-                columns_list = list(rg_df.select_dtypes(exclude=['object', 'datetime']).columns)
-                selected_column = st.selectbox("Column to regress:", columns_list)
-                col_idx = rg_df.columns.get_loc(selected_column)
-
-                tm_columns_list = list(rg_df.select_dtypes(include=['datetime']).columns)
-                time_column = st.selectbox("Select a time column:", tm_columns_list)
-                tm_col_idx = rg_df.columns.get_loc(selected_column)
-
                 solver_fun1 = ("lbfgs", "sgd", "adam")
                 selected_solver = st.selectbox("Solver:", solver_fun1)
 
                 activation_fun1 = ("identity", "logistic", "tanh", "relu")
-                selected_function = st.selectbox("Activation function:", activation_fun1)           
-            
+                selected_function = st.selectbox("Activation function:", activation_fun1) 
+
+                group_bool = st.checkbox('Group data?')
+                                         
+            # Input variables/widgets for the 2nd column
+            with cc2:
+                iteration_num = st.slider('Number of iterations', 100, 5000, 200, 50)
+
+                columns_list = list(rg_df.select_dtypes(exclude=['object', 'datetime']).columns)
+                selected_column = st.selectbox("Column to regress:", columns_list)
+                col_idx = rg_df.columns.get_loc(selected_column)
+
+                unique_columns_list = list(rg_df.select_dtypes(exclude=['datetime']).columns)
+                unique_selected_column = st.selectbox("Filter uniques:", unique_columns_list)
+                unique_col_idx = rg_df.columns.get_loc(unique_selected_column)
+
+                tm_columns_list = list(rg_df.select_dtypes(include=['datetime']).columns)
+                time_column = st.selectbox("Select a time column:", tm_columns_list)
+                tm_col_idx = rg_df.columns.get_loc(time_column)
+
+                            
             # Input variables/widgets for the 3rd column
             with cc3:
-                number_hl = st.slider('Hidden layers:', 1, 5, 2, 1)
+                number_hl = st.slider('Hidden layers:', 1, 5, 3, 1)
 
                 a = []
 
                 for i in range(number_hl):
-                    a.append(st.number_input(f'Number of neurons in hidden layer {i+1}:', 1, 600, 1, 1, key=i))
+                    a.append(st.number_input(f'Number of neurons in hidden layer {i+1}:', 1, 600, 10, 1, key=i))
         
         with st.container():
             
+            
+
+            # Class instance for further input
+            NN_inputs_TS = Regressor_Inputs_TS(tt_proportion,
+                                    selected_function,
+                                    tuple(a),
+                                    selected_solver,
+                                    iteration_num,
+                                    group_bool
+                                    )
+
+            # Class instance/method for Neural Networks execution
+            Regressor_TS = NN_TimeSeries_Reg(rg_df, NN_inputs_TS, col_idx, tm_col_idx)
+
+            if group_bool:
+                # Section subheader
+                st.subheader('Additional user inputs')
+                Regressor_TS.listing(unique_col_idx)
+                #st.dataframe(Regressor_TS.group_object)
+                selected_group = Regressor_TS.group_object['index']
+                sel = st.selectbox("Select an element for groupping:", selected_group)
+                sel_idx = selected_group[selected_group == sel].index[0]
+
             # Submit button
             with st.form(key="Youssef"):
                 submit_button = st.form_submit_button(label='Submit')
+
+                
 
                 # Circle animation for code execution 
                 if submit_button:
                     with st.spinner("Training models..."):
                         
-                        # Class instance for further input
-                        NN_inputs_TS = Regressor_Inputs_TS(tt_proportion,
-                                                selected_function,
-                                                tuple(a),
-                                                selected_solver,
-                                                iteration_num,
-                                                norm_bool
-                                                )
-
-                        # Class instance/method for Neural Networks execution
-                        Regressor_TS = NN_TimeSeries_Reg(rg_df, NN_inputs_TS, col_idx, tm_col_idx)
-
+                        if group_bool:
+                            Regressor_TS.group(sel_idx)
                         Regressor_TS.Regressor()
-                        Regressor_TS.listing(col_idx)
-                        Regressor_TS.group(5)
                         Regressor_TS.printing()
                         Regressor_TS.plotting()
                 
 
     # Selected 'Random Forest'
-    if rg_method == 'Random Forest':
+    if rg_method == 'Random Forest (Sneha)':
 
         # st.dataframe(rg_df)
         # st.write(rg_df.shape)

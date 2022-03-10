@@ -56,7 +56,7 @@ class NN_TimeSeries_Reg:
             self.col_name=self.df.columns[i]
             self.group_object=collections.Counter(self.df[self.col_name])
             self.group_object = pd.DataFrame.from_dict(self.group_object, orient='index').reset_index()
-            st.write(self.group_object.head(6))
+            #st.write(self.group_object.head(6))
         except Exception as e:
             self.Error_message='Error in Handling Method: ' + str(e)
             self.flag=True
@@ -67,7 +67,7 @@ class NN_TimeSeries_Reg:
             self.internal_df=self.internal_df.dropna()
             self.internal_df.drop_duplicates(keep='first',inplace=True) 
             self.features()
-            st.write(self.internal_df.head(5))
+            # st.write(self.internal_df.head(5))
         except Exception as e:
             self.Error_message='Error in Handling Method: ' + str(e)
             self.flag=True
@@ -84,7 +84,7 @@ class NN_TimeSeries_Reg:
             #for l in range (0,6):
             for a in range(0,n):
 
-                date_time_obj = datetime.strptime(date_time_column.iloc[a,0], '%Y-%m-%d %H:%M:%S')
+                date_time_obj = date_time_column.iloc[a,0]
                 year=date_time_obj.year
                 month=date_time_obj.month
                 day=date_time_obj.day
@@ -136,7 +136,7 @@ class NN_TimeSeries_Reg:
 
                 self.model.fit(X_train_norm,y_train)
                 self.Train_score= self.model.score(X_train_norm,y_train)
-                test_score= self.model.score(X_test_norm,self.y_actual)
+                self.test_score= self.model.score(X_test_norm,self.y_actual)
                 #coeff=self.model.coefs_
 
 
@@ -181,7 +181,7 @@ class NN_TimeSeries_Reg:
     def printing(self):
         #Printing the chosen metrics
         if (self.flag) != True:
-            self.Error_message= ' No Error Occurred during prcoessing of the code'
+            self.Error_message= ' No Error Occurred during processing of the code'
         
         try:
             

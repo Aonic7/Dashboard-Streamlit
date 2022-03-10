@@ -103,7 +103,6 @@ class Interface():
       # Initial welcome page when there is no file selected
       else:
         Welcome_Page.welcome()
-        st.image('https://images.alphacoders.com/224/thumb-1920-224763.jpg')
         # It deletes the Preprocessing dataset from the last run
         if os.path.isfile("Smoothing_and_Filtering//Preprocessing dataset.csv"):
             os.remove("Smoothing_and_Filtering//Preprocessing dataset.csv")
