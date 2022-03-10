@@ -256,7 +256,7 @@ activation_fun1 = ("identity", "logistic", "tanh", "relu")
 solver_fun1 = ("lbfgs", "sgd", "adam")
 hidden_layers3=(100,20)
 
-Inputs= Regressor_Inputs(0.1,activation_fun1[3],hidden_layers3,solver_fun1[0],2000)
+Inputs= Regressor_Inputs(0.1,activation_fun1[3],hidden_layers3,solver_fun1[0],2000,True)
 
 Regressor1=NN_TimeSeries_Reg(parking_data,Inputs,2,3)
 
@@ -267,9 +267,9 @@ Regressor1.listing(1)
 Regressor1.group(5)
 
 
-Regressor1.Regressor()
-Regressor1.printing()
-Regressor1.plotting()
+#Regressor1.Regressor()
+#Regressor1.printing()
+#Regressor1.plotting()
 
 
 
