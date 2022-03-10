@@ -65,7 +65,7 @@ def main(data_obj):
                 tt_proportion = st.slider('Portion of test data', 0.0, 1.0, 0.2, 0.05)
                 iteration_num = st.slider('Number of iterations', 100, 5000, 200, 50)
                 norm_bool = st.checkbox('Normalize data?')
-                bool_placeholder = st.checkbox('BOOLEAN PLACEHOLDER')              
+                resample_bool = st.checkbox('Resample data?')              
                 
             # Input variables/widgets for the 2nd column
             with cc2:
@@ -104,11 +104,13 @@ def main(data_obj):
                                                 tuple(a),
                                                 selected_solver,
                                                 iteration_num,
-                                                norm_bool
+                                                norm_bool,
+                                                resample_bool
                                                 )
 
                         # Class instance/method for Neural Networks execution
                         Classifier = NN_Classifier(cl_df, NN_inputs, col_idx)
+
                         Classifier.Classify()
                         Classifier.printing()
                         Classifier.Conf()

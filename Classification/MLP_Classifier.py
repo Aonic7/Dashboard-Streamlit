@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sn
 from sklearn import metrics,preprocessing
-from sklearn.metrics import classification_report
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
 from imblearn.combine import SMOTEENN
 from typing import NamedTuple
 from numpy.core.fromnumeric import shape
@@ -24,7 +24,7 @@ class NN_Classifier:
     Train_score:                float #Model score on Training data
     X_test:                     float #Testing samples
     test_score:                 float #Model score on the Testing data
-    Report:                     pd.DataFrame #Complete Report of the classifier performance on the testing data
+    Report:                     pd.DataFrame #Comlete Report of the classifier performance on the testing data
     Report_dic:                 dict
     Error_message:              str #Error message to be sent to the user if any issues occur
     flag:                       bool #Flag to signal an Error occurred in a previous method
@@ -116,20 +116,23 @@ class NN_Classifier:
                 self.model = MLPClassifier(hidden_layer_sizes = self.NN_Inputs.hidden_layers, 
                                     activation = self.NN_Inputs.activation_fun, solver = self.NN_Inputs.solver_fun, 
                                     learning_rate = 'adaptive', max_iter = self.NN_Inputs.Max_iterations, random_state = 109,shuffle=True,batch_size=15,alpha=0.0005 )
-                
-                #Re-sampling method used to handle imbalanced data 
-                if self.Class_len >2:
-                    method = SMOTEENN(random_state=109,sampling_strategy='minority')
+                if self.NN_Inputs.resample:
+                    #Re-sampling method used to handle imbalanced data 
+                    if self.Class_len >2:
+                        method = SMOTEENN(random_state=109,sampling_strategy='minority')
+                    else:
+                        method = SMOTEENN(random_state=109,sampling_strategy=0.48)    
+                    X_res, y_res = method.fit_resample(X_train, y_train)
+                    df=pd.DataFrame(X_res)
+                    #print(df)
+                    new_df=pd.concat([df,pd.DataFrame(y_res,columns=[self.k])],axis=1)
+                    #print(new_df.head)
+                    df1=new_df.sample(frac=1,random_state=1).reset_index(drop=True)
+                    #After Resampling and shuffling, we feed the df to the handle method to generate X,y arrays used to train the model
+                    x2,y2 = self.handle2(df1)
                 else:
-                    method = SMOTEENN(random_state=109,sampling_strategy=0.48)    
-                X_res, y_res = method.fit_resample(X_train, y_train)
-                df=pd.DataFrame(X_res)
-                #print(df)
-                new_df=pd.concat([df,pd.DataFrame(y_res,columns=[self.k])],axis=1)
-                #print(new_df.head)
-                df1=new_df.sample(frac=1,random_state=1).reset_index(drop=True)
-                #After Resampling and shuffling, we feed the df to the handle method to generate X,y arrays used to train the model
-                x2,y2 = self.handle2(df1)
+                    x2,y2 = X_train,y_train
+            
                 #print(shape(x2))
                 #print(shape(y2))
                 
@@ -164,7 +167,7 @@ class NN_Classifier:
                 #Mean squared error and accuracy
                 self.Report_dic ={'1': ['Refer To error in Handling Method 1'] }
                 self.Report=pd.DataFrame.from_dict(self.Report_dic)#, target_names=target_names)
-
+                    #self.Report = "Vasya"
         else:
             self.Train_score= 'Refer To error in Handling Method'
             self.test_score= 'Refer To error in Handling Method'
@@ -226,7 +229,6 @@ class NN_Classifier:
             ax.set_yticklabels(labels)
 
             st.pyplot(fig)
-            #plt.show()
 
         else:
             st.write('Error occurred in previous methods, Refer to Error Message Warning')
@@ -241,3 +243,17 @@ class classifier_inputs(NamedTuple):
     solver_fun:             tuple  # solver function
     Max_iterations:         int    # number of iterations
     Normalize:              bool   # flag to normalize X data or not
+    resample:               bool   # flag to resample the X data for imbalanced data or not
+
+# data2 = pd.read_csv("D:\MAIT\OOP\Datasets/transfusion.csv",',')
+# data = pd.read_csv("D:\\TH Koeln\\Wolf\\Project\\Data\\Classification.data", ',')
+
+# activation_fun1 = ("identity", "logistic", "tanh", "relu")
+# solver_fun1 = ("lbfgs", "sgd", "adam")
+# hidden_layers2=(20,5)
+# inputs=classifier_inputs(0.2,activation_fun1[1],hidden_layers2,solver_fun1[2],500,False)
+
+# Classifier = NN_Classifier(data,inputs,4)
+# Classifier.Classify()
+# Classifier.printing()
+#Classifier.Conf()
