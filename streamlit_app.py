@@ -2,25 +2,23 @@
 import pandas as pd #to work with dataframes
 import streamlit as st #streamlit backend
 from io import StringIO #to read data files as .csv correctly
-import os
+import os #to work with files
 
+# Streamlit main page configuration
 st.set_page_config(page_title="MAIT 21/22 Data Analytics Dashboard",
                     page_icon=None,
                     layout="wide",
                     initial_sidebar_state="expanded",
                     menu_items=None)
 
-# Dashboard apps
-
-#App import
-#from Data_Preview import data_preview
+# App import
 import Welcome_Page
 import Data_Preview
 import Data_Preparation
 import Smoothing_and_Filtering
-import Playground
 import Regression
 import Classification
+
 # Data object class
 class DataObject():
     """
@@ -67,18 +65,10 @@ class Interface():
             #now the standard 'read_csv' should work
             dt_obj.df = pd.read_csv(filename, sep=';', decimal=',', index_col = False)
             dt_obj.filesize = dt_obj.df.size
-
-
-        # Attempts to convert all numerical columns to 'datetime' format. Relevant for timeseries.
-        # for col in dt_obj.df.columns:
-        #   if dt_obj.df[col].dtype == 'object':
-        #     try:
-        #       dt_obj.df[col] = pd.to_datetime(dt_obj.df[col])
-        #     except ValueError:
-        #       pass
       
         # Side bar navigation menu with a select box
-        menu = ['Welcome Page','Data Preview', 'Data Preparation', 'Smoothing and filtering', 'Classification', 'Regression', 'Playground']
+        menu = ['Welcome Page','Data Preview', 'Data Preparation', 'Smoothing and filtering',
+                                                 'Classification', 'Regression']
         navigation = st.sidebar.selectbox(label="Select menu", options=menu)
 
         # Landing page
@@ -99,10 +89,6 @@ class Interface():
         # Runs 'Smoothing and filtering' app
         if navigation == 'Smoothing and filtering':
           Smoothing_and_Filtering.smoothing_and_filtering(dt_obj)
-
-        # Runs 'Playground' app
-        if navigation == 'Playground':
-          Playground.playground(dt_obj)
         
         # Runs 'Classification' app
         if navigation == 'Classification':
@@ -111,10 +97,12 @@ class Interface():
         # Runs 'Regression' app
         if navigation == 'Regression':
           Regression.regression(dt_obj)
-        
+      
+      # Initial welcome page when there is no file selected
       else:
         Welcome_Page.welcome()
         st.image('https://images.alphacoders.com/224/thumb-1920-224763.jpg')
+        # It 
         if os.path.isfile("Smoothing_and_Filtering//Preprocessing dataset.csv"):
             os.remove("Smoothing_and_Filtering//Preprocessing dataset.csv")
 

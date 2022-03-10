@@ -1,33 +1,28 @@
+#General import section
 import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
-# from pathlib import Path
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
+from math import isqrt
+
+#Local classes/functions import
 from .MLP_Classifier import NN_Classifier, classifier_inputs
 from .ClassificationClass_Noah import Classification
 from .RF_classfication import Sample
-from math import isqrt
-
-def import_dset(data_obj):
-    try:
-        st.write('Try execution')
-        cl_df1 = pd.read_csv('Smoothing_and_Filtering//Preprocessing Dataset.csv', index_col=None)
-
-    except:
-        st.write('Exception execution')
-        cl_df1 = data_obj.df
-        st.error("""You did not smooth of filter the data.
-                    Please go to 'Smoothing and filtering' and finalize your results.
-                    Otherwise, the default dataset would be used!
-                    """)    
-    return cl_df1
 
 
 def main(data_obj):
+    """Main callable 
 
+    Args:
+        data_obj (__main__.DataObject): DataObject instance.
+    """
+
+    #Page header
     st.header("Classification")
 
+    #Check for existing dataset 
     try:
         var_read = pd.read_csv("Smoothing_and_Filtering//Preprocessing dataset.csv")
         cl_df = var_read
@@ -39,7 +34,7 @@ def main(data_obj):
                      Otherwise, the default dataset would be used!
                      """)   
     
-
+    #Radio button style/setting
     st.write(
         '<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;}</style>', unsafe_allow_html=True)
 
@@ -47,6 +42,7 @@ def main(data_obj):
     cl_method = st.radio(label='Classification Method', options=[
                          'Neural Networks (Youssef)', 'Classification (Noah)', 'Random Forest (Sneha)'])
 
+    #Show dataset
     st.dataframe(cl_df)
     st.write(cl_df.shape)
     st.download_button(label="Download data as CSV",
@@ -57,10 +53,6 @@ def main(data_obj):
 
     # Selected 'Neural Networks'
     if cl_method == 'Neural Networks (Youssef)':
-
-        #st.dataframe(cl_df)
-        #st.write(cl_df.shape)
-
 
         with st.container():
             st.subheader('Select input settings')
@@ -116,10 +108,9 @@ def main(data_obj):
                         Classifier.printing()
                         Classifier.Conf()
 
+
+    #Selected 'Classification (Noah)'
     if cl_method == 'Classification (Noah)':
-        
-        # st.dataframe(cl_df)
-        # st.write(cl_df.shape)
 
         with st.container():
             st.subheader('Select input settings')
@@ -198,9 +189,6 @@ def main(data_obj):
                             st.error("Please check if you selected a dataset and column suitable for binary classification. \nAlternatively, your labels should be one-hot encoded.")
 
     if cl_method == 'Random Forest (Sneha)':
-
-        # st.dataframe(cl_df)
-        # st.write(cl_df.shape)
 
         with st.container():
             st.subheader('Select input settings')
