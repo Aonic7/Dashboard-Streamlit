@@ -198,12 +198,12 @@ class NN_Regressor:
 
 
 #Using the Class
-data = pd.read_csv("C:\\Users\\Beats\\Desktop\\Python_OOP\\synchronous machine.csv",delimiter=';',decimal=',')
-#print(data.head)
-activation_fun1 = ("identity", "logistic", "tanh", "relu")
-solver_fun1 = ("lbfgs", "sgd", "adam")
+# data = pd.read_csv("C:\\Users\\Beats\\Desktop\\Python_OOP\\synchronous machine.csv",delimiter=';',decimal=',')
+# #print(data.head)
+# activation_fun1 = ("identity", "logistic", "tanh", "relu")
+# solver_fun1 = ("lbfgs", "sgd", "adam")
 
-hidden_layers3=(600,300,100)
+# hidden_layers3=(600,300,100)
 
 class Regressor_Inputs(NamedTuple):
         
