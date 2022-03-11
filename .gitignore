@@ -2,7 +2,6 @@
 .vscode/settings.json
 .gitignore
 Smoothing_and_Filtering/Preprocessing dataset.csv
-Smoothing_and_Filtering/Preprocessing dataset.csv
 catboost_info/learn_error.tsv
 logs.log
 catboost_info/catboost_training.json

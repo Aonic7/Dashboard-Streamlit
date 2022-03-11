@@ -23,6 +23,8 @@ from sklearn.model_selection import RandomizedSearchCV
 from typing import NamedTuple
 import math
 
+import streamlit as st
+
 
 # User Inputs:
                 # Syscodenumber
@@ -65,8 +67,8 @@ class Timeseries:
         # Create a model
         reg=RandomForestRegressor(n_estimators=estimator)
 
-        c = obj.RandomizedSearchoptim()
-        # print(c)
+        c = self.RandomizedSearchoptim()
+        # st.write(c)
 
         rf_reg=RandomizedSearchCV(estimator= reg ,param_distributions = c, n_iter = 100, cv = 3, verbose=2, random_state=42, n_jobs = -1)
 
@@ -74,7 +76,7 @@ class Timeseries:
         rf_reg.fit(X_train,Y_train)
         self.Y_pred = rf_reg.predict(X_test)
 
-        # print(self.Y_test, self.Y_pred)
+        # st.write(self.Y_test, self.Y_pred)
         return(self.Y_pred,self.Y_test)
 
         
@@ -84,11 +86,11 @@ class Timeseries:
         self.test_size=test_size  
         # Split the data into training set and testing set
         X_train1,self.X_test1,Y_train1,self.Y_test1 = train_test_split(self.X1,self.Y1,test_size=test_size,random_state=123)
-        print(X_train1,Y_train1)
+        # st.write(X_train1,Y_train1)
 
         # Create a model
         reg=RandomForestRegressor(n_estimators=estimator)
-        b = obj.RandomizedSearchoptim()
+        b = self.RandomizedSearchoptim()
         
         rf_reg=RandomizedSearchCV(estimator= reg ,param_distributions = b, n_iter = 100, cv = 3, verbose=2, random_state=42, n_jobs = -1)
 
@@ -97,12 +99,12 @@ class Timeseries:
         self.Y_pred1 = rf_reg.predict(self.X_testIP)
         # self.Y_pred1 = round(self.Y_pred1,0)
         
-        print( 'Occupancy Rate: ', self.Y_pred1, '%' ,' of the space is occupied')
+        st.write( 'Rate: ', self.Y_pred1, '%')
         # df.to_excel('Filtered1.xlsx', sheet_name='Filtered Data')
 
-        Total = self.df['Capacity'].unique()
+        Total = self.df[self.base].unique()
         o = (Total * self.Y_pred1)/100
-        print('Occupancy : ', math.floor(o))
+        st.write('Original value: ', math.floor(o))
 
     def RandomizedSearchoptim(self):
         # Find the best parameters for the model
@@ -129,7 +131,7 @@ class Timeseries:
         nxm=np.shape(self.df)
         n=nxm[0]
         m=nxm[1]
-        date_time_column=df[self.time_col]
+        date_time_column=self.df[self.time_col]
         X=np.ndarray(shape=(n,6),dtype=float, order='F')
         
         for a in range(0,n):
@@ -163,7 +165,7 @@ class Timeseries:
        
        # To initialize the features and self.target 
         self.X = self.df.loc[:,[self.base,'year','month','day','hour','newmin']]
-        self.X.to_csv('DatasetYY2.csv')
+        #self.X.to_csv('DatasetYY2.csv')
         self.Y= self.df['Rate'] 
             
     
@@ -199,16 +201,17 @@ class Timeseries:
         
         # R-Square value
         r2 = r2_score(self.Y_test, self.Y_pred)
-        print('R-squared score of Predicted model: ', round(r2, 5))
-        print('RMSE of Predicted model: ',MSE(self.Y_test,self.Y_pred)**(0.5))
+        st.write('R-squared score of Predicted model: ', round(r2, 5))
+        st.write('RMSE of Predicted model: ',MSE(self.Y_test,self.Y_pred)**(0.5))
         
         # To display the 2D-plot for the actual vs predicted values
         df1=pd.DataFrame({'Y_Actual':self.Y_test,'Y_Pred':self.Y_pred})
+        fig = plt.figure(figsize=(10, 4))
         sns.scatterplot(x='Y_Actual',y='Y_Pred',data=df1,label='Real Prediction')
         sns.lineplot(x='Y_Actual',y='Y_Actual',data=df1,color='red',alpha=0.5,label='Optimal Prediction')
         plt.title('Y_Actual vs Y_Pred')
         plt.legend()
-        plt.show()
+        st.pyplot(fig)
     
         
 
@@ -221,7 +224,7 @@ class rf_Inputs(NamedTuple):
 # Import data setsss 
 # df = pd.read_csv(r"C:\Users\Yash Uday Pisat\Desktop\dataset.csv")
 
-# # print('Before removing inconsistence data:',df.shape)
+# # st.write('Before removing inconsistence data:',df.shape)
 # df.dropna(inplace = True)
 # df.drop_duplicates(keep='first',inplace=True) 
 
@@ -229,26 +232,26 @@ class rf_Inputs(NamedTuple):
 # df = df[df['Capacity']>=0 ]
 # false_data = df[df['Occupancy']> df['Capacity']]
 # df = pd.concat([df, false_data]).drop_duplicates(keep=False)
-# # print('After removing inconsistence data:',df.shape)
+# # st.write('After removing inconsistence data:',df.shape)
 
 
-dat=datetime(2016,10,10)
-s=datetime(dat.year,dat.month,dat.day,15,15)
+# dat=datetime(2016,10,10)
+# s=datetime(dat.year,dat.month,dat.day,15,15)
 
 
-Input= rf_Inputs('Shopping',dat,s)
+# Input= rf_Inputs('Shopping',dat,s)
 
 # df['LastUpdated']=pd.to_datetime(df['LastUpdated'])
 
 "'Capacity' = base column"
 "'Ocupancy' = target column"
 
-obj= Timeseries(df,Input,'Capacity','Occupancy','LastUpdated','SystemCodeNumber') 
+# obj= Timeseries(df,Input,'Capacity','Occupancy','LastUpdated','SystemCodeNumber') 
 
-obj.DataPrep()
-obj.fullmodel()
-obj.model(500, 0.3)
-obj.Results()
-obj.SelectedSysCode(Input)
-obj.UserSelectedmodel(500, 0.3)
+# obj.DataPrep()
+# obj.fullmodel()
+# obj.model(500, 0.3)
+# obj.Results()
+# obj.SelectedSysCode(Input)
+# obj.UserSelectedmodel(500, 0.3)
 

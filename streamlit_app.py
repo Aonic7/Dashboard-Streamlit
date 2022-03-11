@@ -104,9 +104,11 @@ class Interface():
       # Initial welcome page when there is no file selected
       else:
         Welcome_Page.welcome()
-        # It deletes the Preprocessing dataset from the last run
+        # It deletes Preprocessing and initial datasets from the last run
         if os.path.isfile("Smoothing_and_Filtering//Preprocessing dataset.csv"):
-            os.remove("Smoothing_and_Filtering//Preprocessing dataset.csv")
+           os.remove("Smoothing_and_Filtering//Preprocessing dataset.csv")
+        if os.path.isfile("Smoothing_and_Filtering//initial.csv"):
+           os.remove("Smoothing_and_Filtering//initial.csv")
 
 def main():
   """
