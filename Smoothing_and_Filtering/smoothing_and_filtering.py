@@ -371,14 +371,18 @@ def main(data_obj):
                     with cc1:
                         columns_list = list(current_df.select_dtypes(exclude=['datetime', 'object']).columns)
                         columns_list1 = list(current_df.select_dtypes(include=['datetime']).columns)
+                        #columns_list2 = list(current_df.select_dtypes(include=['datetime', 'object']).columns)
                         selected_column = st.selectbox("Select a column:", columns_list)
                         time_column = st.selectbox("Select a time column:", columns_list1)
-                        interpolation_all = TimeSeriesOOP(current_df, selected_column, time_column)
-                        linear_df = interpolation_all.make_interpolation_liner(selected_column) 
+                        #col_group = st.selectbox("Select a gouping column:", columns_list2)
+                        col_group = st.multiselect('Group by', current_df.columns, default=[current_df.columns[0], current_df.columns[1]])
+                        interpolation_all = TimeSeriesOOP(current_df, selected_column, time_column, col_group)
+                        linear_df = interpolation_all.make_interpolation_liner(selected_column, col_group) 
+                    
                     with cc2:
                         st.write(" ")
                         st.write(" ")
-                        plot_basic = st.button('Plot')
+                        plot_basic = st.button('Plot')    
                         
                     with cc3:
                         st.write(" ")
@@ -395,10 +399,15 @@ def main(data_obj):
                             current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)  
                 
                 # If not time-series compatible dataset
-                except KeyError as e:
+                except KeyError or ValueError or IndexError as e:  
                         st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
-                        st.stop()   
-
+                        st.stop()
+                except  ValueError as ev:  
+                        st.warning("Please select different column of interest")
+                        st.stop()
+                except  IndexError as ei:              
+                        st.warning("Please select one more column in group by field")
+                        st.stop()
                     
         # Cubic method selected
         if interpolation_radio == 'Cubic':
@@ -415,8 +424,9 @@ def main(data_obj):
                     columns_list1 = list(current_df.select_dtypes(include=['datetime']).columns)
                     selected_column = st.selectbox("Select a column:", columns_list)
                     time_column = st.selectbox("Select a time column:", columns_list1)
-                    interpolation_all = TimeSeriesOOP(current_df, selected_column, time_column)
-                    Cubic_df = interpolation_all.make_interpolation_cubic(selected_column) 
+                    col_group = st.multiselect('Group by', current_df.columns, default=[current_df.columns[0], current_df.columns[1]])
+                    interpolation_all = TimeSeriesOOP(current_df, selected_column, time_column, col_group)
+                    Cubic_df = interpolation_all.make_interpolation_cubic(selected_column, col_group) 
                     
                 with cc2:
                     st.write(" ")
@@ -438,9 +448,15 @@ def main(data_obj):
                     current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)   
             
             # If not time-series compatible dataset        
-            except KeyError as e: 
-                   st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
-                   st.stop()        
+            except KeyError or ValueError or IndexError as e:  
+                        st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
+                        st.stop()
+            except  ValueError as ev:  
+                        st.warning("Please select different column of interest")
+                        st.stop()
+            except  IndexError as ei:              
+                        st.warning("Please select one more column in group by field")
+                        st.stop()
         
 
         # Forward Fill method selected
@@ -460,8 +476,9 @@ def main(data_obj):
                     columns_list1 = list(current_df.select_dtypes(include=['datetime']).columns)
                     selected_column = st.selectbox("Select a column:", columns_list)
                     time_column = st.selectbox("Select a time column:", columns_list1)
-                    interpolation_all = TimeSeriesOOP(current_df, selected_column, time_column)
-                    df_ffill = interpolation_all.int_df_ffill() 
+                    col_group = st.multiselect('Group by', current_df.columns, default=[current_df.columns[0], current_df.columns[1]])
+                    interpolation_all = TimeSeriesOOP(current_df, selected_column, time_column, col_group)
+                    df_ffill = interpolation_all.int_df_ffill(selected_column, col_group) 
                     
                 with cc2:
                     st.write(" ")
@@ -485,6 +502,12 @@ def main(data_obj):
             except KeyError as e: 
                  st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
                  st.stop()   
+            except  ValueError as ev:  
+                        st.warning("Please select different column of interest")
+                        st.stop()
+            except  IndexError as ei:              
+                        st.warning("Please select one more column in group by field")
+                        st.stop()
 
         # Backward Fil method selected
         if interpolation_radio == 'Backward Fill':
@@ -503,8 +526,9 @@ def main(data_obj):
                     columns_list1 = list(current_df.select_dtypes(include=['datetime']).columns)
                     selected_column = st.selectbox("Select a column:", columns_list)
                     time_column = st.selectbox("Select a time column:", columns_list1)
-                    interpolation_all = TimeSeriesOOP(current_df, selected_column, time_column)
-                    df_bfill = interpolation_all.int_df_bfill() 
+                    col_group = st.multiselect('Group by', current_df.columns, default=[current_df.columns[0], current_df.columns[1]])
+                    interpolation_all = TimeSeriesOOP(current_df, selected_column, time_column, col_group)
+                    df_bfill = interpolation_all.int_df_bfill(selected_column, col_group) 
                     
                 with cc2:
                     st.write(" ")
@@ -528,7 +552,13 @@ def main(data_obj):
             # If not time-series compatible dataset                    
             except KeyError as e:
                 st.warning("Selected dataframe is not appropriate for this method, please upload a different one")
-                st.stop()   
+                st.stop()
+            except  ValueError as ev:  
+                st.warning("Please select different column of interest")
+                st.stop()
+            except  IndexError as ei:              
+                st.warning("Please select one more column in group by field")
+                st.stop()       
                 
     # Current dataframe display
     with col2:
