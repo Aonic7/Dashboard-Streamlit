@@ -133,7 +133,7 @@ class NN_TimeSeries_Reg:
                 X_train, self.X_test, y_train, self.y_actual= train_test_split(self.X_new,self.Y_new,test_size=self.NN_Inputs.test_size,shuffle=False, random_state=109)
                 self.model = MLPRegressor(hidden_layer_sizes = self.NN_Inputs.hidden_layers,
                                     activation = self.NN_Inputs.activation_fun, solver = self.NN_Inputs.solver_fun,
-                                    max_iter = self.NN_Inputs.Max_iterations,alpha= 0.01,  learning_rate= 'constant', learning_rate_init= 0.1, random_state= 1, tol= 0.01, verbose= False)
+                                    max_iter = self.NN_Inputs.Max_iterations,alpha= 0.01, early_stopping=True, learning_rate= 'constant', learning_rate_init= 0.1, random_state= 1, tol= 0.01, verbose= False)
                 from sklearn.preprocessing import MinMaxScaler
                 scaler = MinMaxScaler()
                 X_train_norm = scaler.fit_transform(X_train)
