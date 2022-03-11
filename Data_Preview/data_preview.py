@@ -12,8 +12,8 @@ from Visualization.visualization import Heatmap
 def main(data_obj):
     """Data Preview main
 
-    Args:
-        data_obj (__main__.DataObject): DataObject instance.
+    :param data_obj: DataObject instance
+    :type data_obj: __main__.DataObject
     """
     st.header("DATA PREVIEW")
     col1, col2 = st.columns(2)
@@ -36,13 +36,13 @@ def main(data_obj):
         st.subheader("Correlation")
         st.dataframe(data_obj.df.corr())
 
-    if os.path.isfile("Smoothing_and_Filtering//Preprocessing dataset.csv"):
-        os.remove("Smoothing_and_Filtering//Preprocessing dataset.csv")
+    # if os.path.isfile("Smoothing_and_Filtering//Preprocessing dataset.csv"):
+    #     os.remove("Smoothing_and_Filtering//Preprocessing dataset.csv")
 
     # Correlation matrix
     st.subheader("Correlation heatmap")
     Heatmap(data_obj)
 
-
+# Main
 if __name__ == "__main__":
    main()

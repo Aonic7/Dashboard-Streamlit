@@ -25,14 +25,16 @@ class DataObject():
     Data object class holds a dataframe and its byte size.
     """
     def __init__(self, df=None, filesize=None):
-      """The constructor for DataObject class.
+      """The constructor for DataObject class
 
-      Args:
-          df (pandas.core.frame.DataFrame, optional): pandas dataframe object. Defaults to None.
-          filesize (numpy.int32, optional): byte size of pandas dataframe. Defaults to None.
+      :param df: pandas dataframe object, defaults to None
+      :type df: pandas.core.frame.DataFrame, optional
+      :param filesize: byte size of pandas dataframe, defaults to None
+      :type filesize: numpy.int32, optional
       """
       self.df = df
       self.filesize = filesize
+
 
 # Interface class        
 class Interface():
@@ -43,13 +45,12 @@ class Interface():
       """The constructor for Interface class.
       """
       pass
-
     
     def side_bar(cls, dt_obj):
       """Sidebar configuration and file picker
 
-      Args:
-          dt_obj (pandas.core.frame.DataFrame): pandas dataframe object.
+      :param dt_obj: pandas dataframe object
+      :type dt_obj: pandas.core.frame.DataFrame
       """
       # Accepts .csv and .data
       filename = st.sidebar.file_uploader("Upload a data file", type=(["csv", "data"]))                   

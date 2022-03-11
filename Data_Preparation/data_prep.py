@@ -7,14 +7,13 @@ from streamlit_autorefresh import st_autorefresh #library for autorefresher http
 
 
 def import_dset(data_obj):
-    """  Checking if the processed dataset is already exist, then current dataframe will be equal to that. 
-         if it's not, initial dataframe will be generated into intial.csv file, and current dataframe will be equal to intial.    
+    """Checking if the processed dataset already exist, then current dataframe will be equal to that. 
+       If it's not, initial dataframe will be generated into initial.csv file, and current dataframe will be equal to initial.
 
-    Args:
-        data_obj (__main__.DataObject): DataObject instance.
-
-    Returns:
-        pandas.core.frame.DataFrame: pandas dataframe object.
+    :param data_obj: DataObject instance
+    :type data_obj: __main__.DataObject
+    :return: pandas dataframe object
+    :rtype: pandas.core.frame.DataFrame
     """
 
     try:
@@ -34,9 +33,9 @@ def import_dset(data_obj):
 def main(data_obj):
     """Data Preparation main
 
-    Args:
-        data_obj (__main__.DataObject): DataObject instance.
-    """
+    :param data_obj: DataObject instance
+    :type data_obj: __main__.DataObject
+    """    """"""
 
     # Header  
     st.header("Data Preparation")
@@ -97,6 +96,7 @@ def main(data_obj):
             current_df.to_csv("Smoothing_and_Filtering//Filtered Dataset.csv", index=False)
             st_autorefresh(interval=50, limit=2, key="fizzbuzzcounter")
                                
-             
+
+# Main
 if __name__ == "__main__":
     main()

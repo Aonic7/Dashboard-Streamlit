@@ -10,17 +10,17 @@ from Visualization.visualization import doubleLinePlot, DoubleBoxPlot, Histogram
 # S&F import
 from .smoothing_and_filtering_functions import Remove_Outliers, Smoothing, TimeSeriesOOP, Converter
 
+
 def import_dset(data_obj):
     """Creates a current dataframe either from the original data object,
        or from the Filtered dataset, depending on which one is 'fresher'.
        Also, a datetime conversion is attempted in case of a time-
        series dataset.
 
-    Args:
-        data_obj (__main__.DataObject): DataObject instance.
-
-    Returns:
-        pandas.core.frame.DataFrame: pandas dataframe object.
+    :param data_obj: DataObject instance
+    :type data_obj: __main__.DataObject
+    :return: pandas dataframe object
+    :rtype: pandas.core.frame.DataFrame
     """
     try:
         # Read Filtered dataset if it exists
@@ -46,8 +46,8 @@ def import_dset(data_obj):
 def main(data_obj):
     """Smoothing and Filtering main
 
-    Args:
-        data_obj (__main__.DataObject): DataObject instance.
+    :param data_obj: DataObject instance
+    :type data_obj: __main__.DataObject
     """
     
     # Header
@@ -371,10 +371,8 @@ def main(data_obj):
                     with cc1:
                         columns_list = list(current_df.select_dtypes(exclude=['datetime', 'object']).columns)
                         columns_list1 = list(current_df.select_dtypes(include=['datetime']).columns)
-                        #columns_list2 = list(current_df.select_dtypes(include=['datetime', 'object']).columns)
                         selected_column = st.selectbox("Select a column:", columns_list)
                         time_column = st.selectbox("Select a time column:", columns_list1)
-                        #col_group = st.selectbox("Select a gouping column:", columns_list2)
                         col_group = st.multiselect('Group by', current_df.columns, default=[current_df.columns[0], current_df.columns[1]])
                         interpolation_all = TimeSeriesOOP(current_df, selected_column, time_column, col_group)
                         linear_df = interpolation_all.make_interpolation_liner(selected_column, col_group) 
@@ -461,6 +459,7 @@ def main(data_obj):
 
         # Forward Fill method selected
         if interpolation_radio == 'Forward Fill':
+
             # Forward Fill interpolation method selected
             with st.container():
                 st.subheader('Forward Fill interpolation')
@@ -511,6 +510,7 @@ def main(data_obj):
 
         # Backward Fil method selected
         if interpolation_radio == 'Backward Fill':
+            
             # Backward Fil interpolation method selected
             with st.container():
                 st.subheader('Backward Fill interpolation')

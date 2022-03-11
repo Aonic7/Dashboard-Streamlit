@@ -219,20 +219,25 @@ class NN_Classifier:
         fig = plt.figure(figsize=(10, 4))
         ax=fig.add_subplot(111)
         if (self.flag) !=True:
+            try:
+                conf_matrix=metrics.confusion_matrix(self.y_actual, self.y_pred)
+                df_conf=pd.DataFrame(conf_matrix,range(self.Class_len),range(self.Class_len))
+                sn.set(font_scale=1.4)
+                sn.heatmap(df_conf, annot=True, annot_kws={"size":16},ax=ax)
+                ax.set_xlabel('Predicted labels')
+                ax.set_ylabel('True labels')
+                key=list(self.Report_dic)
+                labels=key[0:(self.Class_len)]
+                #print(labels)
+                ax.set_xticklabels(labels)
+                ax.set_yticklabels(labels)
 
-            conf_matrix=metrics.confusion_matrix(self.y_actual, self.y_pred)
-            df_conf=pd.DataFrame(conf_matrix,range(self.Class_len),range(self.Class_len))
-            sn.set(font_scale=1.4)
-            sn.heatmap(df_conf, annot=True, annot_kws={"size":16},ax=ax)
-            ax.set_xlabel('Predicted labels')
-            ax.set_ylabel('True labels')
-            key=list(self.Report_dic)
-            labels=key[0:(self.Class_len)]
-            #print(labels)
-            ax.set_xticklabels(labels)
-            ax.set_yticklabels(labels)
-
-            st.pyplot(fig)
+                st.pyplot(fig)
+                #plt.show()
+            except Exception as e:
+                self.Error_message = 'Error while creating Confusion Matrix: ' +str(e)
+                self.flag=True
+                st.warning(self.Error_message)
 
         else:
             st.write('Error occurred in previous methods, Refer to Error Message Warning')
