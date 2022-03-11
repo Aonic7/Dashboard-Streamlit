@@ -96,7 +96,7 @@ def main(data_obj):
                 # Input variables/widgets for the 2nd column
                 with cc2:
                     columns_list = list(rg_df.columns)
-                    selected_column = st.selectbox("Column to classify:", columns_list)
+                    selected_column = st.selectbox("Column to regress:", columns_list)
                     col_idx = rg_df.columns.get_loc(selected_column)
 
                     solver_fun1 = ("lbfgs", "sgd", "adam")
