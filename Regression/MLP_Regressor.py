@@ -63,6 +63,7 @@ class NN_Regressor:
     #Data handling method, creates the X and Y arrays that go into the Train_test_split method
     #Called when the object is instantiated within the constructor 
     def handle(self):
+        
         try:   
             self.internal_data =self.df.drop(self.df.iloc[:,[self.k]],axis=1)
             nxm=shape(self.internal_data)
@@ -116,6 +117,8 @@ class NN_Regressor:
             except Exception as e:
                 self.Error_message= 'Error in Regressor Creation: ' + str(e)
                 self.flag=True
+                st.warning(self.Error_message)
+
                 self.Train_score= 'Refer To error in Regressor Creation'
                 self.test_score= 'Refer To error in Regressor Creation'
                 #self.coeff=self.model.coefs_
@@ -129,6 +132,8 @@ class NN_Regressor:
                 #Mean squared error and accuracy
                 self.mean_squared_error = 'Refer To error in Regressor Creation'
         else:
+            st.warning(self.Error_message)
+
             self.Train_score= 'Refer To error in Handling Method'
             self.test_score= 'Refer To error in Handling Method'
             #self.coeff=self.model.coefs_
@@ -167,6 +172,7 @@ class NN_Regressor:
                 # st.write('Predicted Output:       ', self.NN_Outputs.y_pred)
                 st.metric('Model score on the Training Data:',  round(self.Train_score, 8))
                 st.metric('Model score on the Testing Data:',  round(self.test_score, 8))
+                st.write('R-squared score (aka coefficient of determination) measures the variation that is explained by a regression model.')
                 st.metric('Length of output array: ',  self.length)
             with cc2:
                 #st.write('Classification Report: ')
@@ -201,8 +207,7 @@ class NN_Regressor:
             except Exception as e:
                 self.Error_message='Error in Plotting Method: ' + str(e)
                 self.flag=True
-                #print(e)
-
+                st.warning(self.Error_message)
 
 #Using the Class
 data = pd.read_csv("D:\MAIT\OOP\Datasets\Regression\synchronous_machine.csv",delimiter=';',decimal=',')

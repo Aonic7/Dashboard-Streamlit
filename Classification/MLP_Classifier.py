@@ -166,6 +166,8 @@ class NN_Classifier:
             except Exception as e:
                 self.Error_message= 'Error in Classifier Creation: ' + str(e)
                 self.flag=True
+                st.warning(self.Error_message)
+
                 self.Train_score= 'Refer To error in Classifier Creation'
                 self.test_score= 'Refer To error in Classifier Creation'
                 #self.coeff=self.model.coefs_
@@ -181,6 +183,8 @@ class NN_Classifier:
                 self.Report=pd.DataFrame.from_dict(self.Report_dic)#, target_names=target_names)
                     #self.Report = "Vasya"
         else:
+            st.warning(self.Error_message)
+
             self.Train_score= 'Refer To error in Handling Method'
             self.test_score= 'Refer To error in Handling Method'
             #self.coeff=self.model.coefs_

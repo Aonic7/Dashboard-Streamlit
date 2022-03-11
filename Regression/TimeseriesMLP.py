@@ -78,6 +78,7 @@ class NN_TimeSeries_Reg:
 
     def features(self):
         try:
+            
             nxm=shape(self.internal_df)
             n=nxm[0]
             m=nxm[1]
@@ -86,6 +87,7 @@ class NN_TimeSeries_Reg:
             X=np.ndarray(shape=(n,6),dtype=float, order='F')
             #for l in range (0,6):
             for a in range(0,n):
+                #date_time_obj = datetime.strptime(date_time_column.iloc[a,0], '%Y-%m-%d %H:%M:%S')
 
                 date_time_obj = date_time_column.iloc[a,0]
                 year=date_time_obj.year
@@ -131,7 +133,7 @@ class NN_TimeSeries_Reg:
                 X_train, self.X_test, y_train, self.y_actual= train_test_split(self.X_new,self.Y_new,test_size=self.NN_Inputs.test_size,shuffle=False, random_state=109)
                 self.model = MLPRegressor(hidden_layer_sizes = self.NN_Inputs.hidden_layers,
                                     activation = self.NN_Inputs.activation_fun, solver = self.NN_Inputs.solver_fun,
-                                    max_iter = self.NN_Inputs.Max_iterations,alpha= 0.01, early_stopping= True,  learning_rate= 'constant', learning_rate_init= 0.1, random_state= 1, tol= 0.01, verbose= False)
+                                    max_iter = self.NN_Inputs.Max_iterations,alpha= 0.01,  learning_rate= 'constant', learning_rate_init= 0.1, random_state= 1, tol= 0.01, verbose= False)
                 from sklearn.preprocessing import MinMaxScaler
                 scaler = MinMaxScaler()
                 X_train_norm = scaler.fit_transform(X_train)
@@ -154,6 +156,8 @@ class NN_TimeSeries_Reg:
             except Exception as e:
                 self.Error_message= 'Error in Regressor Creation: ' + str(e)
                 self.flag=True
+                st.warning(self.Error_message)
+
                 self.Train_score= 'Refer To error in Regressor Creation'
                 self.test_score= 'Refer To error in Regressor Creation'
                 
@@ -167,6 +171,7 @@ class NN_TimeSeries_Reg:
                 #Mean squared error and accuracy
                 self.mean_squared_error = 'Refer To error in Regressor Creation'
         else:
+            st.warning(self.Error_message)
             self.Train_score= 'Refer To error in Handling Method'
             self.test_score= 'Refer To error in Handling Method'
             #self.coeff=self.model.coefs_
@@ -211,8 +216,8 @@ class NN_TimeSeries_Reg:
         except Exception as e:
             self.Error_message = 'Error while printing outputs: ' +str(e)
             self.flag=True
-            print(self.Error_message)
-            #st.warning(self.Error_message)
+            #print(self.Error_message)
+            st.warning(self.Error_message)
         #print('coeff: ',.coeff )
 
     def plotting(self):
@@ -239,7 +244,7 @@ class NN_TimeSeries_Reg:
             except Exception as e:
                 self.Error_message='Error in Plotting Method: ' + str(e)
                 self.flag=True
-                #print(e)
+                st.warning(self.Error_message)
 
 class Regressor_Inputs(NamedTuple):
         
@@ -256,7 +261,7 @@ activation_fun1 = ("identity", "logistic", "tanh", "relu")
 solver_fun1 = ("lbfgs", "sgd", "adam")
 hidden_layers3=(100,20)
 
-Inputs= Regressor_Inputs(0.1,activation_fun1[3],hidden_layers3,solver_fun1[0],2000,True)
+Inputs= Regressor_Inputs(0.1,activation_fun1[0],hidden_layers3,solver_fun1[1],2000,True)
 
 Regressor1=NN_TimeSeries_Reg(parking_data,Inputs,2,3)
 
@@ -267,9 +272,9 @@ Regressor1.listing(1)
 Regressor1.group(2)
 
 
-#Regressor1.Regressor()
-#Regressor1.printing()
-#Regressor1.plotting()
+Regressor1.Regressor()
+Regressor1.printing()
+Regressor1.plotting()
 
 
 
