@@ -1,7 +1,5 @@
 # # Data Visualization
 # Import necessary libraries.
-import string
-from tkinter import ROUND
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -11,14 +9,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import r2_score
-from sklearn.model_selection import GridSearchCV
-import statsmodels.api as sm
-from sklearn.model_selection import train_test_split,GridSearchCV
+from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error as MSE
-from sklearn.metrics import accuracy_score
 from datetime import datetime
-from sklearn.preprocessing import OrdinalEncoder
 from sklearn.model_selection import RandomizedSearchCV
 from typing import NamedTuple
 import math
