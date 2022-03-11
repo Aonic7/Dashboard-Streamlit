@@ -36,54 +36,80 @@ class Regressor:
     reg=None
     X_train=None
     Y_train=None
+    Error_message=None
+    flag=None
 
-    # instance attribute
+ # instance attribute
     def __init__(self,X,Y):
         self.X = X
         self.Y = Y
 
     def model(self,estimator, test_size):
-        self.estimator=estimator 
-        self.test_size=test_size  
-        # Split the data into training set and testing set
-        X_train,X_test,Y_train,self.Y_test=train_test_split(self.X,self.Y,test_size=test_size,random_state=123)      
-        
-        # Create a model
-        reg=RandomForestRegressor(n_estimators=estimator)
+        try:
+            self.estimator=estimator 
+            self.test_size=test_size  
+            # Split the data into training set and testing set
+            X_train,X_test,Y_train,self.Y_test=train_test_split(self.X,self.Y,test_size=test_size,random_state=123)      
+            
+            # Create a model
+            reg=RandomForestRegressor(n_estimators=estimator)
 
-        # Fitting training data to the model
-        reg.fit(X_train,Y_train)
+            # Fitting training data to the model
+            reg.fit(X_train,Y_train)
 
-        self.Y_pred = reg.predict(X_test)
-        b=[]
-        b=self.gridSearchCV(reg, X_train, Y_train)
-        # re-create the model
-        reg=RandomForestRegressor(n_estimators=estimator,max_depth=b[0],min_samples_split=b[1],min_samples_leaf=b[2],max_features=b[3])
+            self.Y_pred = reg.predict(X_test)
+            b=[]
+            b=self.gridSearchCV(reg, X_train, Y_train)
+            # re-create the model
+            reg=RandomForestRegressor(n_estimators=estimator,max_depth=b[0],min_samples_split=b[1],min_samples_leaf=b[2],max_features=b[3])
 
-        # Fitting training data to the model
-        reg.fit(X_train,Y_train)
-        self.Y_pred = reg.predict(X_test)
+            # Fitting training data to the model
+            reg.fit(X_train,Y_train)
+            self.Y_pred = reg.predict(X_test)
+        except Exception as e:
+            self.Error_message = 'Error while creating model: ' +str(e)
+            self.flag=True
+            st.warning(self.Error_message)
+            self.Y_pred=[]
+
         return(self.Y_pred)
 
     def result(self,Y_test, Y_pred): 
         # To compute R-squared score+
-        r2 = r2_score(Y_test, Y_pred)
-        st.metric('R-squared score: ', round(r2, 4))
-        # To compute root mean squared error
-        st.metric('RMSE: ', round((MSE(Y_test,Y_pred)**(0.5)), 4))
-        # To compute adjusted R-squared error 
-        # r_adj = 1 - ((1-r2)*((Y_test.shape[0])-1))/(Y_test.shape[0]-X_test.shape[1]-1)
-        # print('R-squared adjusted:',r_adj)
-    
+        if self.flag != True:
+            try:
+                r2 = r2_score(Y_test, Y_pred)
+                st.metric('R-squared score: ', round(r2, 4))
+                # To compute root mean squared error
+                st.metric('RMSE: ', round((MSE(Y_test,Y_pred)**(0.5)), 4))
+                # To compute adjusted R-squared error 
+                # r_adj = 1 - ((1-r2)*((Y_test.shape[0])-1))/(Y_test.shape[0]-X_test.shape[1]-1)
+                # print('R-squared adjusted:',r_adj)
+            except Exception as e:
+                self.Error_message = 'Error while printing outputs: ' +str(e)
+                self.flag=True
+                st.warning(self.Error_message)
+        else:
+            st.write('Error occurred in previous methods, Refer to Error Message Warning')
+
+            
     def prediction_plot(self,Y_test, Y_pred):
-        # To display the 2D-plot for the actual vs predicted values
-        df=pd.DataFrame({'y_test':Y_test,'y_pred':Y_pred})
-        fig = plt.figure(figsize=(10, 4))
-        sns.scatterplot(x='y_test',y='y_pred',data=df,label='Real Prediction')
-        sns.lineplot(x='y_test',y='y_test',data=df,color='red',alpha=0.5,label='Optimal Prediction')
-        plt.title('y_test vs y_pred')
-        plt.legend()
-        st.pyplot(fig)
+        if self.flag != True:
+            try:
+                # To display the 2D-plot for the actual vs predicted values
+                df=pd.DataFrame({'y_test':Y_test,'y_pred':Y_pred})
+                fig = plt.figure(figsize=(10, 4))
+                sns.scatterplot(x='y_test',y='y_pred',data=df,label='Real Prediction')
+                sns.lineplot(x='y_test',y='y_test',data=df,color='red',alpha=0.5,label='Optimal Prediction')
+                plt.title('y_test vs y_pred')
+                plt.legend()
+                st.pyplot(fig)
+            except Exception as e:
+                self.Error_message = 'Error while plotting: ' +str(e)
+                self.flag=True
+                st.warning(self.Error_message)
+        else:
+            st.write('Error occurred in previous methods, Refer to Error Message Warning')
 
     def gridSearchCV(self,reg,X_train, y_train):
         # Find the best parameters for the model using Grid search optimisation
@@ -102,6 +128,73 @@ class Regressor:
         c=best['min_samples_leaf']
         d=best['max_features']
         return(a,b,c,d)
+
+    
+    # # instance attribute
+    # def __init__(self,X,Y):
+    #     self.X = X
+    #     self.Y = Y
+
+    # def model(self,estimator, test_size):
+    #     self.estimator=estimator 
+    #     self.test_size=test_size  
+    #     # Split the data into training set and testing set
+    #     X_train,X_test,Y_train,self.Y_test=train_test_split(self.X,self.Y,test_size=test_size,random_state=123)      
+        
+    #     # Create a model
+    #     reg=RandomForestRegressor(n_estimators=estimator)
+
+    #     # Fitting training data to the model
+    #     reg.fit(X_train,Y_train)
+
+    #     self.Y_pred = reg.predict(X_test)
+    #     b=[]
+    #     b=self.gridSearchCV(reg, X_train, Y_train)
+    #     # re-create the model
+    #     reg=RandomForestRegressor(n_estimators=estimator,max_depth=b[0],min_samples_split=b[1],min_samples_leaf=b[2],max_features=b[3])
+
+    #     # Fitting training data to the model
+    #     reg.fit(X_train,Y_train)
+    #     self.Y_pred = reg.predict(X_test)
+    #     return(self.Y_pred)
+
+    # def result(self,Y_test, Y_pred): 
+    #     # To compute R-squared score+
+    #     r2 = r2_score(Y_test, Y_pred)
+    #     st.metric('R-squared score: ', round(r2, 4))
+    #     # To compute root mean squared error
+    #     st.metric('RMSE: ', round((MSE(Y_test,Y_pred)**(0.5)), 4))
+    #     # To compute adjusted R-squared error 
+    #     # r_adj = 1 - ((1-r2)*((Y_test.shape[0])-1))/(Y_test.shape[0]-X_test.shape[1]-1)
+    #     # print('R-squared adjusted:',r_adj)
+    
+    # def prediction_plot(self,Y_test, Y_pred):
+    #     # To display the 2D-plot for the actual vs predicted values
+    #     df=pd.DataFrame({'y_test':Y_test,'y_pred':Y_pred})
+    #     fig = plt.figure(figsize=(10, 4))
+    #     sns.scatterplot(x='y_test',y='y_pred',data=df,label='Real Prediction')
+    #     sns.lineplot(x='y_test',y='y_test',data=df,color='red',alpha=0.5,label='Optimal Prediction')
+    #     plt.title('y_test vs y_pred')
+    #     plt.legend()
+    #     st.pyplot(fig)
+
+    # def gridSearchCV(self,reg,X_train, y_train):
+    #     # Find the best parameters for the model using Grid search optimisation
+    #     parameters = {
+    #    'max_depth': [70, 80, 90, 100],
+    #    'min_samples_split':[2,5,10],
+    #    'min_samples_leaf':[1,2,4],
+    #    'max_features': ["auto", "sqrt", "log2"],
+    #     }
+    #     gridforest = GridSearchCV(reg, parameters, cv = 3, n_jobs = -1, verbose = 1)
+    #     gridforest.fit(X_train, y_train)
+    #     best = gridforest.best_params_
+    #     #Storing the best parameter values to pass as paramters in the function 'model'
+    #     a=best['max_depth']
+    #     b=best['min_samples_split']
+    #     c=best['min_samples_leaf']
+    #     d=best['max_features']
+    #     return(a,b,c,d)
        
 
 # Read data and converting it to dataframe

@@ -23,6 +23,14 @@ def main(data_obj):
 
     st.header('Regression')
 
+    with st.expander("How to use", expanded=True):
+        st.markdown("""
+                    Here the User can choose Regression Method and parameters for each different regressor:
+                    1. Choose Regressor type and weather it is time series regression or not?
+                    2. Choose Target Column for the regression
+                    3. Modify Regressor inputs and click submit to run regression and output results
+                    """)
+
     try:
         var_read = pd.read_csv("Smoothing_and_Filtering//Preprocessing dataset.csv", index_col=None, parse_dates=True, date_parser = pd.to_datetime)
         rg_df = var_read
@@ -136,6 +144,13 @@ def main(data_obj):
     # Selected 'Neural Networks TS (Youssef)'             
         if rg_nn_radio == 'Timeseries':
         
+            with st.expander("How to use", expanded=True):
+                st.markdown("""
+                    Here you need to choose if you want to group the data set based on a unique value in a specific column and then run the regression for this filtered data only. 
+                    
+                    If you don't group data then timeseries regression will be done on the whole model.
+                    """)
+                    
             with st.container():
 
                 # Input settings header
@@ -285,26 +300,26 @@ def main(data_obj):
 
                 if submit_button:
                     if t_s:
-                        #try:
-                        with st.spinner("Training models..."):
-                            dat = datetime.datetime(d.year,d.month,d.day)
-                            dt_input = datetime.datetime(d.year,d.month,d.day,t.hour,t.minute)
-                            ts_rg_input = rf_Inputs(unique_val, dat, dt_input)
+                        try:
+                            with st.spinner("Training models..."):
+                                dat = datetime.datetime(d.year,d.month,d.day)
+                                dt_input = datetime.datetime(d.year,d.month,d.day,t.hour,t.minute)
+                                ts_rg_input = rf_Inputs(unique_val, dat, dt_input)
 
-                            obj= Timeseries(rg_df, ts_rg_input,
-                                            base_column, selected_column,
-                                            time_column, column_uniques)
+                                obj= Timeseries(rg_df, ts_rg_input,
+                                                base_column, selected_column,
+                                                time_column, column_uniques)
 
-                            obj.DataPrep()
-                            obj.fullmodel()
-                            obj.model(tree_size, tt_proportion)
-                            obj.Results()
-                            obj.SelectedSysCode(ts_rg_input)
-                            obj.UserSelectedmodel(tree_size, tt_proportion)
-                        # except KeyError as e:
-                        #     st.error("Guess what? You hardcoded it again!")
-                        # except:
-                        #     st.error("Something went wrong, Sneha...")
+                                obj.DataPrep()
+                                obj.fullmodel()
+                                obj.model(tree_size, tt_proportion)
+                                obj.Results()
+                                obj.SelectedSysCode(ts_rg_input)
+                                obj.UserSelectedmodel(tree_size, tt_proportion)
+                        except KeyError as e:
+                            st.error("Guess what? You hardcoded it again!")
+                        except:
+                            st.error("Something went wrong, Sneha...")
 
                     if t_s == False:        
                         try:
@@ -313,11 +328,13 @@ def main(data_obj):
                                 Y = rg_df[selected_column]
                                 reg_inst = Regressor(X,Y) 
                                 reg_inst.model(tree_size, tt_proportion)
+                                st.balloons()
 
                             reg_inst.result(reg_inst.Y_test, reg_inst.Y_pred)
                             reg_inst.prediction_plot(reg_inst.Y_test, reg_inst.Y_pred)
                             
                         except:
+                            st.balloons()
                             st.error("Something went wrong, Sneha...")
 
     if rg_method == 'Other Method':

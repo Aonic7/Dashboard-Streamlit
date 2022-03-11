@@ -11,7 +11,7 @@ class Remove_Outliers():
     """
     This class is used to provide methods for removing outliers from a given dataset.
     
-    """  
+    """ 
     def __init__(self):
         pass
 

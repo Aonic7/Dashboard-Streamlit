@@ -18,6 +18,14 @@ def main(data_obj):
         data_obj (__main__.DataObject): DataObject instance.
     """
 
+    with st.expander("How to use", expanded=True):
+        st.markdown("""
+                    Here the User can choose Classification method and parameters for each different classifier:
+                    1. Choose Classifier Type (Neural Network, Random Forest, SVM, …etc)
+                    2. Choose Label column in the data set
+                    3. Modify Chosen Classifier inputs and click submit to run the classification and output results
+                    """)
+
     # Page header
     st.header("Classification")
 
@@ -39,7 +47,7 @@ def main(data_obj):
 
     # Main data classification method radio selector
     cl_method = st.radio(label='Classification Method', options=[
-                         'Neural Networks (Youssef)', 'Classification (Noah)', 'Random Forest (Sneha)'])
+                         'Neural Networks', 'Classification', 'Random Forest'])
 
     # Show dataset
     st.dataframe(cl_df)
@@ -51,7 +59,7 @@ def main(data_obj):
                                                 )
 
     # Selected 'Neural Networks'
-    if cl_method == 'Neural Networks (Youssef)':
+    if cl_method == 'Neural Networks':
 
         with st.container():
 
@@ -117,7 +125,7 @@ def main(data_obj):
 
 
     # Selected 'Classification (Noah)'
-    if cl_method == 'Classification (Noah)':
+    if cl_method == 'Classification':
         st.header("Classification")
 
         st.write(
@@ -259,7 +267,7 @@ def main(data_obj):
                         st.write("No model found!")
         
     # Selected 'Random Forest (Sneha)'
-    if cl_method == 'Random Forest (Sneha)':
+    if cl_method == 'Random Forest':
 
         # Container for inputs
         with st.container():
@@ -273,7 +281,7 @@ def main(data_obj):
             with cc1:
                 tt_proportion = st.slider('Portion of test data', 0.0, 1.0, 0.2, 0.05)
                 estimator_value = st.slider('Estimator:', 0, 1000, 500, 10)
-                maxim_depth = st.slider('Maximal depth:', 0, 15, 5, 1)
+                #maxim_depth = st.slider('Maximal depth:', 0, 15, 5, 1)
 
             # Input variables/widgets for the 2nd column
             with cc2:
@@ -293,8 +301,6 @@ def main(data_obj):
 
                 # Section subheader
                 st.subheader("Model")
-
-
 
 
 
