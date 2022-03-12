@@ -122,7 +122,7 @@ def main(data_obj):
                 with cc4:
                     st.write(" ")
                     st.write(" ")
-                    st.warning(f'If applied, {current_df.shape[0]-rm_outlier.shape[0]} rows will be removed.')
+                   
                 
                 # Plotting
                 if scatter_plot:
@@ -371,7 +371,7 @@ def main(data_obj):
                     with cc1:
                         columns_list = list(current_df.select_dtypes(exclude=['datetime', 'object']).columns)
                         columns_list1 = list(current_df.select_dtypes(include=['datetime']).columns)
-                        selected_column = st.selectbox("Select a column:", columns_list)
+                        selected_column = st.selectbox("Select a column of interest:", columns_list)
                         time_column = st.selectbox("Select a time column:", columns_list1)
                         col_group = st.multiselect('Group by', current_df.columns, default=[current_df.columns[0], current_df.columns[1]])
                         interpolation_all = TimeSeriesOOP(current_df, selected_column, time_column, col_group)
@@ -385,7 +385,7 @@ def main(data_obj):
                     with cc3:
                         st.write(" ")
                         st.write(" ")
-                        st.warning(f'If applied, {current_df.shape[0]-linear_df.shape[0]} rows will be removed.')
+                        
                         
                     # Plotting
                     if plot_basic:
@@ -420,7 +420,7 @@ def main(data_obj):
                 with cc1:
                     columns_list = list(current_df.select_dtypes(exclude=['datetime', 'object']).columns)
                     columns_list1 = list(current_df.select_dtypes(include=['datetime']).columns)
-                    selected_column = st.selectbox("Select a column:", columns_list)
+                    selected_column = st.selectbox("Select a column of interest:", columns_list)
                     time_column = st.selectbox("Select a time column:", columns_list1)
                     col_group = st.multiselect('Group by', current_df.columns, default=[current_df.columns[0], current_df.columns[1]])
                     interpolation_all = TimeSeriesOOP(current_df, selected_column, time_column, col_group)
@@ -434,7 +434,7 @@ def main(data_obj):
                 with cc3:
                      st.write(" ")
                      st.write(" ")
-                     st.warning(f'If applied, {current_df.shape[0]-Cubic_df.shape[0]} rows will be removed.')
+                     
                 
                 # Plotting
                 if plot_basic: 
@@ -473,7 +473,7 @@ def main(data_obj):
                 with cc1:
                     columns_list = list(current_df.select_dtypes(exclude=['datetime', 'object']).columns)
                     columns_list1 = list(current_df.select_dtypes(include=['datetime']).columns)
-                    selected_column = st.selectbox("Select a column:", columns_list)
+                    selected_column = st.selectbox("Select a column of interest:", columns_list)
                     time_column = st.selectbox("Select a time column:", columns_list1)
                     col_group = st.multiselect('Group by', current_df.columns, default=[current_df.columns[0], current_df.columns[1]])
                     interpolation_all = TimeSeriesOOP(current_df, selected_column, time_column, col_group)
@@ -487,7 +487,6 @@ def main(data_obj):
                 with cc3:
                     st.write(" ")
                     st.write(" ")
-                    st.warning(f'If applied, {current_df.shape[0]-df_ffill.shape[0]} rows will be removed.')
                 
                 # Plotting
                 if plot_basic:
@@ -524,7 +523,7 @@ def main(data_obj):
                 with cc1:
                     columns_list = list(current_df.select_dtypes(exclude=['datetime', 'object']).columns)
                     columns_list1 = list(current_df.select_dtypes(include=['datetime']).columns)
-                    selected_column = st.selectbox("Select a column:", columns_list)
+                    selected_column = st.selectbox("Select a column of interest:", columns_list)
                     time_column = st.selectbox("Select a time column:", columns_list1)
                     col_group = st.multiselect('Group by', current_df.columns, default=[current_df.columns[0], current_df.columns[1]])
                     interpolation_all = TimeSeriesOOP(current_df, selected_column, time_column, col_group)
@@ -538,7 +537,7 @@ def main(data_obj):
                 with cc3:
                     st.write(" ")
                     st.write(" ")
-                    st.warning(f'If applied, {current_df.shape[0]-df_bfill.shape[0]} rows will be removed.')
+                  
                 
                 # Plotting
                 if plot_basic: 

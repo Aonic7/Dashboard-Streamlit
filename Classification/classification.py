@@ -126,15 +126,13 @@ def main(data_obj):
 
     # Selected 'Classification (Noah)'
     if cl_method == 'Other Methods':
-        st.header("Classification")
-
+       
         st.write(
         '<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;}</style>',
         unsafe_allow_html=True)
 
     # Main data classification method radio selector
 
-        st.dataframe(cl_df)
         class_obj = Classification(cl_df)
         
         with st.container():
