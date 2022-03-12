@@ -162,6 +162,7 @@ class Smoothing():
 class TimeSeriesOOP():
     """
     This class is used to provide methods for interpolation of a given dataset with time-series.
+    Interpolation is a method of finding new data points based on the range of a discrete set of known data points.
     """ 
   
     def __init__(self, current_df, column_of_interest, time_column, col_group):
@@ -196,7 +197,8 @@ class TimeSeriesOOP():
 
     # Forward fill    
     def int_df_ffill(self, column_of_interest, col_group):
-        """Forward fill
+        """Forward fill - It fills missing values with previous data. Forward-fill propagates the last observed 
+        non-null value forward until another non-null value is encountered.
 
         :param column_of_interest: column selected for processing
         :type column_of_interest: str
@@ -213,7 +215,8 @@ class TimeSeriesOOP():
     
     # Backward fill  
     def int_df_bfill(self, column_of_interest, col_group):
-        """Backward fill 
+        """Backward fill - Backward filling means fill missing values with next data point. backward-fill propagates 
+        the first observed non-null value backward until another non-null value is met. 
 
         :param column_of_interest: column selected for processing
         :type column_of_interest: str
@@ -229,7 +232,8 @@ class TimeSeriesOOP():
     
     # Linear Interpolation 
     def make_interpolation_liner(self, column_of_interest, col_group):
-        """Linear Interpolation
+        """Linear Interpolation - In this, the points are simply joined by straight line segments. Each segment 
+        (bounded by two data points) can be interpolated independently.
 
         :param column_of_interest: column selected for processing
         :type column_of_interest: str
@@ -247,7 +251,8 @@ class TimeSeriesOOP():
     
     # Cubic Interpolation
     def make_interpolation_cubic(self, column_of_interest, col_group):
-        """Cubic Interpolation
+        """Cubic interpolation offers true continuity between the segments. As such it 
+        requires more than just the two endpoints of the segment but also the two points on either side of them.
 
         :param column_of_interest: column selected for processing
         :type column_of_interest: str
