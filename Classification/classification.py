@@ -47,7 +47,7 @@ def main(data_obj):
 
     # Main data classification method radio selector
     cl_method = st.radio(label='Classification Method', options=[
-                         'Neural Networks', 'Classification', 'Random Forest'])
+                         'Neural Networks', 'Random Forest', 'Other Methods'])
 
     # Show dataset
     st.dataframe(cl_df)
@@ -125,7 +125,7 @@ def main(data_obj):
 
 
     # Selected 'Classification (Noah)'
-    if cl_method == 'Classification':
+    if cl_method == 'Other Methods':
         st.header("Classification")
 
         st.write(

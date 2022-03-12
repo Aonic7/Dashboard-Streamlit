@@ -61,7 +61,7 @@ def main(data_obj):
     # Main data classification method radio selector
     rg_method = st.radio(label='Regression Method', options=['Neural Networks',
                                                              'Random Forest',
-                                                             'Other Method'])
+                                                             'Other Methods'])
 
     
 
@@ -337,7 +337,7 @@ def main(data_obj):
                             st.balloons()
                             st.error("Something went wrong, Sneha...")
 
-    if rg_method == 'Other Method':
+    if rg_method == 'Other Methods':
         """_summary_
         Args:
             data_obj (_type_): _description_
