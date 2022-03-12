@@ -38,7 +38,7 @@ class Sample:
     acctrain = None
     acctest = None
     Class_len=None
-    Report_dic=dict
+    Report_dic:dict
     Error_message=None
     flag=None
 
@@ -95,7 +95,7 @@ class Sample:
                 random_grid=[]
             return random_grid
 
-    def accuracy(self,k,l):
+    def accuracy(self):
         #To calculate the accuracy
         if self.flag != True:
             try:
@@ -105,8 +105,8 @@ class Sample:
                 acctrain = accuracy_score(self.Y_train,self.model_train)
                 #st.write("Pass2")
 
-                print("Train accuracy of the model: ",acctrain)
-                print("Test accuracy of the model: ",acc)
+                # print("Train accuracy of the model: ",acctrain)
+                # print("Test accuracy of the model: ",acc)
                 st.metric("Accuracy of the model on the Training data: ", round(acctrain, 4))
                 st.metric("Accuracy of the model on the Test data: ", round(acc, 4))
             except Exception as e:
@@ -117,7 +117,7 @@ class Sample:
             st.write('Error occurred in previous methods, Refer to Error Message Warning')
 
 
-    def report(self,Y_test,Y_pred):
+    def report(self):
         #To display the confusion matrix
         if self.flag != True:
             try:

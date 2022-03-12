@@ -33,8 +33,8 @@ class NN_TimeSeries_Reg:
     # = Regressor_Outputs
     flag=False
     Error_message='No Error occurred in the processing'
-    df=pd.DataFrame # original dataframe
-    internal_df=pd.DataFrame   # Internal Df
+    df:pd.DataFrame # original dataframe
+    internal_df:pd.DataFrame   # Internal Df
 
     #Constructor
     #External inputs are the Data frame object, the Named Tuple of NN_Inputs, the index of the dependant variable in the Data frame

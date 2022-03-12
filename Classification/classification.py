@@ -320,8 +320,8 @@ def main(data_obj):
                                 obj = Sample(X, Y)
 
                                 obj.model(estimator_value, tt_proportion) 
-                                obj.report(obj.Y_test, obj.Y_pred)
-                                obj.accuracy(obj.Y_test, obj.Y_pred)
+                                obj.report()
+                                obj.accuracy()
 
                             except ValueError as e:
                                 st.error('Something went wrong, Sneha...')

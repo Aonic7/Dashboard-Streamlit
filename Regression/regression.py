@@ -148,7 +148,7 @@ def main(data_obj):
                 st.markdown("""
                     Here you need to choose if you want to group the data set based on a unique value in a specific column and then run the regression for this filtered data only. 
                     
-                    If you don't group data then timeseries regression will be done on the whole model.
+                    If you don't group data then timeseries regression will be done on the whole dataset.
                     """)
                     
             with st.container():

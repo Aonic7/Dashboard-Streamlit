@@ -191,7 +191,7 @@ class NN_Regressor:
                 df=pd.DataFrame({'y_test':self.y_actual,'y_pred':self.y_pred})
                 fig = plt.figure(figsize=(10, 4))
                 sn.scatterplot(x='y_test',y='y_pred',data=df,label='Real Prediction')
-                sn.lineplot(x='y_pred',y='y_test',data=df,color='red',alpha=0.5,label='Optimal Prediction')
+                sn.lineplot(x='y_test',y='y_test',data=df,color='red',alpha=0.5,label='Optimal Prediction')
                 plt.title('Expected vs Predicted Output')
                 plt.legend()
                 #plt.show()
