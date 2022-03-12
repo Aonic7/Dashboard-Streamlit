@@ -49,16 +49,12 @@ class Sample:
 
     # random= Sample('estimator','test_size')
 
-    def model(self,estimator, test_size, criteria, depth, minimum_leaf, min_split):
+    def model(self,estimator, test_size):
         try:
 
             self.estimator=estimator 
             self.test_size=test_size
-            self.criteria = criteria
-            self.depth = depth
-            self.min_split = min_split
-            self.minimum_leaf = minimum_leaf
-            # Split the data into training set and testing set
+            
             X_train, X_test, self.Y_train, self.Y_test = train_test_split(self.X, self.Y, test_size=test_size, random_state = 123,stratify=self.Y)
 
             #create a model

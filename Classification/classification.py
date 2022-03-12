@@ -280,21 +280,15 @@ def main(data_obj):
             # Input variables/widgets for the 1st column
             with cc1:
                 tt_proportion = st.slider('Portion of test data', 0.0, 1.0, 0.2, 0.05)
-                estimator_value = st.slider('Estimator:', 0, 1000, 500, 10)
-                #maxim_depth = st.slider('Maximal depth:', 0, 15, 5, 1)
 
             # Input variables/widgets for the 2nd column
             with cc2:
-                columns_list = list(cl_df.columns)
-                selected_column = st.selectbox("Column to classify:", columns_list)
-                criterion_list = ["gini", "entropy"]
-                selected_criterion = st.selectbox("Select a criterion:", criterion_list)
+                estimator_value = st.slider('Estimator:', 0, 1000, 500, 10)
 
             # Input variables/widgets for the 3rd column
             with cc3:
-                depth = st.slider('Max depth:', 1, 10, 5, 1)
-                minimum_leaf = st.slider('Min samples leaf:', 0, 15, 3, 1)
-                min_split = st.slider('Min samples split:', 0, 15, 2, 1)
+                columns_list = list(cl_df.columns)
+                selected_column = st.selectbox("Column to classify:", columns_list)
 
             # Container for output
             with st.container():
@@ -303,13 +297,11 @@ def main(data_obj):
                 st.subheader("Model")
 
 
-
                 # Submit button
                 with st.form(key="Sneha"):
                     submit_button = st.form_submit_button(label='Submit')
 
                     
-
                     if submit_button:
                         # Circle animation for code execution
                         with st.spinner("Training models..."):
@@ -329,7 +321,7 @@ def main(data_obj):
                                 # Instance creation
                                 obj = Sample(X, Y)
 
-                                obj.model(estimator_value, tt_proportion, selected_criterion, depth, minimum_leaf, min_split)
+                                obj.model(estimator_value, tt_proportion) 
                                 obj.report(obj.Y_test, obj.Y_pred)
                                 obj.accuracy(obj.Y_test, obj.Y_pred)
 
