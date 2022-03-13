@@ -32,3 +32,6 @@ def main():
 
     if os.path.isfile("Smoothing_and_Filtering//Preprocessing dataset.csv"):
         os.remove("Smoothing_and_Filtering//Preprocessing dataset.csv")
+            
+    if os.path.isfile("Smoothing_and_Filtering//Filtered Dataset.csv"):
+        os.remove("Smoothing_and_Filtering//Filtered Dataset.csv")
