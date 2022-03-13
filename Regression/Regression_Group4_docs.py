@@ -13,30 +13,45 @@ from sklearn.preprocessing import StandardScaler
 import streamlit as st
 
 class Regression:
+    """ 
+    This class allows to read a Pandas Dataframe and train different regression models on the given data.
+    At the beginning the dataframe has to be read in when creating an instance of the class.
+    Afterwards a target dimension is chosen and the data is divided into training and test sections.
+    One of the provided regression types can be selected and the model can be trained.
+    Information on the accuracy of the model is provided by means of various graphics and key figures.
+    Via a method it is possible to enter new parameters and to output the prediction of the model.
 
+    This class was build by Team 4.
+
+    """
     ############### Load Pandas Dataframe ###############
 
     def __init__(self, dataframe):
-        """Constructor method
+        """
+        Initialization of an instance of the Regression class
 
         :param dataframe: Give input as Pandas Dataframe
         :type dataframe: pd.DataFrame
         :raises Exception: When no Pandas Dataframe is given into the function
+        :return: None
         """
 
         if isinstance(dataframe, pd.DataFrame):
             self.dataframe = dataframe
             self.dataframe_shape = dataframe.shape
-            print("Regression-Object with", str(self.dataframe_shape[0]), "samples and", str(self.dataframe_shape[1]),
-                  "columns was created")
+            #print("Regression-Object with", str(self.dataframe_shape[0]), "samples and", str(self.dataframe_shape[1]),
+            #      "columns was created")
         else:
             raise Exception("No pandas dataframe was given!")
 
+    # Placeholder
     def __str__(self):
         pass
 
+    # Placeholder
     def __del__(self):
         pass
+
 
     ############### Drop Columns for Regression ###############
 
@@ -45,17 +60,19 @@ class Regression:
 
         :param label_drop: Target Columns to drop
         :type label_drop: str
+        :return: None
         """
 
-        dropped_dataframe = self.dataframe.drop(label_drop, axis=1)
+        self.dataframe.drop(label_drop, axis=1)
 
         print("Column: ", label_drop, " is deleted.")
-        return dropped_dataframe
+
 
     ############### Split Columns ###############
 
     def split_columns(self, label_target, new_label_1, new_label_2, seperator=" "):
-        """Splits a specified column into two new columns.
+        """
+        Splits a specified column into two new columns.
 
         :param label_target: Target column to split
         :type label_target: str
@@ -65,6 +82,7 @@ class Regression:
         :type new_label_2: str
         :param seperator: Operator to seperate the target column, defaults to " "
         :type seperator: str, optional
+        :return: None
         """
 
         if (label_target in self.dataframe.columns):
@@ -77,7 +95,7 @@ class Regression:
                 self.dataframe[new_label_1] = new_column_1
                 self.dataframe[new_label_2] = new_column_2
 
-                self.dataframe = self.dataframe.drop(label_target, 1)
+                self.dataframe.drop(label_target, 1)
 
                 print("Regression-Object was changed to ", str(self.dataframe_shape[0]), "samples and",
                       str(self.dataframe_shape[1]), "columns.")
@@ -88,11 +106,14 @@ class Regression:
         else:
             print("The Target Column is not within the Dataframe. Check your Input.")
 
+
     ############### Dividing Data into Training and Test ###############
 
     def split_train_test(self, label_target, testsize=0.3, random_state=1, deleting_na=False, scaling=False,
                          deleting_duplicates=False):
-        """Sets a target column and splits the given dataframe into test and training data.
+        """
+        Method to preprocess the data. Sets a target column and splits the given dataframe into test and training data.
+        Allows to delete NA columns, the scaling of the dataset (centering and scaling to unit variance) and deleting duplicates.
 
         :param label_target: Sets the target column for the regression
         :type label_target: str
@@ -100,24 +121,26 @@ class Regression:
         :type testsize: float, optional
         :param random_state: Controls the shuffling applied to the data before applying the split, defaults to 1
         :type random_state: int, optional
-        :param deleting_na: Remove missing values., defaults to False
+        :param deleting_na: Remove missing values, defaults to False
         :type deleting_na: bool, optional
         :param scaling: Standardize features by removing the mean and scaling to unit variance, defaults to False
         :type scaling: bool, optional
         :param deleting_duplicates: Deletes duplicates, defaults to False
         :type deleting_duplicates: bool, optional
+        :return: None
         """
 
+        # set column targeted by the user as target label for the whole instance
         if (label_target in self.dataframe.columns.values):
             print("The target label is set as: ", label_target)
             self.label_target = label_target
 
+        # set last column as target label for the whole instance (if no user input or wrong user input)
         else:
             print("Error: No valid label name!")
             label_target = self.dataframe.columns.values[len(self.dataframe.columns.values) - 1]
             self.label_target = label_target
             print("As default the last column of dataframe is placed as target label: ", label_target)
-
 
         if deleting_na:
             self.dataframe = self.dataframe.dropna(how='all')
@@ -126,7 +149,7 @@ class Regression:
         if scaling:
             scaler = StandardScaler()
             self.dataframe = pd.DataFrame(scaler.fit_transform(self.dataframe), columns=self.dataframe.columns)
-            # dataframe = scaler.transform(dataframe)
+            #self.dataframe = scaler.transform(dataframe)
             st.write("Data has been rescalled!")
 
         if deleting_duplicates:
@@ -137,8 +160,7 @@ class Regression:
         self.y = self.dataframe[[label_target]]
         self.y = np.ravel(self.y)
 
-        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(self.x, self.y, test_size=testsize,
-                                                                                random_state=random_state)
+        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(self.x, self.y, test_size=testsize, random_state=random_state)
 
         print("The given data is seperated into test and training data for the given Target Label")
         print("Train data size for x:", self.x_train.shape)
@@ -146,19 +168,26 @@ class Regression:
 
         self.data_splitted = True
 
-        #except:
-            #st.write("Something went wrong. Check your Inputs.")
 
     ############### Create the Regression Model ###############
 
     def build_regression(self, regression_name, **args):
-        """Builds a specified Regression Model with given Training Data.
+        """Builds a specified Regression Model with the given Training Data.
 
-        :param regression_name: Name of the chosen Regression Model :type regression_name: str = 'Support Vector Machine Regression ','Elastic Net Regression ','Ridge Regression ','Linear Regression ', 'Stochastic Gradient Descent Regression '
-        :raises Exception: _description_
+        :param regression_name: Name of the chosen Regression Model
+        :type regression_name: str = 'Support Vector Machine Regression ','Elastic Net Regression ','Ridge Regression ','Linear Regression ', 'Stochastic Gradient Descent Regression '
+        :param args: Arguments depending on the chosen Regression Model.
+        :return: self.regression, params
         """
 
+        # check wether data is already preprocessed and therefore already splitted (if this is not the case, it is not possible to proceed)
+
         if self.data_splitted:
+
+        # Checks which Regression Model is selected and calls the designated method. Serves as an interface between user selection and the model building.
+        # The method returns a trained model and stores it in the class instance (self.regression).
+        # Key figures as RMSE and r2 score are returned to the user.
+
             if regression_name == "Support Vector Machine Regression ":
                 self.regression = self._build_svm_regression(**args)
             elif regression_name == "Elastic Net Regression ":
@@ -171,88 +200,97 @@ class Regression:
                 self.regression = self._build_sgd_regression(**args)
             else:
                 raise Exception(
-                    "Regression was not found! Avialable options are Support Vector Machine Regression (SVM), Polynomial Regression and Ridge Regression")
+                    "Regression was not found! Avialable options are Support Vector Machine Regression (SVM), Elastic Net Regression, Ridge Regression, Linear Regression, Stochastic Gradient Descent Regression.")
             self.y_pred = self.regression.predict(self.x_test)
             params = [str(regression_name),
                       round(mean_squared_error(self.y_test, self.y_pred), 4),
                       round(r2_score(self.y_test, self.y_pred),4)]
             return self.regression, params
         else:
-            print(
-                "The data has to be splitted in train and test data befor a regression can be build (use the split_train_test command).")
-
+            print("The data has to be splitted in train and test data befor a regression can be build (use the split_train_test method).")
+            
     def _build_svm_regression(self, kernel='poly', degree=3, svmNumber=0.5, maxIterations=-1):
-        """**Nu Support Vector Regression**
+        """
+        **Nu Support Vector Regression**
 
         :param kernel: Specifies the kernel type to be used in the algorithm, defaults to 'poly'
-        :type kernel: str = 'linear', 'poly', 'rbf', 'sigmoid', 'precomputed', str, optional
+        :type kernel: str = 'linear', 'poly', 'rbf', 'sigmoid', 'precomputed', optional
         :param degree: Degree of the polynomial kernel function, defaults to 3
         :type degree: int, optional
         :param svmNumber: An upper bound on the fraction of training errors and a lower bound of the fraction of support vectors, should be in the interval (0, 1), defaults to 0.5
         :type svmNumber: float, optional
         :param maxIterations: Hard limit on iterations within solver, or -1 for no limit, defaults to -1
         :type maxIterations: int, optional
+        :return: Fitted estimator
         """
-        # kernel {‘linear’, ‘poly’, ‘rbf’, ‘sigmoid’, ‘precomputed’} or callable, default=’rbf’
-        # degree: int, default = 3
-        # svmNumber: float, default=0.5
-        # max_iter: int, default=-1
 
         svm = NuSVR(kernel=kernel, degree=degree, nu=svmNumber, max_iter=maxIterations)
         return svm.fit(self.x_train, self.y_train)
 
     def _build_ridge_regression(self, max_iter=15000, solver='auto'):
-        """Ridge Regression or Tikhonov regularization.
+        """
+        **Ridge Regression or Tikhonov regularization**
 
         :param max_iter: Maximum number of iterations for conjugate gradient solver, defaults to 15000
         :type max_iter: int, optional
         :param solver: Solver to use in the computational routines:, defaults to 'auto'
         :type solver: str = 'auto', 'svd', 'cholesky', 'lsqr', 'sparse_cg', 'sag', 'saga', 'lbfgs', optional
+        :return: Fitted estimator
         """
-        # max_iter: int, default=None
-        # solver{‘auto’, ‘svd’, ‘cholesky’, ‘lsqr’, ‘sparse_cg’, ‘sag’, ‘saga’, ‘lbfgs’}, default=’auto’
 
         clf = Ridge(max_iter=max_iter, solver=solver)
         return clf.fit(self.x_train, self.y_train)
 
     def _build_elastic_net_regression(self):
-        """Gradient Boosting for regression.
+        """
+        **Gradient Boosting for regression**
 
-
+        :return: Fitted estimator
         """
 
         eln = GradientBoostingRegressor()
         return eln.fit(self.x_train, self.y_train)
 
     def _build_linear_regression(self):
-        """Ordinary least squares Linear Regression
+        """
+        **Ordinary least squares Linear Regression**
+
+        :return: Fitted estimator
         """
 
         reg = LinearRegression()
         return reg.fit(self.x_train, self.y_train)
 
     def _build_sgd_regression(self, max_iter=1000):
-        """Linear model fitted by minimizing a regularized empirical loss with SGD.
+        """
+        **Linear model** fitted by minimizing a regularized empirical loss with SGD.
 
         :param max_iter: The maximum number of passes over the training data, defaults to 1000
         :type max_iter: int, optional
+        :return: Fitted estimator
         """
 
         sgd = SGDRegressor(max_iter=max_iter)
         return sgd.fit(self.x_train, self.y_train)
 
+
     ############### Predict User Inputs ###############
 
     def regression_function(self, user_input):
-        """Feeds User Inputs into the Regression Model and outputs the Prediction
+        """
+        Feeds user inputs into the Regression Model and outputs the Prediction.
 
         :param user_input: Give input as Pandas Dataframe
         :type user_input: pd.DataFrame
+        :return: model prediction
         """
 
+        #check wether user input is given as Pandas Dataframe
         if isinstance(user_input, pd.DataFrame):
             user_input = user_input
             print("User Input is given as Pandas Dataframe!")
+
+            # Check wether number of user inputs is correct
             if len(user_input.columns) == (len(self.dataframe.columns) - 1):
                 print("Number of Input variables fits the function!")
                 result = round(self.regression.predict(user_input)[0], 2)
@@ -264,15 +302,18 @@ class Regression:
                 "The active dataframe allows ", (len(self.dataframe.columns) - 1),
                 " input variables. The predicted colum is ", self.label_target)
 
+
     ############### Plot Data in 2D Graph ###############
 
     def plot_correlation(self, label_target_1, label_target_2):
-        """Plots the correlation of two Target Labels, defined by the User, within a Scatter Plot.
+        """
+        Plots the correlation of two Target Labels, defined by the User, within a Scatter Plot.
 
         :param label_target_1: First column name to plot
         :type label_target_1: str
         :param label_target_2: Second column name to plot
         :type label_target_2: str
+        :return: None
         """
 
         if label_target_1 in self.dataframe.columns:
@@ -293,10 +334,14 @@ class Regression:
         else:
             print("The first selected column is not within the Dataframe")
 
+
     ############### Plot Data in 2D Graph with regression ###############
 
     def plot_regression_1(self):
-        """Plots the deviation between the prediction and the acutal test data of the Target Label.
+        """
+        Plots the deviation between the prediction and the acutal test data of the Target Label.
+        
+        :return: Figure
         """
 
         try:
@@ -317,10 +362,12 @@ class Regression:
             print("Something went wrong. Check your Inputs.")
 
     def plot_regression_2(self, label_second):
-        """Plots the deviation between the prediction and the acutal test data from a choosen column.
+        """
+        Plots the deviation between the prediction and the acutal test data from a choosen column.
 
         :param label_second: Set dimension / column to plot
         :type label_second: str
+        :return: None
         """
 
         if label_second in self.dataframe.columns:
@@ -343,13 +390,17 @@ class Regression:
         else:
             print("The first selected column is not within the Dataframe")
 
+
     ############### Heatmap for correlation ###############
 
     def plot_heatmap_correlation(self, figsize=(5, 4)):
-        """Plots a heatmap to show correlation between different columns of the dataframe.
+        """
+        Plots a correlation matrix / heatmap to show correlation between different columns of the dataframe.
+        Serves as a descision support for the user. 
 
         :param figsize: Size of the figure, defaults to (5,4)
         :type figsize: tuple, optional
+        :return: None
         """
 
         corrmat = self.dataframe.corr()
@@ -361,15 +412,19 @@ class Regression:
         ax = sns.heatmap(corrmat, mask=mask, cmap="YlGnBu", linewidths=0.1, fmt=".2f", annot=True, vmin=-1, vmax=1, ax=ax)
         st.pyplot(f)
 
+
     ############### Main Effects Plot ##############
     def MainEffectsPlot(self):
+        """
+        Plots the development of the Target Value with respect to each input values independently (all other values are fixed at their mean for each line graph).
 
-        self.dataframe
-
-        # normData = (self.dataframe-np.min(self.dataframe))/(np.max(self.dataframe)-np.min(self.dataframe))
+        :return: Figure
+        """
 
         meanList = []
         fig = plt.figure()
+
+        # Creates a list with the mean of all input columns (skips target column)
         for a in list(self.dataframe.columns):
             if a == self.label_target:
                 pass
@@ -378,6 +433,7 @@ class Regression:
 
         ii = 0
 
+        # Creates x and y values for the plotting of the main effects of each input variable and saves data in the plot
         for i in range(len(list(self.dataframe.columns))):
 
             if self.dataframe.columns[i] == self.label_target:
@@ -404,16 +460,17 @@ class Regression:
         plt.legend(loc='upper left')
         return fig 
 
+
     ############### Check Active Regression Type ###############
 
     def get_regression_type(self):
         """Returns the Regression Type of the created model.
 
         :return: Regression Type
-        :rtype: str
         """
 
         return self.regression
+
 
     ############### Get Pandas Dataframe Description ###############
 
@@ -421,9 +478,9 @@ class Regression:
         """Returns a brief overiew with basic information of the dataframe.
 
         :return: Dataframe Overview
-        :rtype: table
         """
         return self.dataframe.describe()
+
 
     ############### Get Pandas Dataframe Description ###############
 
@@ -431,7 +488,6 @@ class Regression:
         """Return the head of the dataframe.
 
         :return: Dataframe Head
-        :rtype: table
         """
 
         return self.dataframe.head()

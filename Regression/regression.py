@@ -7,7 +7,8 @@ from pandas.api.types import is_numeric_dtype
 from .Regression_final import Regressor
 from .MLP_Regressor import NN_Regressor, Regressor_Inputs
 from .MLP_TimeSeries import NN_TimeSeries_Reg, Regressor_Inputs_TS
-from .RegressionClass import Regression
+# from .RegressionClass import Regression
+from .Regression_Group4_docs import Regression
 from .TimeSeries_Final import Timeseries, rf_Inputs
 
 #dateparse = lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
