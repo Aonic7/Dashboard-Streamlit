@@ -351,7 +351,7 @@ def main(data_obj):
                     mime='text/csv')
 
 
-        st.header('Regression')
+        # st.header('Regression')
 
         rg_df = data_obj.df.copy()
         regg_obj = Regression(rg_df)
@@ -367,8 +367,8 @@ def main(data_obj):
             '<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;}</style>',
             unsafe_allow_html=True)
 
-        st.dataframe(rg_df)
-        st.write(rg_df.shape)
+        # st.dataframe(rg_df)
+        # st.write(rg_df.shape)
 
         with st.container():
             c1, c2, c3 = st.columns(3)
