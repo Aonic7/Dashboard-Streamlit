@@ -122,6 +122,7 @@ def main(data_obj):
                 with cc4:
                     st.write(" ")
                     st.write(" ")
+                    st.warning(f'If applied, {current_df.shape[0]-q_outlier.shape[0]} rows will be removed.')
                    
                 
                 # Plotting
