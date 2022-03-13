@@ -14,38 +14,7 @@ import collections
 
 
 class NN_Classifier:
-    """Neural Network Classifier Class:
-
-    This Class contains the methods used for Neural Network Classification using MLP Classifier from sklearn library
-
-    Class input parameters:
-
-    :param df: The input data frame
-    :type df: Pandas DataFrame
-    :param NN_Inputs: Tuple of parameters for the Classifier clarified by the user
-    :type NN_Inputs: Named Tuple
-    :param dependant_var_index: The index of the target column in the df for the Classification
-    :type dependant_var_index: int
-
-    Class Output Parameters:
-
-    :param y_pred: The resulting output of the Classification test
-    :type y_pred: float 
-    :param y_actual: The expected output of the Classification test
-    :type y_actual: float 
-    :param length: The length of the output of the Classification test set
-    :type length: int 
-    :param Train_score: Model Score (Accuracy) on the Training data
-    :type Train_score: float 
-    :param test_score: Model Score (Accuracy) on the Testing data  
-    :type test_score: float
-    :param model: The MLP Classifier model created using the specified inputs
-    :type model: MLPClassifier
-    :param Error_message: Error message if an exception was encountered during the processing of the code
-    :type Error_message: str
-    :param flag: internal flag for marking if an error occurred while processing a previous method
-    :type flag: bool
-    """
+        
     
     
     y_pred:                     int # resulting output
@@ -68,15 +37,6 @@ class NN_Classifier:
     #Constructor
     #External inputs are the Data frame object, the Named Tuple of NN_Inputs and the index of the dependant variable in the Data frame
     def __init__(self,df,NN_Inputs,dependant_var_index):
-        """Class Constructor:
-
-        :param df: The input data frame
-        :type df: _type_
-        :param NN_Inputs: _description_
-        :type NN_Inputs: _type_
-        :param dependant_var_index: _description_
-        :type dependant_var_index: _type_
-        """
         self.df=df
         self.NN_Inputs=NN_Inputs
         
@@ -92,11 +52,6 @@ class NN_Classifier:
 
 
     def preprocess(self):
-        """Method Used to Normalize the X data if the user required
-
-        This method is called when the class instance is created and the Normalize flag in the input NN_Inputs tuple is True.
-
-        """
         #Simple Normalization method for X Data
         scaler=preprocessing.MinMaxScaler()
         self.x_n = scaler.fit_transform(self.X)
@@ -104,12 +59,6 @@ class NN_Classifier:
     #Data handling method, creates the X and Y arrays that go into the Train_test_split method
     #Called when the object is instantiated within the constructor 
     def handle(self):
-        """Data Handling Method:
-
-        This method takes the Target column index and splits the data frame "df" into X and Y numpy arrays so they are ready for being split into train and test sets
-
-        This method is called internally once the class instance is created and the X,Y output arrays are fed to the "Classify" method 
-        """
         try:
             self.internal_data =self.df.drop(self.df.iloc[:,[self.k]],axis=1)
             nxm=shape(self.internal_data)
@@ -137,18 +86,6 @@ class NN_Classifier:
 
     #Data handling method, Used by the Regressor to re-handle the data after resampling and shuffling is done
     def handle2(self,df):
-        """
-        Data Handling Method Version 2:
-
-        This method takes the Target column index and splits the data into X and Y numpy arrays for internal use
-
-        This method is used internally by the "Classify" method after the data is resampled and reshuffled, it takes input dataframe and returns the X and Y arrays to the caller
-
-        :param df: the Data frame passed to handle
-        :type df: Pandas DataFrame
-        :return: X,Y
-        :rtype: numpy arrays
-        """
         internal_data =df.drop(df.iloc[:,[self.k]],axis=1)
         nxm=shape(internal_data)
         n=nxm[0]
@@ -172,20 +109,6 @@ class NN_Classifier:
 
     #Method that creates the MLP Classifier and returns the Named Tuple of to be used in other methods  
     def Classify(self):
-        """ 
-        Classifier Creation Method:
-
-        In this method 3 different steps are done:
-
-            1. This method splits the data into train and test sets, then creates the MLP Classifier based on the user inputs from NN_Inputs Named Tuple.
-            2. The extracted Train data is resampled (or not) based on the user input Normalize flag from the NN_Inputs parameter.
-            3. Model is fitted on the resampled/normal data and  returns some metrics for the performance of the model on the test and train data sets.
-            
-            
-
-        :return: Modified set of class parameters
-        
-        """
         if (self.flag) !=True:
             try:
                     
@@ -231,8 +154,6 @@ class NN_Classifier:
             except Exception as e:
                 self.Error_message= 'Error in Classifier Creation: ' + str(e)
                 self.flag=True
-                st.warning(self.Error_message)
-
                 self.Train_score= 'Refer To error in Classifier Creation'
                 self.test_score= 'Refer To error in Classifier Creation'
                 #self.coeff=self.model.coefs_
@@ -248,8 +169,6 @@ class NN_Classifier:
                 self.Report=pd.DataFrame.from_dict(self.Report_dic)#, target_names=target_names)
                     #self.Report = "Vasya"
         else:
-            st.warning(self.Error_message)
-
             self.Train_score= 'Refer To error in Handling Method'
             self.test_score= 'Refer To error in Handling Method'
             #self.coeff=self.model.coefs_
@@ -269,16 +188,6 @@ class NN_Classifier:
         return self
     
     def printing(self):
-        """Printing Outputs:
-
-        This method prints the chosen metrics to the user after the model is trained and fitted
-
-        The metrics are:
-            1. Model Accuracy on the Training Data
-            2. Model Accuracy on the Testing Data
-            3. Length of the output array
-            4. Classification Report
-        """
         if (self.flag) != True:
             self.Error_message= ' No Error Occurred during processing of the code'
         
@@ -306,12 +215,7 @@ class NN_Classifier:
 
         
     def Conf(self):
-        """Creation of Confusion matrix:
-
-        This method outputs a confusion matrix figure to show the quality of the classification on the test data.
-
-        The Confusion matrix dimensions and Labels are derived from the number and names of the different unique values in the Labels Target column for the classification. 
-        """
+        
         fig = plt.figure(figsize=(10, 4))
         ax=fig.add_subplot(111)
         if (self.flag) !=True:
@@ -334,25 +238,21 @@ class NN_Classifier:
                 self.Error_message = 'Error while creating Confusion Matrix: ' +str(e)
                 self.flag=True
                 st.warning(self.Error_message)
+
         else:
             st.write('Error occurred in previous methods, Refer to Error Message Warning')
 
 
 class classifier_inputs(NamedTuple):
-    """
-    This class is used to parse inputs from the user into this Named Tuple structure for easy use inside the NN_Classifier class.
 
-    Below is a description of the Named Tuple Elements:
-
-    """
     
-    test_size:              float  ;"""Test size percentage"""
-    activation_fun:         tuple  ;"""Activation function selection"""
-    hidden_layers:          tuple  ;"""Size of hidden layer and number of neurons in each layer"""
-    solver_fun:             tuple  ;"""Solver function Selection"""
-    Max_iterations:         int    ;"""Number of Maximum iterations"""
-    Normalize:              bool   ;"""Flag to normalize X data or not"""
-    resample:               bool   ;"""Flag to resample for imbalanced data or not"""
+    test_size:              float  # test size percentage
+    activation_fun:         tuple  # activation function selection
+    hidden_layers:          tuple  # size of hidden layer and number of neurons in each layer
+    solver_fun:             tuple  # solver function
+    Max_iterations:         int    # number of iterations
+    Normalize:              bool   # flag to normalize X data or not
+    resample:               bool   # flag to resample the X data for imbalanced data or not
 
 # data2 = pd.read_csv("D:\MAIT\OOP\Datasets/transfusion.csv",',')
 # data = pd.read_csv("D:\\TH Koeln\\Wolf\\Project\\Data\\Classification.data", ',')

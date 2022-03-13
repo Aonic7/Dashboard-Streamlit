@@ -16,11 +16,12 @@ from .TimeSeries_Final import Timeseries, rf_Inputs
 
 
 def main(data_obj):
-    """_summary_
+    """Regression main 
 
-    Args:
-        data_obj (_type_): _description_
-    """ 
+    :param data_obj: DataObject instance.
+    :type data_obj: __main__.DataObject
+    
+    """
 
     st.header('Regression')
 
@@ -329,7 +330,7 @@ def main(data_obj):
                                 Y = rg_df[selected_column]
                                 reg_inst = Regressor(X,Y) 
                                 reg_inst.model(tree_size, tt_proportion)
-                                st.balloons()
+                                # st.balloons()
 
                             reg_inst.result(reg_inst.Y_test, reg_inst.Y_pred)
                             reg_inst.prediction_plot(reg_inst.Y_test, reg_inst.Y_pred)

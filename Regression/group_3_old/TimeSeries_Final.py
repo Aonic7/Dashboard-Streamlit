@@ -41,56 +41,10 @@ import streamlit as st
                 # Results(): To display the R2 score, RMSE and the prediction plot
 
 class Timeseries:
-    """Class Timeseries: Random forest Regressor for time series implementation
-
-    This Class contains the methods for Random forest Regressor for time series implementation
-    Class input parameters:
-
-    :param df: The input data frame
-    :type df: Pandas DataFrame
-    :param estimator: Number of decision trees to be build before taking the average of all predictions to be specified by the user
-    :type estimator: Integer
-    :param test_size: User Input - Proportion of test data specified by user in which dataset is to be splitted.
-    :type test_size: float
-
-    Class Output Parameters:
-
-    :param Y_pred: The resulting output of the Regression test
-    :type Y_pred: float 
-    :param Y_test: The expected output of the Regression test
-    :type Y_test: float  
-    :param R-squared score: Model accuracy on the Training data
-    :type : float 
-    :param RMSE: Root mean squared error   
-    :type RMSE: float
-    :param Target: Occupancy to be predicted at a user specified time.
-    :type Target: int
-    :param Error_message: Error message if an exception was encountered during the processing of the code
-    :type Error_message: str 
-    :param flag: internal flag for marking if an error occurred while processing a previous method
-    :type flag: bool 
-       
-    """
     flag=False
     Error_message='No errors during processing'
     # instance attribute
     def __init__(self,df,Input,base,target,time_col,sysCodeNo):
-        """Class Constructor
-
-        :param df: dataframe
-        :type df: pandas dataframe
-        :param Input: user inputs 
-        :type Input: tuple
-        :param base: Capacity of the parking lot
-        :type base: array
-        :param target: Target variable that is to be classified
-        :type target: array
-        :param time_col: Time Column 
-        :type time_col: datetime
-        :param sysCodeNo: System Code Number
-        :type sysCodeNo: array
-        
-        """
         self.df=df
         self.Input = Input
         self.base=base
@@ -100,23 +54,6 @@ class Timeseries:
 
     #
     def model(self,estimator, test_size):
-        """ model Method : 
-
-            This method splits the data into train and test sets, then creates a model based on the user input n_estimator and test_size. 
-            
-            It calls model 'RandomizedSearchoptim' that returns the best parameters on which the model can be fitted.
-            
-            It then fits the model based on the best parameters obtained after Randomized search cross validation and test it on the test dataset, then returns the predicted value 'Y_pred' 
-
-            
-
-            :param estimator: User Input - Number of decision trees to be build before taking the average of all prediction.
-            :type estimator: Integer
-            :param test_size: User Input - Proportion of test data specified by user in which dataset is to be splitted.
-            :type test_size: float
-
-            :return: Modified set of class parameters
-        """
         if self.flag!=True:
             try:
                 self.estimator=estimator 
@@ -151,22 +88,6 @@ class Timeseries:
 
         
     def UserSelectedmodel(self,estimator, test_size):
-        """ UserSelectedmodel Method: 
-
-            This method splits the data into train and test sets, then creates a model based on the user input n_estimator,test_size and the specific system code number.
-            
-            It calls model 'RandomizedSearchoptim' that returns the best parameters on which the model can be fitted.
-            
-            It then fits the model based on the best parameters obtained after Randomized search cross validation and test it on the test dataset, then returns the predicted value 'Y_pred' i.e Occupancy at a user specified date and time. 
-
-
-            :param estimator: User Input - Number of decision trees to be build before taking the average of all prediction.
-            :type estimator: Integer
-            :param test_size: User Input - Proportion of test data specified by user in which dataset is to be splitted.
-            :type test_size: float
-
-        
-        """
         if self.flag !=True:
             try:  
                 self.estimator=estimator 
@@ -201,19 +122,6 @@ class Timeseries:
             st.write('Error occurred in previous methods, Refer to Error Message Warning')     
 
     def RandomizedSearchoptim(self):
-        """ RandomizedSearchoptim Method : 
-                This method returns the best parameters on which the model is to be fitted.
-
-                Parameters:  
-                    max_features:      Number of features to consider at every split
-                    max_depth :        Maximum number of levels in tree
-                    min_samples_split: Minimum number of samples required to split a node
-                    in_samples_leaf:   Minimum number of samples required at each leaf node
-                    bootstrap:         Method of selecting samples for training each tree
-
-                :return: Best parameter values on which regressor is fitted.
-
-        """
         try:
 
             # Find the best parameters for the model
@@ -239,13 +147,6 @@ class Timeseries:
         return random_grid
 
     def DataPrep(self):
-        """ DataPrep Method : 
-
-                This method includes all the preprocessing of data required for the regressor model. It extracts the year, month, day, hours and minutes from the time column.
-                It also calculates the rate based on target and base column. 
-                The minutes column of the given dataset have been binned in an interval of 15 mins for better prediction of the target value.
-
-        """
         try:
         # Convert LastUpdated column into Time and Date column. Add new columns for occupancy rate in percentage and Day of Week.
             self.df['Rate'] = round((100.0*self.df[self.target])/self.df[self.base],1)
@@ -287,10 +188,6 @@ class Timeseries:
             st.warning(self.Error_message)
 
     def fullmodel(self):
-        """ fullmodel Method : 
-        
-                This method includes the initialization of features and target for training and testing the regressor model on the whole dataset.
-        """
         if self.flag != True:
             try:
             # To initialize the features and self.target 
@@ -305,15 +202,6 @@ class Timeseries:
             st.write('Error occurred in previous methods, Refer to Error Message Warning')     
     
     def SelectedSysCode(self,Input):
-        """ DataPrep Method : 
-
-                This method includes all the preprocessing of data required for the regressor model for the user input data. It extracts the year, month, day, hours and minutes from the time column.
-                The minutes column of the user specified time have been binned in an interval of 15 mins for better prediction of the target value.
-
-                The data frame is filtered according to the user specified syscodeno(system code number) in order to obtain the target value for the user specified system code number.
-                Last but not the least the method also initializes the features and target column.
-
-        """
         if self.flag!=True:
 
             try:
@@ -350,21 +238,6 @@ class Timeseries:
             st.write('Error occurred in previous methods, Refer to Error Message Warning')     
     
     def Results (self):
-        """ Results Method :
-
-            This method displays metrics 'R-squared score' and 'RMSE - Root Mean Squared Error' value to analyze the performace of model,
-            
-            R-Squared Score: It is a statistical measure that represents the proportion of the variance for a dependent variable that's explained by an independent variable or variables in a regression model. 
-
-            RMSE: Mean Squared Error represents the average of the squared difference between the original and predicted values in the data set. 
-            It measures the variance of the residuals. Root Mean Squared Error is the square root of Mean Squared error. It measures the standard deviation of residuals.
-         
-            This method prints a plot that represents the real prediction and optimal prediction. 
-            Optimal prediction are the true values that are plotted as a line plot and real prediction are values predicted by the classification model that are plotted as a scatter plot.
-
-        """
-        
-        
         if self.flag !=True:
                 
             try:
@@ -390,14 +263,9 @@ class Timeseries:
         
 
 class rf_Inputs(NamedTuple):
-    """Class rf_Inputs: 
-    This Class comprises the inputs provided by the user.There are three user inputs namely system code number, date and time based on which the target value is determined.
-    
-    Class input parameters:
-    """
-    Syscodenumber:  str;""" System code number """
-    Date:           datetime;""" Date """
-    Time:           datetime;""" Time """
+    Syscodenumber:  str
+    Date:           datetime
+    Time:           datetime
 
 
 # Import data setsss 
@@ -423,7 +291,7 @@ class rf_Inputs(NamedTuple):
 # df['LastUpdated']=pd.to_datetime(df['LastUpdated'])
 
 "'Capacity' = base column"
-"'Ocupancy' = target column"
+"'Occupancy' = target column"
 
 # obj= Timeseries(df,Input,'Capacity','Occupancy','LastUpdated','SystemCodeNumber') 
 
@@ -433,5 +301,3 @@ class rf_Inputs(NamedTuple):
 # obj.Results()
 # obj.SelectedSysCode(Input)
 # obj.UserSelectedmodel(500, 0.3)
-
-   

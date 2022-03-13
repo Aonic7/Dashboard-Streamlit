@@ -29,35 +29,6 @@ import streamlit as st
 
 class Sample:
 
-    """Class Sample for Random forest Classification
-
-    This Class contains the methods used for Random forest Classifier
-
-    Class input parameters:
-
-    :param df: The input data frame
-    :type df: Pandas DataFrame
-    :param estimator: Number of decision trees to be specified by user
-    :type estimator: Integer
-    :param test_size: User Input - Proportion of test data specified by user in which dataset is to be splitted.
-    :type test_size: float
-
-    Class Output Parameters:
-
-    :param Y_pred: The resulting output of the Regression test
-    :type Y_pred: int array 
-    :param Y_test: The expected output of the Regression test
-    :type Y_test: int array  
-    :param acctrain: Model accuracy on the Training data
-    :type acctrain: float 
-    :param acctest: Model accuracy on the Testing data  
-    :type acctest: float
-    :param Error_message: Error message if an exception was encountered during the processing of the code
-    :type Error_message: str
-    :param flag: internal flag for marking if an error occurred while processing a previous method
-    :type flag: bool
-    """
-
     model_train = None
     model_test = None
     Y_test=None
@@ -73,48 +44,19 @@ class Sample:
 
     # instance attribute
     def __init__(self,X,Y):
-
-        """Class Constructor
-
-        :param X: Features to train the model
-        :type X: array
-        :param Y: Target variable that is to be classified
-        :type Y: array
-        
-        """
         self.X = X
         self.Y = Y
 
     # random= Sample('estimator','test_size')
 
-    def model(self,estimator, test_size, criteria, depth, minimum_leaf, min_split):
-        """ Model Method :
-         
-            This method splits the data into train and test sets, then creates a model based on the user input n_estimator and test_size. 
-            
-            It calls model 'RandomizedSearchoptim' that returns the best parameters on which the model can be fitted.
-            
-            It then fits the model based on the best parameter obtained after Randomized search cross validation and test it on the test dataset, then returns the predicted value 'Y_pred' 
-
-            
-
-            :param estimator: User Input - Number of decision trees for random forest classifier
-            :type estimator: Integer
-            :param test_size: User Input - Proportion of test data specified by user in which dataset is to be splitted.
-            :type test_size: float
-
-        """
+    def model(self,estimator, test_size):
         try:
 
             self.estimator=estimator 
             self.test_size=test_size
-            self.criteria = criteria
-            self.depth = depth
-            self.min_split = min_split
-            self.minimum_leaf = minimum_leaf
-            # Split the data into training set and testing set
-            X_train, X_test, self.Y_train, self.Y_test = train_test_split(self.X, self.Y, test_size=test_size, random_state = 123,stratify=self.Y)
             
+            X_train, X_test, self.Y_train, self.Y_test = train_test_split(self.X, self.Y, test_size=test_size, random_state = 123,stratify=self.Y)
+
             #create a model
             classifier=RandomForestClassifier(n_estimators=estimator)   
             b = self.RandomizedSearchoptim()
@@ -130,20 +72,6 @@ class Sample:
             st.warning(self.Error_message)
         #return(self.Y_pred)
     def RandomizedSearchoptim(self):
-            """ RandomizedSearchoptim Method : 
-
-                This method returns the best parameters using Randomized search cross validation method on which the model is to be fitted.
-
-                Parameters:
-                    max_features:      Number of features to consider at every split
-                    max_depth :        Maximum number of levels in tree
-                    min_samples_split: Minimum number of samples required to split a node
-                    in_samples_leaf:   Minimum number of samples required at each leaf node
-                    bootstrap:         Method of selecting samples for training each tree
-
-                :return: Best parameters 
-
-            """
             try:
                 # Find the best parameters for the model
                 max_features = ['auto', 'sqrt']                                                  # Number of features to consider at every split
@@ -168,12 +96,6 @@ class Sample:
             return random_grid
 
     def accuracy(self):
-        """ accuracy Method :
-
-            Classification accuracy is a measure that indicates a classification model's performance by dividing the number of correct predictions by the total number of predictions. 
-
-            This method returns the accuracy for the training and testing dataset. 
-        """
         #To calculate the accuracy
         if self.flag != True:
             try:
@@ -183,8 +105,8 @@ class Sample:
                 acctrain = accuracy_score(self.Y_train,self.model_train)
                 #st.write("Pass2")
 
-                print("Train accuracy of the model: ",acctrain)
-                print("Test accuracy of the model: ",acc)
+                # print("Train accuracy of the model: ",acctrain)
+                # print("Test accuracy of the model: ",acc)
                 st.metric("Accuracy of the model on the Training data: ", round(acctrain, 4))
                 st.metric("Accuracy of the model on the Test data: ", round(acc, 4))
             except Exception as e:
@@ -196,20 +118,6 @@ class Sample:
 
 
     def report(self):
-        """ report Method :
-
-                This method prints the Confusion Matrix and classification report for the performance of the whole model.
-
-                Confusion matrix - A confusion matrix is a summary of prediction results on a classification problem.The number of correct and incorrect predictions are summarized with count values and broken down by each class.
-                
-                Classification Report - The classification report visualizer displays the precision, recall, F1, and support scores for the model. 
-                     Precision:  Precision is the ratio of correctly predicted positive observations to the total predicted positive observations.
-                     
-                     Recall (Sensitivity) - Recall is the ratio of correctly predicted positive observations to the all observations in actual class
-                     
-                     The F1 score represents the balance of accuracy and recall. F1 Score is the weighted average of Precision and Recall. F1 score is good parameter in analyzing performance of model on an unbalanced dataset.
-
-        """
         #To display the confusion matrix
         if self.flag != True:
             try:
@@ -243,7 +151,7 @@ class Sample:
                 st.write("Precision:  Precision is the ratio of correctly predicted positive observations to the total predicted positive observations. ")
                 st.write('Recall (Sensitivity) - Recall is the ratio of correctly predicted positive observations to the all observations in actual class')
                 st.write('The F1 score represents the balance of accuracy and recall. F1 Score is the weighted average of Precision and Recall. Good for Unbalanced dataset.')
-                
+
             except Exception as e:
                 self.Error_message = 'Error while Printing output: ' +str(e)
                 self.flag=True
@@ -251,8 +159,59 @@ class Sample:
         else:
             st.write('Error occurred in previous methods, Refer to Error Message Warning')
 
-        #st.write(cm)
-        
-        
 
-    
+
+
+
+
+
+    # Y_test=None
+    # Y_pred=None
+
+    # # instance attribute
+    # def __init__(self,X,Y):
+    #     self.X = X
+    #     self.Y = Y
+
+    # # random= Sample('estimator','test_size')
+
+    # def model(self,estimator, test_size, criteria, depth, minimum_leaf, min_split): 
+    #     self.estimator=estimator 
+    #     self.test_size=test_size
+    #     self.criteria = criteria
+    #     self.depth = depth
+    #     self.min_split = min_split
+    #     self.minimum_leaf = minimum_leaf
+    #     # Split the data into training set and testing set
+    #     X_train, X_test, Y_train, self.Y_test = train_test_split(self.X, self.Y, test_size=test_size, random_state = 123,stratify=self.Y)
+            
+    #     #create a model
+    #     classifier=RandomForestClassifier(n_estimators=estimator,criterion = self.criteria, max_depth = self.depth, min_samples_leaf = self.minimum_leaf, min_samples_split = self.min_split)
+
+    #     #fitting training data to the model
+    #     classifier.fit(X_train,Y_train)
+
+    #     self.Y_pred=classifier.predict(X_test)    
+         
+    #     return(self.Y_pred)
+
+    # def accuracy(self,Y_test,Y_pred):
+    #     #To calculate the accuracy
+    #     acc=accuracy_score(Y_test,Y_pred)
+    #     st.metric("Accuracy of the model: ", round(acc, 4))
+
+    # def report(self,Y_test,Y_pred):
+    #     #To display the confusion matrix
+    #     cm=confusion_matrix(Y_test,Y_pred)
+    #     st.write(cm)
+        
+    #     #To st.write the Precision, Recall and F1-score
+    #     st.write("Classification report: ")
+    #     #st.write(classification_report(Y_test,Y_pred))
+    #     self.Report_dic=classification_report(Y_test, Y_pred, output_dict=True)
+    #     self.Report=pd.DataFrame.from_dict(self.Report_dic)
+    #     st.write(self.Report)
+        
+    #    #To st.write the F1-score for binary target
+    #     f1= f1_score(Y_test, Y_pred)
+    #     st.metric("F1-score: ", round(f1, 4))

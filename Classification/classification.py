@@ -11,11 +11,13 @@ from .ClassificationClass_Noah import Classification
 from .RF_classfication import Sample
 
 
-def main(data_obj):
-    """Main callable page function
 
-    Args:
-        data_obj (__main__.DataObject): DataObject instance.
+def main(data_obj):
+    """Classification main 
+
+    :param data_obj: DataObject instance.
+    :type data_obj: __main__.DataObject
+    
     """
 
     with st.expander("How to use", expanded=True):
