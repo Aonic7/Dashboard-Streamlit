@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 
 def main():
     """Welcome main
@@ -28,3 +29,6 @@ def main():
     st.info("The experience from the workflow is the best when all the pages are navigated in sequence!")
     st.subheader("Source code")
     st.markdown("It can be found via navigating to the menu in the top right corner and pressing 'View App Source' or by using [this link](https://github.com/Aonic7/Dashboard-Streamlit).")
+
+    if os.path.isfile("Smoothing_and_Filtering//Preprocessing dataset.csv"):
+        os.remove("Smoothing_and_Filtering//Preprocessing dataset.csv")
