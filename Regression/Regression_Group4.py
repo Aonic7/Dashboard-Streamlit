@@ -144,17 +144,17 @@ class Regression:
 
         if deleting_na:
             self.dataframe = self.dataframe.dropna()
-            st.write("Data has been preprocessed!")
+            #st.write("Data has been preprocessed!")
 
         if scaling:
             scaler = StandardScaler()
             self.dataframe = pd.DataFrame(scaler.fit_transform(self.dataframe), columns=self.dataframe.columns)
             #self.dataframe = scaler.transform(dataframe)
-            st.write("Data has been rescalled!")
+            #st.write("Data has been rescalled!")
 
         if deleting_duplicates:
             self.dataframe.drop_duplicates(keep='first', inplace=True)
-            st.write("Duplicates have been deleted!")
+            #st.write("Duplicates have been deleted!")
 
         self.x = self.dataframe.drop(label_target, axis=1)
         self.y = self.dataframe[[label_target]]

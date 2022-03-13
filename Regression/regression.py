@@ -577,8 +577,8 @@ def main(data_obj):
 
 
                         except ValueError as e:
-                            st.error(
-                                "Please check if you selected a dataset and column suitable for binary classification. \nAlternatively, your labels should be one-hot encoded.")
+                            st.error("Please check if you selected a dataset and column suitable for the regression "
+                                     "model.\n Remember that the regression model only works with numerical data")
                 try:
                     st.metric(st.session_state.model_string[0]+str(" --> RMSE"),st.session_state.model_string[1])
                     st.metric(st.session_state.model_string[0]+str(" --> R2-Score"),st.session_state.model_string[2])
