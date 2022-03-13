@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KNN-,SVM- and LR-Classification Class &mdash; MAIT Project OOP 13.03.2022 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Neural Network Classification Class" href="Classification_Group3_NN.html" />
+    <link rel="prev" title="Classification" href="Classification_Index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> MAIT Project OOP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="Classification_Index.html">Classification</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">KNN-,SVM- and LR-Classification Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Classification_Group3_NN.html">Neural Network Classification Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Classification_Group3_RF.html">Random Forest Classification Class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Regression_Index.html">Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data%20Preparation.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data%20Preview.html">Data Preview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Smoothing.html">Smoothing and Filtering of Data</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MAIT Project OOP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="Classification_Index.html">Classification</a> &raquo;</li>
+      <li>KNN-,SVM- and LR-Classification Class</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Classification_Group4.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="knn-svm-and-lr-classification-class">
+<h1>KNN-,SVM- and LR-Classification Class<a class="headerlink" href="#knn-svm-and-lr-classification-class" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ClassificationClass_Noah.Classification">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ClassificationClass_Noah.</span></span><span class="sig-name descname"><span class="pre">Classification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ClassificationClass_Noah.Classification" title="Permalink to this definition"></a></dt>
+<dd><p>This Class is used to build one of three
+possible classifiers with a givin dataset.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ClassificationClass_Noah.Classification._build_LogisticRegression_classifier">
+<span class="sig-name descname"><span class="pre">_build_LogisticRegression_classifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'liblinear'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ClassificationClass_Noah.Classification._build_LogisticRegression_classifier" title="Permalink to this definition"></a></dt>
+<dd><p>Builds the Logistic Regression Classifier with the given dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>solver</strong> (<em>string</em>) – (optional, default=liblinear) Name of the Solver: liblinear, newton-cg, lbfgs, sag, saga.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>sklearn.linear_model._logistic.LogisticRegression</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ClassificationClass_Noah.Classification._build_SVM_classifier">
+<span class="sig-name descname"><span class="pre">_build_SVM_classifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernel_fun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ClassificationClass_Noah.Classification._build_SVM_classifier" title="Permalink to this definition"></a></dt>
+<dd><p>Builds the Support Vector Machine Classifier with the given dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>kernel_fun</strong> (<em>string</em>) – (optional, default=linear) Name of the Kernel function: linear, ploy, rbf, sigmoid.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>sklearn.svm.SVC</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ClassificationClass_Noah.Classification._build_knn_classifier">
+<span class="sig-name descname"><span class="pre">_build_knn_classifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ClassificationClass_Noah.Classification._build_knn_classifier" title="Permalink to this definition"></a></dt>
+<dd><p>Builds the K-Nearest Neighbor Classifier with the given dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>k</strong> (<em>int</em>) – (optional, default=5) Number of k-Values</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>sklearn.neighbors.KNeighborsClassifier</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ClassificationClass_Noah.Classification._upsample_dataset">
+<span class="sig-name descname"><span class="pre">_upsample_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_column_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ClassificationClass_Noah.Classification._upsample_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Function for upsampling data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y_column_name</strong> (<em>string</em>) – Name of the target column of the dataset</p>
+</dd>
+<dt class="field-even">Return pandas.core.frame.DataFrame dataframe</dt>
+<dd class="field-even"><p>The upscaled dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ClassificationClass_Noah.Classification.build_classifier">
+<span class="sig-name descname"><span class="pre">build_classifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">classifier_name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ClassificationClass_Noah.Classification.build_classifier" title="Permalink to this definition"></a></dt>
+<dd><p>The second important class method.
+This function builds the heart of the class - the classifier.
+It can be distinguished between three different types of classifiers
+by usage of the classifier_name argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>classifier_name</strong> (<em>str</em>) – Name of the wished classifier.
+Three options:
+KNN = K-Nearest Neighbor,
+SVM = Support Vector Machine,
+LR = Logistic Regression</p></li>
+<li><p><strong>args</strong> – Argument depending on the chosen classifier.
+For KNN: the value of k (int),
+for SVM: the desired kernel_fun (string = linear, ploy, rbf, sigmoid)
+for LR: the desired Solver (string = liblinear, newton-cg, lbfgs, sag, saga)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ClassificationClass_Noah.Classification.drop_dataframe_column">
+<span class="sig-name descname"><span class="pre">drop_dataframe_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ClassificationClass_Noah.Classification.drop_dataframe_column" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>column_name</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ClassificationClass_Noah.Classification.get_classifer">
+<span class="sig-name descname"><span class="pre">get_classifer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ClassificationClass_Noah.Classification.get_classifer" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the Classifier which was build in the build_classifier method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>sklearn</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ClassificationClass_Noah.Classification.show_classifier_accuracy">
+<span class="sig-name descname"><span class="pre">show_classifier_accuracy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ClassificationClass_Noah.Classification.show_classifier_accuracy" title="Permalink to this definition"></a></dt>
+<dd><p>The third of the three important
+Shows the Accuracy of the classifier by giving the Accuracy for each class and by showing a correlation matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ClassificationClass_Noah.Classification.show_correlation">
+<span class="sig-name descname"><span class="pre">show_correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(5,</span> <span class="pre">4)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ClassificationClass_Noah.Classification.show_correlation" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>figsize</strong> (<em>list</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ClassificationClass_Noah.Classification.split_train_test">
+<span class="sig-name descname"><span class="pre">split_train_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_column_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upsample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deleting_na</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ClassificationClass_Noah.Classification.split_train_test" title="Permalink to this definition"></a></dt>
+<dd><p>The first of the three important classes methods.
+This function splits the input data frame into training and test data
+and provides three optional steps for data preparation:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>data which are not available are deleted</p></li>
+<li><p>data is upsampled (see: _upsample_dataset)</p></li>
+<li><p>data is scaled to a value between 0 and 1</p></li>
+</ol>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_column_name</strong> (<em>str</em>) – Name of the target column</p></li>
+<li><p><strong>test_size</strong> (<em>float</em><em>,</em><em>optional</em>) – Percentage of the number of test data, default=0.2</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em>,</em><em>optional</em>) – Value for the seed, default=0</p></li>
+<li><p><strong>upsample</strong> (<em>boolean</em><em>,</em><em>optional</em>) – If True the data gets upsampled, default = False</p></li>
+<li><p><strong>scaling</strong> (<em>boolean</em><em>,</em><em>optional</em>) – If True the data gets scaled, default = False</p></li>
+<li><p><strong>deleting_na</strong> (<em>boolean</em><em>,</em><em>optional</em>) – If True all na data gets deleted, default = False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Classification_Index.html" class="btn btn-neutral float-left" title="Classification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Classification_Group3_NN.html" class="btn btn-neutral float-right" title="Neural Network Classification Class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, MAIT Students WiSe 21/22.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

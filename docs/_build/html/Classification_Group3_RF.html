@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Random Forest Classification Class &mdash; MAIT Project OOP 13.03.2022 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Regression" href="Regression_Index.html" />
+    <link rel="prev" title="Neural Network Classification Class" href="Classification_Group3_NN.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> MAIT Project OOP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="Classification_Index.html">Classification</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Classification_Group4.html">KNN-,SVM- and LR-Classification Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Classification_Group3_NN.html">Neural Network Classification Class</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Random Forest Classification Class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Regression_Index.html">Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data%20Preparation.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data%20Preview.html">Data Preview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Smoothing.html">Smoothing and Filtering of Data</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MAIT Project OOP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="Classification_Index.html">Classification</a> &raquo;</li>
+      <li>Random Forest Classification Class</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Classification_Group3_RF.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="random-forest-classification-class">
+<h1>Random Forest Classification Class<a class="headerlink" href="#random-forest-classification-class" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="RF_classfication.Sample">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">RF_classfication.</span></span><span class="sig-name descname"><span class="pre">Sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RF_classfication.Sample" title="Permalink to this definition"></a></dt>
+<dd><p>Class Sample for Random forest Classification</p>
+<p>This Class contains the methods used for Random forest Classifier</p>
+<p>Class input parameters:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>Pandas DataFrame</em>) – The input data frame</p></li>
+<li><p><strong>estimator</strong> (<em>Integer</em>) – Number of decision trees to be specified by user</p></li>
+<li><p><strong>test_size</strong> (<em>float</em>) – User Input - Proportion of test data specified by user in which dataset is to be splitted.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Class Output Parameters:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Y_pred</strong> (<em>int array</em>) – The resulting output of the Regression test</p></li>
+<li><p><strong>Y_test</strong> (<em>int array</em>) – The expected output of the Regression test</p></li>
+<li><p><strong>acctrain</strong> (<em>float</em>) – Model accuracy on the Training data</p></li>
+<li><p><strong>acctest</strong> (<em>float</em>) – Model accuracy on the Testing data</p></li>
+<li><p><strong>Error_message</strong> (<em>str</em>) – Error message if an exception was encountered during the processing of the code</p></li>
+<li><p><strong>flag</strong> (<em>bool</em>) – internal flag for marking if an error occurred while processing a previous method</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="RF_classfication.Sample.RandomizedSearchoptim">
+<span class="sig-name descname"><span class="pre">RandomizedSearchoptim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RF_classfication.Sample.RandomizedSearchoptim" title="Permalink to this definition"></a></dt>
+<dd><p>RandomizedSearchoptim Method :</p>
+<p>This method returns the best parameters using Randomized search cross validation method on which the model is to be fitted.</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><p>max_features:      Number of features to consider at every split
+max_depth :        Maximum number of levels in tree
+min_samples_split: Minimum number of samples required to split a node
+in_samples_leaf:   Minimum number of samples required at each leaf node
+bootstrap:         Method of selecting samples for training each tree</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Best parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RF_classfication.Sample.accuracy">
+<span class="sig-name descname"><span class="pre">accuracy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RF_classfication.Sample.accuracy" title="Permalink to this definition"></a></dt>
+<dd><p>accuracy Method :</p>
+<p>Classification accuracy is a measure that indicates a classification model’s performance by dividing the number of correct predictions by the total number of predictions.</p>
+<p>This method returns the accuracy for the training and testing dataset.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RF_classfication.Sample.model">
+<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#RF_classfication.Sample.model" title="Permalink to this definition"></a></dt>
+<dd><p>Model Method :</p>
+<p>This method splits the data into train and test sets, then creates a model based on the user input n_estimator and test_size.</p>
+<p>It calls model ‘RandomizedSearchoptim’ that returns the best parameters on which the model can be fitted.</p>
+<p>It then fits the model based on the best parameter obtained after Randomized search cross validation and test it on the test dataset, then returns the predicted value ‘Y_pred’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>estimator</strong> (<em>Integer</em>) – User Input - Number of decision trees for random forest classifier</p></li>
+<li><p><strong>test_size</strong> (<em>float</em>) – User Input - Proportion of test data specified by user in which dataset is to be splitted.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RF_classfication.Sample.report">
+<span class="sig-name descname"><span class="pre">report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RF_classfication.Sample.report" title="Permalink to this definition"></a></dt>
+<dd><p>report Method :</p>
+<p>This method prints the Confusion Matrix and classification report for the performance of the whole model.</p>
+<p>Confusion matrix - A confusion matrix is a summary of prediction results on a classification problem.The number of correct and incorrect predictions are summarized with count values and broken down by each class.</p>
+<dl>
+<dt>Classification Report - The classification report visualizer displays the precision, recall, F1, and support scores for the model. </dt><dd><p>Precision:  Precision is the ratio of correctly predicted positive observations to the total predicted positive observations.</p>
+<p>Recall (Sensitivity) - Recall is the ratio of correctly predicted positive observations to the all observations in actual class</p>
+<p>The F1 score represents the balance of accuracy and recall. F1 Score is the weighted average of Precision and Recall. F1 score is good parameter in analyzing performance of model on an unbalanced dataset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Classification_Group3_NN.html" class="btn btn-neutral float-left" title="Neural Network Classification Class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Regression_Index.html" class="btn btn-neutral float-right" title="Regression" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, MAIT Students WiSe 21/22.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

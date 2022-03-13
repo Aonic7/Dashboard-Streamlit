@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smoothing and Filtering of Data &mdash; MAIT Project OOP 13.03.2022 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Visualization" href="Visualization.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> MAIT Project OOP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Classification_Index.html">Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Regression_Index.html">Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data%20Preparation.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data%20Preview.html">Data Preview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Visualization.html">Visualization</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Smoothing and Filtering of Data</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MAIT Project OOP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Smoothing and Filtering of Data</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Smoothing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="smoothing-and-filtering-of-data">
+<h1>Smoothing and Filtering of Data<a class="headerlink" href="#smoothing-and-filtering-of-data" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="smoothing_and_filtering_functions.Remove_Outliers">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">smoothing_and_filtering_functions.</span></span><span class="sig-name descname"><span class="pre">Remove_Outliers</span></span><a class="headerlink" href="#smoothing_and_filtering_functions.Remove_Outliers" title="Permalink to this definition"></a></dt>
+<dd><p>This class is used to provide methods for removing outliers from a given dataset.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="smoothing_and_filtering_functions.Remove_Outliers.removeOutlier">
+<span class="sig-name descname"><span class="pre">removeOutlier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smoothing_and_filtering_functions.Remove_Outliers.removeOutlier" title="Permalink to this definition"></a></dt>
+<dd><p>RemoveOutlier - method based on mean and standard deviation. 
+The function determines the mean and standard deviation of the value in a given column. Further, following the formula, 
+it determines the boundary values and removes outliers.
+Remove outliers using a coefficient of standard deviation (n) in range from 1.0 to 3.0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>pandas.core.frame.DataFrame</strong><strong>)</strong> (<em>df</em>) – input dataframe</p></li>
+<li><p><strong>(</strong><strong>str</strong><strong>)</strong> (<em>columnName</em>) – a column of the input dataframe</p></li>
+<li><p><strong>(</strong><strong>float</strong><strong>)</strong> (<em>n</em>) – standard deviation coefficient</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return pandas.core.frame.DataFrame</dt>
+<dd class="field-even"><p>filtered dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smoothing_and_filtering_functions.Remove_Outliers.removeOutlier_q">
+<span class="sig-name descname"><span class="pre">removeOutlier_q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smoothing_and_filtering_functions.Remove_Outliers.removeOutlier_q" title="Permalink to this definition"></a></dt>
+<dd><p>removeOutlier_q - method based on the removal of data that lie below the lower quantile and above the upper quantile.
+Remove outliers using a quantile range from 0.0 to 1.0</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>pandas.core.frame.DataFrame</strong><strong>)</strong> (<em>df</em>) – input dataframe</p></li>
+<li><p><strong>(</strong><strong>str</strong><strong>)</strong> (<em>columnName</em>) – a column of the input dataframe</p></li>
+<li><p><strong>(</strong><strong>float</strong><strong>)</strong> (<em>n2</em>) – lower quantile</p></li>
+<li><p><strong>(</strong><strong>float</strong><strong>)</strong> – upper quantile</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return pandas.core.frame.DataFrame</dt>
+<dd class="field-even"><p>filtered dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smoothing_and_filtering_functions.Remove_Outliers.removeOutlier_z">
+<span class="sig-name descname"><span class="pre">removeOutlier_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smoothing_and_filtering_functions.Remove_Outliers.removeOutlier_z" title="Permalink to this definition"></a></dt>
+<dd><p>removeOutlier_z - method based on Z-score. The z-score define the number of standard deviations above and below the mean.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>pandas.core.frame.DataFrame</strong><strong>)</strong> (<em>df</em>) – input dataframe</p></li>
+<li><p><strong>(</strong><strong>str</strong><strong>)</strong> (<em>columnName</em>) – a column of the input dataframe</p></li>
+<li><p><strong>(</strong><strong>float</strong><strong>)</strong> (<em>n</em>) – standard deviation coefficient</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return pandas.core.frame.DataFrame</dt>
+<dd class="field-even"><p>filtered dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="smoothing_and_filtering_functions.Converter">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">smoothing_and_filtering_functions.</span></span><span class="sig-name descname"><span class="pre">Converter</span></span><a class="headerlink" href="#smoothing_and_filtering_functions.Converter" title="Permalink to this definition"></a></dt>
+<dd><p>Class checks columns of dataset for datetime data and then converts it to the datetime datatype</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="smoothing_and_filtering_functions.Converter.dateTime_converter">
+<span class="sig-name descname"><span class="pre">dateTime_converter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#smoothing_and_filtering_functions.Converter.dateTime_converter" title="Permalink to this definition"></a></dt>
+<dd><p>Timeseries converter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.core.frame.DataFrame</em>) – input dataframe</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>converted dataframe</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.core.frame.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="smoothing_and_filtering_functions.Smoothing">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">smoothing_and_filtering_functions.</span></span><span class="sig-name descname"><span class="pre">Smoothing</span></span><a class="headerlink" href="#smoothing_and_filtering_functions.Smoothing" title="Permalink to this definition"></a></dt>
+<dd><p>This class is used to provide methods for smoothing a given dataset.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="smoothing_and_filtering_functions.Smoothing.median_filter">
+<span class="sig-name descname"><span class="pre">median_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_length</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smoothing_and_filtering_functions.Smoothing.median_filter" title="Permalink to this definition"></a></dt>
+<dd><p>Data smoothing using median filter function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.core.frame.DataFrame</em>) – input dataframe</p></li>
+<li><p><strong>columnName</strong> (<em>str</em>) – a column of the input dataframe</p></li>
+<li><p><strong>filter_length</strong> (<em>int</em>) – filter length parameter</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>smoothed dataframe (median filter)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.core.frame.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smoothing_and_filtering_functions.Smoothing.moving_average">
+<span class="sig-name descname"><span class="pre">moving_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_length</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smoothing_and_filtering_functions.Smoothing.moving_average" title="Permalink to this definition"></a></dt>
+<dd><p>Data smoothing using moving average function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.core.frame.DataFrame</em>) – input dataframe</p></li>
+<li><p><strong>columnName</strong> (<em>str</em>) – a column of the input dataframe</p></li>
+<li><p><strong>filter_length</strong> (<em>int</em>) – filter length parameter</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>smoothed dataframe (moving average)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.core.frame.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smoothing_and_filtering_functions.Smoothing.savitzky_golay">
+<span class="sig-name descname"><span class="pre">savitzky_golay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smoothing_and_filtering_functions.Smoothing.savitzky_golay" title="Permalink to this definition"></a></dt>
+<dd><p>Data smoothing using savitzky-golay function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.core.frame.DataFrame</em>) – input dataframe</p></li>
+<li><p><strong>columnName</strong> (<em>str</em>) – a column of the input dataframe</p></li>
+<li><p><strong>filter_length</strong> (<em>int</em>) – filter length parameter</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – order of the polynomial to fit the function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>smoothed dataframe (savitzky-golay)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.core.frame.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="smoothing_and_filtering_functions.TimeSeriesOOP">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">smoothing_and_filtering_functions.</span></span><span class="sig-name descname"><span class="pre">TimeSeriesOOP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_of_interest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smoothing_and_filtering_functions.TimeSeriesOOP" title="Permalink to this definition"></a></dt>
+<dd><p>This class is used to provide methods for interpolation of a given dataset with time-series.
+Interpolation is a method of finding new data points based on the range of a discrete set of known data points.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="smoothing_and_filtering_functions.TimeSeriesOOP.int_df_bfill">
+<span class="sig-name descname"><span class="pre">int_df_bfill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_of_interest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smoothing_and_filtering_functions.TimeSeriesOOP.int_df_bfill" title="Permalink to this definition"></a></dt>
+<dd><p>Backward fill - Backward filling means fill missing values with next data point. backward-fill propagates 
+the first observed non-null value backward until another non-null value is met.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>column_of_interest</strong> (<em>str</em>) – column selected for processing</p></li>
+<li><p><strong>col_group</strong> (<em>list</em>) – list of columns for groupping</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>processed dataframe</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.core.frame.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smoothing_and_filtering_functions.TimeSeriesOOP.int_df_ffill">
+<span class="sig-name descname"><span class="pre">int_df_ffill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_of_interest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smoothing_and_filtering_functions.TimeSeriesOOP.int_df_ffill" title="Permalink to this definition"></a></dt>
+<dd><p>Forward fill - It fills missing values with previous data. Forward-fill propagates the last observed 
+non-null value forward until another non-null value is encountered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>column_of_interest</strong> (<em>str</em>) – column selected for processing</p></li>
+<li><p><strong>col_group</strong> (<em>list</em>) – list of columns for groupping</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>processed dataframe</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.core.frame.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smoothing_and_filtering_functions.TimeSeriesOOP.make_interpolation_cubic">
+<span class="sig-name descname"><span class="pre">make_interpolation_cubic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_of_interest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smoothing_and_filtering_functions.TimeSeriesOOP.make_interpolation_cubic" title="Permalink to this definition"></a></dt>
+<dd><p>Cubic interpolation offers true continuity between the segments. As such it 
+requires more than just the two endpoints of the segment but also the two points on either side of them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>column_of_interest</strong> (<em>str</em>) – column selected for processing</p></li>
+<li><p><strong>col_group</strong> (<em>list</em>) – list of columns for groupping</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>processed dataframe</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.core.frame.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smoothing_and_filtering_functions.TimeSeriesOOP.make_interpolation_liner">
+<span class="sig-name descname"><span class="pre">make_interpolation_liner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_of_interest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smoothing_and_filtering_functions.TimeSeriesOOP.make_interpolation_liner" title="Permalink to this definition"></a></dt>
+<dd><p>Linear Interpolation - In this, the points are simply joined by straight line segments. Each segment 
+(bounded by two data points) can be interpolated independently.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>column_of_interest</strong> (<em>str</em>) – column selected for processing</p></li>
+<li><p><strong>col_group</strong> (<em>list</em>) – list of columns for groupping</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>processed dataframe</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.core.frame.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smoothing_and_filtering_functions.TimeSeriesOOP.process_dataframe">
+<span class="sig-name descname"><span class="pre">process_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col_group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_of_interest</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smoothing_and_filtering_functions.TimeSeriesOOP.process_dataframe" title="Permalink to this definition"></a></dt>
+<dd><p>Resampling the dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>col_group</strong> (<em>list</em>) – list of columns for groupping</p></li>
+<li><p><strong>column_of_interest</strong> (<em>str</em>) – column selected for processing</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Visualization.html" class="btn btn-neutral float-left" title="Visualization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, MAIT Students WiSe 21/22.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neural Network Classification Class &mdash; MAIT Project OOP 13.03.2022 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Random Forest Classification Class" href="Classification_Group3_RF.html" />
+    <link rel="prev" title="KNN-,SVM- and LR-Classification Class" href="Classification_Group4.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> MAIT Project OOP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="Classification_Index.html">Classification</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Classification_Group4.html">KNN-,SVM- and LR-Classification Class</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Neural Network Classification Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Classification_Group3_RF.html">Random Forest Classification Class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Regression_Index.html">Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data%20Preparation.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data%20Preview.html">Data Preview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Smoothing.html">Smoothing and Filtering of Data</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MAIT Project OOP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="Classification_Index.html">Classification</a> &raquo;</li>
+      <li>Neural Network Classification Class</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Classification_Group3_NN.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="neural-network-classification-class">
+<h1>Neural Network Classification Class<a class="headerlink" href="#neural-network-classification-class" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="MLP_Classifier.NN_Classifier">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">MLP_Classifier.</span></span><span class="sig-name descname"><span class="pre">NN_Classifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NN_Inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependant_var_index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#MLP_Classifier.NN_Classifier" title="Permalink to this definition"></a></dt>
+<dd><p>Neural Network Classifier Class:</p>
+<p>This Class contains the methods used for Neural Network Classification using MLP Classifier from sklearn library</p>
+<p>Class input parameters:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>Pandas DataFrame</em>) – The input data frame</p></li>
+<li><p><strong>NN_Inputs</strong> (<em>Named Tuple</em>) – Tuple of parameters for the Classifier clarified by the user</p></li>
+<li><p><strong>dependant_var_index</strong> (<em>int</em>) – The index of the target column in the df for the Classification</p></li>
+</ul>
+</dd>
+</dl>
+<p>Class Output Parameters:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_pred</strong> (<em>float</em>) – The resulting output of the Classification test</p></li>
+<li><p><strong>y_actual</strong> (<em>float</em>) – The expected output of the Classification test</p></li>
+<li><p><strong>length</strong> (<em>int</em>) – The length of the output of the Classification test set</p></li>
+<li><p><strong>Train_score</strong> (<em>float</em>) – Model Score (Accuracy) on the Training data</p></li>
+<li><p><strong>test_score</strong> (<em>float</em>) – Model Score (Accuracy) on the Testing data</p></li>
+<li><p><strong>model</strong> (<em>MLPClassifier</em>) – The MLP Classifier model created using the specified inputs</p></li>
+<li><p><strong>Error_message</strong> (<em>str</em>) – Error message if an exception was encountered during the processing of the code</p></li>
+<li><p><strong>flag</strong> (<em>bool</em>) – internal flag for marking if an error occurred while processing a previous method</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="MLP_Classifier.NN_Classifier.Classify">
+<span class="sig-name descname"><span class="pre">Classify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MLP_Classifier.NN_Classifier.Classify" title="Permalink to this definition"></a></dt>
+<dd><p>Classifier Creation Method:</p>
+<p>In this method 3 different steps are done:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>This method splits the data into train and test sets, then creates the MLP Classifier based on the user inputs from NN_Inputs Named Tuple.</p></li>
+<li><p>The extracted Train data is resampled (or not) based on the user input Normalize flag from the NN_Inputs parameter.</p></li>
+<li><p>Model is fitted on the resampled/normal data and  returns some metrics for the performance of the model on the test and train data sets.</p></li>
+</ol>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Modified set of class parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MLP_Classifier.NN_Classifier.Conf">
+<span class="sig-name descname"><span class="pre">Conf</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MLP_Classifier.NN_Classifier.Conf" title="Permalink to this definition"></a></dt>
+<dd><p>Creation of Confusion matrix:</p>
+<p>This method outputs a confusion matrix figure to show the quality of the classification on the test data.</p>
+<p>The Confusion matrix dimensions and Labels are derived from the number and names of the different unique values in the Labels Target column for the classification.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MLP_Classifier.NN_Classifier.handle">
+<span class="sig-name descname"><span class="pre">handle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MLP_Classifier.NN_Classifier.handle" title="Permalink to this definition"></a></dt>
+<dd><p>Data Handling Method:</p>
+<p>This method takes the Target column index and splits the data frame “df” into X and Y numpy arrays so they are ready for being split into train and test sets</p>
+<p>This method is called internally once the class instance is created and the X,Y output arrays are fed to the “Classify” method</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MLP_Classifier.NN_Classifier.handle2">
+<span class="sig-name descname"><span class="pre">handle2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#MLP_Classifier.NN_Classifier.handle2" title="Permalink to this definition"></a></dt>
+<dd><p>Data Handling Method Version 2:</p>
+<p>This method takes the Target column index and splits the data into X and Y numpy arrays for internal use</p>
+<p>This method is used internally by the “Classify” method after the data is resampled and reshuffled, it takes input dataframe and returns the X and Y arrays to the caller</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>Pandas DataFrame</em>) – the Data frame passed to handle</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>X,Y</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy arrays</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MLP_Classifier.NN_Classifier.preprocess">
+<span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MLP_Classifier.NN_Classifier.preprocess" title="Permalink to this definition"></a></dt>
+<dd><p>Method Used to Normalize the X data if the user required</p>
+<p>This method is called when the class instance is created and the Normalize flag in the input NN_Inputs tuple is True.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MLP_Classifier.NN_Classifier.printing">
+<span class="sig-name descname"><span class="pre">printing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MLP_Classifier.NN_Classifier.printing" title="Permalink to this definition"></a></dt>
+<dd><p>Printing Outputs:</p>
+<p>This method prints the chosen metrics to the user after the model is trained and fitted</p>
+<dl class="simple">
+<dt>The metrics are:</dt><dd><ol class="arabic simple">
+<li><p>Model Accuracy on the Training Data</p></li>
+<li><p>Model Accuracy on the Testing Data</p></li>
+<li><p>Length of the output array</p></li>
+<li><p>Classification Report</p></li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Classification_Group4.html" class="btn btn-neutral float-left" title="KNN-,SVM- and LR-Classification Class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Classification_Group3_RF.html" class="btn btn-neutral float-right" title="Random Forest Classification Class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, MAIT Students WiSe 21/22.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

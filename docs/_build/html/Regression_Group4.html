@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Regression Class &mdash; MAIT Project OOP 13.03.2022 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Neural Network Regression Class" href="Regression_Group3_NN.html" />
+    <link rel="prev" title="Regression" href="Regression_Index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> MAIT Project OOP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Classification_Index.html">Classification</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="Regression_Index.html">Regression</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Regression Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Regression_Group3_NN.html">Neural Network Regression Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Regression_Group3_RF.html">Random Forest Regression Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TimeSeries_Group3_NN.html">Time Series Neural Network Regression Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TimeSeries_Group3_RF.html">Time Series Random Forest Regression Class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Data%20Preparation.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data%20Preview.html">Data Preview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Smoothing.html">Smoothing and Filtering of Data</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MAIT Project OOP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="Regression_Index.html">Regression</a> &raquo;</li>
+      <li>Regression Class</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Regression_Group4.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="regression-class">
+<h1>Regression Class<a class="headerlink" href="#regression-class" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">Regression_Group4_docs.</span></span><span class="sig-name descname"><span class="pre">Regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression" title="Permalink to this definition"></a></dt>
+<dd><p>This class allows to read a Pandas Dataframe and train different regression models on the given data.
+At the beginning the dataframe has to be read in when creating an instance of the class.
+Afterwards a target dimension is chosen and the data is divided into training and test sections.
+One of the provided regression types can be selected and the model can be trained.
+Information on the accuracy of the model is provided by means of various graphics and key figures.
+Via a method it is possible to enter new parameters and to output the prediction of the model.</p>
+<p>This class was build by Team 4.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression.MainEffectsPlot">
+<span class="sig-name descname"><span class="pre">MainEffectsPlot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression.MainEffectsPlot" title="Permalink to this definition"></a></dt>
+<dd><p>Plots the development of the Target Value with respect to each input values independently (all other values are fixed at their mean for each line graph).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression._build_elastic_net_regression">
+<span class="sig-name descname"><span class="pre">_build_elastic_net_regression</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression._build_elastic_net_regression" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Gradient Boosting for regression</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Fitted estimator</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression._build_linear_regression">
+<span class="sig-name descname"><span class="pre">_build_linear_regression</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression._build_linear_regression" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Ordinary least squares Linear Regression</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Fitted estimator</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression._build_ridge_regression">
+<span class="sig-name descname"><span class="pre">_build_ridge_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression._build_ridge_regression" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Ridge Regression or Tikhonov regularization</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_iter</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number of iterations for conjugate gradient solver, defaults to 15000</p></li>
+<li><p><strong>solver</strong> (<em>str = 'auto'</em><em>, </em><em>'svd'</em><em>, </em><em>'cholesky'</em><em>, </em><em>'lsqr'</em><em>, </em><em>'sparse_cg'</em><em>, </em><em>'sag'</em><em>, </em><em>'saga'</em><em>, </em><em>'lbfgs'</em><em>, </em><em>optional</em>) – Solver to use in the computational routines:, defaults to ‘auto’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Fitted estimator</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression._build_sgd_regression">
+<span class="sig-name descname"><span class="pre">_build_sgd_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression._build_sgd_regression" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Linear model</strong> fitted by minimizing a regularized empirical loss with SGD.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>max_iter</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximum number of passes over the training data, defaults to 1000</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Fitted estimator</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression._build_svm_regression">
+<span class="sig-name descname"><span class="pre">_build_svm_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'poly'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">svmNumber</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxIterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression._build_svm_regression" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Nu Support Vector Regression</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>kernel</strong> (<em>str = 'linear'</em><em>, </em><em>'poly'</em><em>, </em><em>'rbf'</em><em>, </em><em>'sigmoid'</em><em>, </em><em>'precomputed'</em><em>, </em><em>optional</em>) – Specifies the kernel type to be used in the algorithm, defaults to ‘poly’</p></li>
+<li><p><strong>degree</strong> (<em>int</em><em>, </em><em>optional</em>) – Degree of the polynomial kernel function, defaults to 3</p></li>
+<li><p><strong>svmNumber</strong> (<em>float</em><em>, </em><em>optional</em>) – An upper bound on the fraction of training errors and a lower bound of the fraction of support vectors, should be in the interval (0, 1), defaults to 0.5</p></li>
+<li><p><strong>maxIterations</strong> (<em>int</em><em>, </em><em>optional</em>) – Hard limit on iterations within solver, or -1 for no limit, defaults to -1</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Fitted estimator</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression.build_regression">
+<span class="sig-name descname"><span class="pre">build_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">regression_name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression.build_regression" title="Permalink to this definition"></a></dt>
+<dd><p>Builds a specified Regression Model with the given Training Data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>regression_name</strong> (<em>str = 'Support Vector Machine Regression '</em><em>,</em><em>'Elastic Net Regression '</em><em>,</em><em>'Ridge Regression '</em><em>,</em><em>'Linear Regression '</em><em>, </em><em>'Stochastic Gradient Descent Regression '</em>) – Name of the chosen Regression Model</p></li>
+<li><p><strong>args</strong> – Arguments depending on the chosen Regression Model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>self.regression, params</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression.dropColumns">
+<span class="sig-name descname"><span class="pre">dropColumns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_drop</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression.dropColumns" title="Permalink to this definition"></a></dt>
+<dd><p>Deletes a specified column within the dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>label_drop</strong> (<em>str</em>) – Target Columns to drop</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression.get_dataframe_description">
+<span class="sig-name descname"><span class="pre">get_dataframe_description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression.get_dataframe_description" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a brief overiew with basic information of the dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dataframe Overview</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression.get_dataframe_head">
+<span class="sig-name descname"><span class="pre">get_dataframe_head</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression.get_dataframe_head" title="Permalink to this definition"></a></dt>
+<dd><p>Return the head of the dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dataframe Head</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression.get_regression_type">
+<span class="sig-name descname"><span class="pre">get_regression_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression.get_regression_type" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the Regression Type of the created model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Regression Type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression.plot_correlation">
+<span class="sig-name descname"><span class="pre">plot_correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_target_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_target_2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression.plot_correlation" title="Permalink to this definition"></a></dt>
+<dd><p>Plots the correlation of two Target Labels, defined by the User, within a Scatter Plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label_target_1</strong> (<em>str</em>) – First column name to plot</p></li>
+<li><p><strong>label_target_2</strong> (<em>str</em>) – Second column name to plot</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression.plot_heatmap_correlation">
+<span class="sig-name descname"><span class="pre">plot_heatmap_correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(5,</span> <span class="pre">4)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression.plot_heatmap_correlation" title="Permalink to this definition"></a></dt>
+<dd><p>Plots a correlation matrix / heatmap to show correlation between different columns of the dataframe.
+Serves as a descision support for the user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Size of the figure, defaults to (5,4)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression.plot_regression_1">
+<span class="sig-name descname"><span class="pre">plot_regression_1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression.plot_regression_1" title="Permalink to this definition"></a></dt>
+<dd><p>Plots the deviation between the prediction and the acutal test data of the Target Label.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression.plot_regression_2">
+<span class="sig-name descname"><span class="pre">plot_regression_2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_second</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression.plot_regression_2" title="Permalink to this definition"></a></dt>
+<dd><p>Plots the deviation between the prediction and the acutal test data from a choosen column.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>label_second</strong> (<em>str</em>) – Set dimension / column to plot</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression.regression_function">
+<span class="sig-name descname"><span class="pre">regression_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_input</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression.regression_function" title="Permalink to this definition"></a></dt>
+<dd><p>Feeds user inputs into the Regression Model and outputs the Prediction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>user_input</strong> (<em>pd.DataFrame</em>) – Give input as Pandas Dataframe</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>model prediction</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression.split_columns">
+<span class="sig-name descname"><span class="pre">split_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_label_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_label_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seperator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression.split_columns" title="Permalink to this definition"></a></dt>
+<dd><p>Splits a specified column into two new columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label_target</strong> (<em>str</em>) – Target column to split</p></li>
+<li><p><strong>new_label_1</strong> (<em>str</em>) – Name of the first new column</p></li>
+<li><p><strong>new_label_2</strong> (<em>str</em>) – Name of the second new column</p></li>
+<li><p><strong>seperator</strong> (<em>str</em><em>, </em><em>optional</em>) – Operator to seperate the target column, defaults to ” “</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Regression_Group4_docs.Regression.split_train_test">
+<span class="sig-name descname"><span class="pre">split_train_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deleting_na</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deleting_duplicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Regression_Group4_docs.Regression.split_train_test" title="Permalink to this definition"></a></dt>
+<dd><p>Method to preprocess the data. Sets a target column and splits the given dataframe into test and training data.
+Allows to delete NA columns, the scaling of the dataset (centering and scaling to unit variance) and deleting duplicates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label_target</strong> (<em>str</em>) – Sets the target column for the regression</p></li>
+<li><p><strong>testsize</strong> (<em>float</em><em>, </em><em>optional</em>) – Represents the proportion of the dataset to include in the test split, defaults to 0.3</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em>, </em><em>optional</em>) – Controls the shuffling applied to the data before applying the split, defaults to 1</p></li>
+<li><p><strong>deleting_na</strong> (<em>bool</em><em>, </em><em>optional</em>) – Remove missing values, defaults to False</p></li>
+<li><p><strong>scaling</strong> (<em>bool</em><em>, </em><em>optional</em>) – Standardize features by removing the mean and scaling to unit variance, defaults to False</p></li>
+<li><p><strong>deleting_duplicates</strong> (<em>bool</em><em>, </em><em>optional</em>) – Deletes duplicates, defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Regression_Index.html" class="btn btn-neutral float-left" title="Regression" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Regression_Group3_NN.html" class="btn btn-neutral float-right" title="Neural Network Regression Class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, MAIT Students WiSe 21/22.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

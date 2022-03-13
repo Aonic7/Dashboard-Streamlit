@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Time Series Neural Network Regression Class &mdash; MAIT Project OOP 13.03.2022 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Time Series Random Forest Regression Class" href="TimeSeries_Group3_RF.html" />
+    <link rel="prev" title="Random Forest Regression Class" href="Regression_Group3_RF.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> MAIT Project OOP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Classification_Index.html">Classification</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="Regression_Index.html">Regression</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Regression_Group4.html">Regression Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Regression_Group3_NN.html">Neural Network Regression Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Regression_Group3_RF.html">Random Forest Regression Class</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Time Series Neural Network Regression Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TimeSeries_Group3_RF.html">Time Series Random Forest Regression Class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Data%20Preparation.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data%20Preview.html">Data Preview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Smoothing.html">Smoothing and Filtering of Data</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MAIT Project OOP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="Regression_Index.html">Regression</a> &raquo;</li>
+      <li>Time Series Neural Network Regression Class</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/TimeSeries_Group3_NN.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="time-series-neural-network-regression-class">
+<h1>Time Series Neural Network Regression Class<a class="headerlink" href="#time-series-neural-network-regression-class" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="MLP_TimeSeries.NN_TimeSeries_Reg">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">MLP_TimeSeries.</span></span><span class="sig-name descname"><span class="pre">NN_TimeSeries_Reg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NN_Inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependant_var_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#MLP_TimeSeries.NN_TimeSeries_Reg" title="Permalink to this definition"></a></dt>
+<dd><p>Neural Network Time Series Regressor Class:</p>
+<p>This Class contains the methods used for Neural Network Regression using MLP Regressor for Timeseries data</p>
+<p>Class input parameters:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>Pandas DataFrame</em>) – The input data frame</p></li>
+<li><p><strong>NN_Inputs</strong> (<em>Named Tuple</em>) – Tuple of parameters for the Regressor clarified by the user</p></li>
+<li><p><strong>dependant_var_index</strong> (<em>int</em>) – The index of the target column in the df for the Regression</p></li>
+<li><p><strong>time_index</strong> (<em>int</em>) – The index of the column with timeseries data in the df</p></li>
+</ul>
+</dd>
+</dl>
+<p>Class Output Parameters:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_pred</strong> (<em>float</em>) – The resulting output of the Regression test</p></li>
+<li><p><strong>y_actual</strong> (<em>float</em>) – The expected output of the Regression test</p></li>
+<li><p><strong>length</strong> (<em>int</em>) – The length of the output of the Regression test set</p></li>
+<li><p><strong>mean_squared_error</strong> (<em>float</em>) – The MSE of the y_pred with respect to the y_actual</p></li>
+<li><p><strong>Train_score</strong> (<em>float</em>) – Model Score (R^2) on the Training data</p></li>
+<li><p><strong>test_score</strong> (<em>float</em>) – Model Score (R^2) on the Testing data</p></li>
+<li><p><strong>model</strong> (<em>MLPRegressor</em>) – The MLP Regressor model created using the specified inputs</p></li>
+<li><p><strong>group_object</strong> (<em>dataframe</em>) – Output array of the list of unique values in a specified column for grouping</p></li>
+<li><p><strong>Error_message</strong> (<em>str</em>) – Error message if an exception was encountered during the processing of the code</p></li>
+<li><p><strong>flag</strong> (<em>bool</em>) – internal flag for marking if an error occurred while processing a previous method</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="MLP_TimeSeries.NN_TimeSeries_Reg.Regressor">
+<span class="sig-name descname"><span class="pre">Regressor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MLP_TimeSeries.NN_TimeSeries_Reg.Regressor" title="Permalink to this definition"></a></dt>
+<dd><p>Regressor Creation Method:</p>
+<p>This method splits the data into train and test sets, then creates the MLP regressor based on the user inputs from NN_Inputs Named Tuple.</p>
+<p>The data is Normalized using MinMaxScaler() and then the method fits the model and returns some metrics for the performance of the model on the test and train data sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Modified set of class parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MLP_TimeSeries.NN_TimeSeries_Reg.features">
+<span class="sig-name descname"><span class="pre">features</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MLP_TimeSeries.NN_TimeSeries_Reg.features" title="Permalink to this definition"></a></dt>
+<dd><p>Extracting features method:
+This method deals with Internal_df parameter in the Class, It extracts datetime information from datetime column into 6 separate columns for “Year,Month,Day,Hour,Minute,Second”.</p>
+<dl class="simple">
+<dt>This method is called internally in one of 2 separate places:</dt><dd><ol class="arabic simple">
+<li><p>During the Class Instance Creation if the user doesn’t wish to group data based on a specific value in a column.</p></li>
+<li><p>In the grouping method after the creation of the subset dataframe based on the specific group identifier if the grouping flag is True.</p></li>
+</ol>
+</dd>
+</dl>
+<p>After these features are extracted the data is reshuffled and then split into X and Y dataframes with the X being the 6 columns including datetime information and the Y the target column for the regression.</p>
+<p>The X,Y dataframes are then fed to the “Regressor” Method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MLP_TimeSeries.NN_TimeSeries_Reg.group">
+<span class="sig-name descname"><span class="pre">group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#MLP_TimeSeries.NN_TimeSeries_Reg.group" title="Permalink to this definition"></a></dt>
+<dd><p>Grouping method:</p>
+<p>This method gets an index of the value the user wants to group the data on from the list of unique values created by the listing method, It then creates the dataframe subset with this group only for the regression to use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>i</strong> (<em>int</em>) – index of the group identifier</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MLP_TimeSeries.NN_TimeSeries_Reg.listing">
+<span class="sig-name descname"><span class="pre">listing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#MLP_TimeSeries.NN_TimeSeries_Reg.listing" title="Permalink to this definition"></a></dt>
+<dd><p>Method for Creating unique values list:</p>
+<p>This method takes a column index and outputs a dataframe with the list of unique values in this specific column in order for the user to choose a group to run the regression on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>i</strong> (<em>int</em>) – Unique Values column index</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MLP_TimeSeries.NN_TimeSeries_Reg.plotting">
+<span class="sig-name descname"><span class="pre">plotting</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MLP_TimeSeries.NN_TimeSeries_Reg.plotting" title="Permalink to this definition"></a></dt>
+<dd><p>Plotting Method:</p>
+<p>This method plots the scatter plot of the predicted vs Expected output to visualize the quality of the regression</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="MLP_TimeSeries.NN_TimeSeries_Reg.printing">
+<span class="sig-name descname"><span class="pre">printing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MLP_TimeSeries.NN_TimeSeries_Reg.printing" title="Permalink to this definition"></a></dt>
+<dd><p>Printing Outputs:</p>
+<p>This method prints the chosen metrics to the user after the model is trained and fitted.</p>
+<dl class="simple">
+<dt>The metrics are:</dt><dd><ol class="arabic simple">
+<li><p>Model R2 Score on the Training Data</p></li>
+<li><p>Model R2 Score on the Testing Data</p></li>
+<li><p>Length of the output array</p></li>
+<li><p>Root Mean Squared Error</p></li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Regression_Group3_RF.html" class="btn btn-neutral float-left" title="Random Forest Regression Class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="TimeSeries_Group3_RF.html" class="btn btn-neutral float-right" title="Time Series Random Forest Regression Class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, MAIT Students WiSe 21/22.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

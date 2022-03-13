@@ -7,7 +7,7 @@ from math import isqrt #for input variable calculation
 
 # Local classes/functions import
 from .MLP_Classifier import NN_Classifier, classifier_inputs
-from .ClassificationClass_Noah import Classification
+from .ClassificationClass import Classification
 from .RF_classfication import Sample
 
 

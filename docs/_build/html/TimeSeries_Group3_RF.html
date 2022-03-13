@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Time Series Random Forest Regression Class &mdash; MAIT Project OOP 13.03.2022 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Data Preparation" href="Data%20Preparation.html" />
+    <link rel="prev" title="Time Series Neural Network Regression Class" href="TimeSeries_Group3_NN.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> MAIT Project OOP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Classification_Index.html">Classification</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="Regression_Index.html">Regression</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Regression_Group4.html">Regression Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Regression_Group3_NN.html">Neural Network Regression Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Regression_Group3_RF.html">Random Forest Regression Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TimeSeries_Group3_NN.html">Time Series Neural Network Regression Class</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Time Series Random Forest Regression Class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Data%20Preparation.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data%20Preview.html">Data Preview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Smoothing.html">Smoothing and Filtering of Data</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MAIT Project OOP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="Regression_Index.html">Regression</a> &raquo;</li>
+      <li>Time Series Random Forest Regression Class</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/TimeSeries_Group3_RF.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="time-series-random-forest-regression-class">
+<h1>Time Series Random Forest Regression Class<a class="headerlink" href="#time-series-random-forest-regression-class" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="TimeSeries_Final.Timeseries">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">TimeSeries_Final.</span></span><span class="sig-name descname"><span class="pre">Timeseries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sysCodeNo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#TimeSeries_Final.Timeseries" title="Permalink to this definition"></a></dt>
+<dd><p>Class Timeseries: Random forest Regressor for time series implementation</p>
+<p>This Class contains the methods for Random forest Regressor for time series implementation
+Class input parameters:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>Pandas DataFrame</em>) – The input data frame</p></li>
+<li><p><strong>estimator</strong> (<em>Integer</em>) – Number of decision trees to be build before taking the average of all predictions to be specified by the user</p></li>
+<li><p><strong>test_size</strong> (<em>float</em>) – User Input - Proportion of test data specified by user in which dataset is to be splitted.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Class Output Parameters:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Y_pred</strong> (<em>float</em>) – The resulting output of the Regression test</p></li>
+<li><p><strong>Y_test</strong> (<em>float</em>) – The expected output of the Regression test</p></li>
+<li><p><strong>score</strong> (<em>R-squared</em>) – Model accuracy on the Training data</p></li>
+</ul>
+</dd>
+</dl>
+<p>:type : float 
+:param RMSE: Root mean squared error   
+:type RMSE: float
+:param Target: Occupancy to be predicted at a user specified time.
+:type Target: int
+:param Error_message: Error message if an exception was encountered during the processing of the code
+:type Error_message: str 
+:param flag: internal flag for marking if an error occurred while processing a previous method
+:type flag: bool</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="TimeSeries_Final.Timeseries.DataPrep">
+<span class="sig-name descname"><span class="pre">DataPrep</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TimeSeries_Final.Timeseries.DataPrep" title="Permalink to this definition"></a></dt>
+<dd><p>DataPrep Method :</p>
+<p>This method includes all the preprocessing of data required for the regressor model. It extracts the year, month, day, hours and minutes from the time column.
+It also calculates the rate based on target and base column. 
+The minutes column of the given dataset have been binned in an interval of 15 mins for better prediction of the target value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TimeSeries_Final.Timeseries.RandomizedSearchoptim">
+<span class="sig-name descname"><span class="pre">RandomizedSearchoptim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TimeSeries_Final.Timeseries.RandomizedSearchoptim" title="Permalink to this definition"></a></dt>
+<dd><p>RandomizedSearchoptim Method : 
+This method returns the best parameters on which the model is to be fitted.</p>
+<dl class="simple">
+<dt>Parameters:  </dt><dd><p>max_features:      Number of features to consider at every split
+max_depth :        Maximum number of levels in tree
+min_samples_split: Minimum number of samples required to split a node
+in_samples_leaf:   Minimum number of samples required at each leaf node
+bootstrap:         Method of selecting samples for training each tree</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Best parameter values on which regressor is fitted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TimeSeries_Final.Timeseries.Results">
+<span class="sig-name descname"><span class="pre">Results</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TimeSeries_Final.Timeseries.Results" title="Permalink to this definition"></a></dt>
+<dd><p>Results Method :</p>
+<p>This method displays metrics ‘R-squared score’ and ‘RMSE - Root Mean Squared Error’ value to analyze the performace of model,</p>
+<p>R-Squared Score: It is a statistical measure that represents the proportion of the variance for a dependent variable that’s explained by an independent variable or variables in a regression model.</p>
+<p>RMSE: Mean Squared Error represents the average of the squared difference between the original and predicted values in the data set. 
+It measures the variance of the residuals. Root Mean Squared Error is the square root of Mean Squared error. It measures the standard deviation of residuals.</p>
+<p>This method prints a plot that represents the real prediction and optimal prediction. 
+Optimal prediction are the true values that are plotted as a line plot and real prediction are values predicted by the classification model that are plotted as a scatter plot.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TimeSeries_Final.Timeseries.SelectedSysCode">
+<span class="sig-name descname"><span class="pre">SelectedSysCode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Input</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#TimeSeries_Final.Timeseries.SelectedSysCode" title="Permalink to this definition"></a></dt>
+<dd><p>DataPrep Method :</p>
+<p>This method includes all the preprocessing of data required for the regressor model for the user input data. It extracts the year, month, day, hours and minutes from the time column.
+The minutes column of the user specified time have been binned in an interval of 15 mins for better prediction of the target value.</p>
+<p>The data frame is filtered according to the user specified syscodeno(system code number) in order to obtain the target value for the user specified system code number.
+Last but not the least the method also initializes the features and target column.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TimeSeries_Final.Timeseries.UserSelectedmodel">
+<span class="sig-name descname"><span class="pre">UserSelectedmodel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#TimeSeries_Final.Timeseries.UserSelectedmodel" title="Permalink to this definition"></a></dt>
+<dd><p>UserSelectedmodel Method:</p>
+<p>This method splits the data into train and test sets, then creates a model based on the user input n_estimator,test_size and the specific system code number.</p>
+<p>It calls model ‘RandomizedSearchoptim’ that returns the best parameters on which the model can be fitted.</p>
+<p>It then fits the model based on the best parameters obtained after Randomized search cross validation and test it on the test dataset, then returns the predicted value ‘Y_pred’ i.e Occupancy at a user specified date and time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>estimator</strong> (<em>Integer</em>) – User Input - Number of decision trees to be build before taking the average of all prediction.</p></li>
+<li><p><strong>test_size</strong> (<em>float</em>) – User Input - Proportion of test data specified by user in which dataset is to be splitted.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TimeSeries_Final.Timeseries.fullmodel">
+<span class="sig-name descname"><span class="pre">fullmodel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TimeSeries_Final.Timeseries.fullmodel" title="Permalink to this definition"></a></dt>
+<dd><p>fullmodel Method :</p>
+<p>This method includes the initialization of features and target for training and testing the regressor model on the whole dataset.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TimeSeries_Final.Timeseries.model">
+<span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#TimeSeries_Final.Timeseries.model" title="Permalink to this definition"></a></dt>
+<dd><p>model Method :</p>
+<p>This method splits the data into train and test sets, then creates a model based on the user input n_estimator and test_size.</p>
+<p>It calls model ‘RandomizedSearchoptim’ that returns the best parameters on which the model can be fitted.</p>
+<p>It then fits the model based on the best parameters obtained after Randomized search cross validation and test it on the test dataset, then returns the predicted value ‘Y_pred’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>estimator</strong> (<em>Integer</em>) – User Input - Number of decision trees to be build before taking the average of all prediction.</p></li>
+<li><p><strong>test_size</strong> (<em>float</em>) – User Input - Proportion of test data specified by user in which dataset is to be splitted.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Modified set of class parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="TimeSeries_Group3_NN.html" class="btn btn-neutral float-left" title="Time Series Neural Network Regression Class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Data%20Preparation.html" class="btn btn-neutral float-right" title="Data Preparation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, MAIT Students WiSe 21/22.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
