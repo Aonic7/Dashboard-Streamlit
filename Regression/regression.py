@@ -50,7 +50,7 @@ def main(data_obj):
         st.error("""You did not smooth of filter the data.
                      Please go to 'Smoothing and filtering' and finalize your results.
                      Otherwise, the default dataset would be used!
-                     """)   
+                     """)
 
     st.write(
         '<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;}</style>', unsafe_allow_html=True)
@@ -60,9 +60,9 @@ def main(data_obj):
                                                              'Random Forest',
                                                              'Other Methods'])
 
-    
 
-    
+
+
     # Selected 'Neural Networks'
     if rg_method == 'Neural Networks':
         rg_nn_radio = st.radio(label = 'Neural Network',
@@ -74,22 +74,22 @@ def main(data_obj):
                 data=rg_df.to_csv(index=False),
                 file_name='Preprocessed Dataset.csv',
                 mime='text/csv')
-        
+
         if rg_nn_radio == 'Standard':
-        
+
             with st.container():
 
                 # Input settings header
                 st.subheader('Select input settings')
 
                 cc1, cc2, cc3 = st.columns(3)
-                
+
                 # Input variables/widgets for the 1st column
                 with cc1:
                     tt_proportion = st.slider('Portion of test data', 0.0, 1.0, 0.2, 0.05)
                     iteration_num = st.slider('Number of iterations', 100, 5000, 200, 50)
-                    norm_bool = st.checkbox('Normalize data?')           
-                    
+                    norm_bool = st.checkbox('Normalize data?')
+
                 # Input variables/widgets for the 2nd column
                 with cc2:
                     columns_list = list(rg_df.columns)
@@ -100,8 +100,8 @@ def main(data_obj):
                     selected_solver = st.selectbox("Solver:", solver_fun1)
 
                     activation_fun1 = ("identity", "logistic", "tanh", "relu")
-                    selected_function = st.selectbox("Activation function:", activation_fun1)           
-                
+                    selected_function = st.selectbox("Activation function:", activation_fun1)
+
                 # Input variables/widgets for the 3rd column
                 with cc3:
                     number_hl = st.slider('Hidden layers:', 1, 5, 2, 1)
@@ -110,9 +110,9 @@ def main(data_obj):
 
                     for i in range(number_hl):
                         a.append(st.number_input(f'Number of neurons in hidden layer {i+1}:', 1, 600, 1, 1, key=i))
-            
+
             with st.container():
-                
+
                 # Submit button
                 with st.form(key="Youssef"):
                     submit_button = st.form_submit_button(label='Submit')
@@ -120,7 +120,7 @@ def main(data_obj):
                     # Circle animation for code execution 
                     if submit_button:
                         with st.spinner("Training models..."):
-                            
+
                             # Class instance for further input
                             NN_inputs = Regressor_Inputs(tt_proportion,
                                                     selected_function,
@@ -138,37 +138,37 @@ def main(data_obj):
                             RegressorMLP.plotting()
 
 
-    # Selected 'Neural Networks TS (Youssef)'             
+    # Selected 'Neural Networks TS (Youssef)'
         if rg_nn_radio == 'Timeseries':
-        
+
             with st.expander("How to use", expanded=True):
                 st.markdown("""
                     Here you need to choose if you want to group the data set based on a unique value in a specific column and then run the regression for this filtered data only. 
                     
                     If you don't group data then timeseries regression will be done on the whole dataset.
                     """)
-                    
+
             with st.container():
 
                 # Input settings header
                 st.subheader('Select input settings')
 
                 cc1, cc2, cc3 = st.columns(3)
-                
-                
+
+
                 # Input variables/widgets for the 1st column
                 try:
                     with cc1:
                         tt_proportion = st.slider('Portion of test data', 0.0, 1.0, 0.2, 0.05)
-                        
+
                         solver_fun1 = ("lbfgs", "sgd", "adam")
                         selected_solver = st.selectbox("Solver:", solver_fun1)
 
                         activation_fun1 = ("identity", "logistic", "tanh", "relu")
-                        selected_function = st.selectbox("Activation function:", activation_fun1) 
+                        selected_function = st.selectbox("Activation function:", activation_fun1)
 
                         group_bool = st.checkbox('Group data?')
-                                                
+
                     # Input variables/widgets for the 2nd column
                     with cc2:
                         iteration_num = st.slider('Number of iterations', 100, 5000, 200, 50)
@@ -181,12 +181,12 @@ def main(data_obj):
                         unique_selected_column = st.selectbox("Filter uniques:", unique_columns_list)
                         unique_col_idx = rg_df.columns.get_loc(unique_selected_column)
 
-                        
+
                         tm_columns_list = list(rg_df.select_dtypes(include=['datetime']).columns)
                         time_column = st.selectbox("Select a time column:", tm_columns_list)
                         tm_col_idx = rg_df.columns.get_loc(time_column)
 
-                                    
+
                     # Input variables/widgets for the 3rd column
                     with cc3:
                         number_hl = st.slider('Hidden layers:', 1, 5, 3, 1)
@@ -201,8 +201,8 @@ def main(data_obj):
 
 
             with st.container():
-                
-                
+
+
 
                 # Class instance for further input
                 NN_inputs_TS = Regressor_Inputs_TS(tt_proportion,
@@ -229,18 +229,18 @@ def main(data_obj):
                 with st.form(key="Youssef"):
                     submit_button = st.form_submit_button(label='Submit')
 
-                    
 
-                    # Circle animation for code execution 
+
+                    # Circle animation for code execution
                     if submit_button:
                         with st.spinner("Training models..."):
-                            
+
                             if group_bool:
                                 Regressor_TS.group(sel_idx)
                             Regressor_TS.Regressor()
                             Regressor_TS.printing()
                             Regressor_TS.plotting()
-                    
+
 
     # Selected 'Random Forest'
     if rg_method == 'Random Forest':
@@ -252,14 +252,14 @@ def main(data_obj):
                     file_name='Preprocessed Dataset.csv',
                     mime='text/csv')
 
-      
+
         with st.container():
-            
+
             # Section header
             st.subheader('Select input settings')
-            
+
             cc1, cc2, cc3 = st.columns(3)
-            
+
             # User input widgets/variables
             with cc1:
                 columns_list = list(rg_df.columns)
@@ -286,10 +286,10 @@ def main(data_obj):
                     unique_val = st.selectbox("Select a unique:", list(rg_df[column_uniques].unique()))
                     d = st.date_input("Date:", datetime.date(2016, 10, 10))
                     t = st.time_input('Time:', datetime.time(15, 15))
-                    
-       
+
+
         with st.container():
-                       
+
             # Submit button
             with st.form(key="form"):
                 submit_button = st.form_submit_button(label='Submit')
@@ -318,22 +318,24 @@ def main(data_obj):
 
                         except:
                             st.error("Something went wrong...")
-                    
+
                     # Checkbox is not activated (False value)
-                    if t_s == False:        
+                    if t_s == False:
                         try:
                             # Spinner animation
                             with st.spinner("Training models..."):
                                 X = rg_df[x_list]
                                 Y = rg_df[selected_column]
-                                reg_inst = Regressor(X,Y) 
+                                reg_inst = Regressor(X,Y)
                                 reg_inst.model(tree_size, tt_proportion)
-                                
+
                             reg_inst.result(reg_inst.Y_test, reg_inst.Y_pred)
                             reg_inst.prediction_plot(reg_inst.Y_test, reg_inst.Y_pred)
-                            
+
                         except:
                             st.error("Something went wrong...")
+
+    ################## Group 4
 
     if rg_method == 'Other Methods':
         """_summary_
@@ -341,15 +343,19 @@ def main(data_obj):
             data_obj (_type_): _description_
         """
 
+        # Displaying the Dataframe
         st.dataframe(rg_df)
+        # Displaying the shape of the Dataframe
         st.write(rg_df.shape)
+        # Button for downloading the Dataframe
         st.download_button(label="Download data as CSV",
                     data=rg_df.to_csv(index=False),
                     file_name='Preprocessed Dataset.csv',
                     mime='text/csv')
 
-
+        # creating a copy of the current dataframe
         rg_df = data_obj.df.copy()
+        # Using this Dataframe to create an instance of the Regression class
         regg_obj = Regression(rg_df)
 
         for col in rg_df.columns:
@@ -365,74 +371,94 @@ def main(data_obj):
 
 
         with st.container():
+            # Creating three columns for Data Description
             c1, c2, c3 = st.columns(3)
 
+            # Left Column shows the data types of every column
             with c1:
                 st.subheader("Dataframe's datatypes")
                 st.dataframe(rg_df.dtypes.astype(str))
 
+            # Middle Column shows the correlation heatmap (the correlation matrix shows a "stair" structure)
             with c2:
                 st.subheader("Correlation heatmap")
                 regg_obj.plot_heatmap_correlation()
-
+            # Right Column shows a description of the internal stored Dataframe (using the pd.Dataframe.describe() function)
             with c3:
                 st.subheader("Dataframe description")
                 st.dataframe(regg_obj.get_dataframe_description())
 
+        # Creating the second row of the page
         with st.container():
             st.subheader('Select input settings')
-
+            # Creating three columns for the Model Inputs
             cc1, cc2, cc3 = st.columns(3)
 
+            # In the left column are input option for the preparation of the dataset
             with cc1:
                 tt_proportion = st.slider('Portion of test data', 0.0, 1.0, 0.2, 0.05)
                 del_dup = st.checkbox('Deleting duplicates?')
                 scale = st.checkbox('Scale data?')
                 del_na = st.checkbox('Get rid of N/A values?')
 
+            # In the middel column is the chosen target column
             with cc2:
                 columns_list = list(rg_df.columns)
                 selected_column = st.selectbox("Column to regress:", columns_list)
 
+            # In the right column is the selected regression method
             with cc3:
                 regression_list = ["Support Vector Machine Regression", "Elastic Net Regression","Ridge Regression",
                                 "Linear Regression","Stochastic Gradient Descent Regression"]
                 selected_regressor = st.selectbox("Select a regression method:", regression_list)
-
+                # Depending on the selected regression method are different options to setup
+                # Following options are given for the Support Vector Machine:
                 if selected_regressor == "Support Vector Machine Regression":
+                    # Kernel to be selected
                     kernel_list = ['linear', 'poly', 'rbf', 'sigmoid', 'precomputed']
                     selected_kernel = st.selectbox("Kernel:", kernel_list)
-
+                    # Degree (Degree of the polynomial kernel function) to be selected
                     degree_default = 3
                     degree_value = st.number_input('Degree of the polynomial kernel function', 1, 10, degree_default, 1)
-
+                    # svmNumber to be selected (An upper bound on the fraction of training errors and a lower bound of the fraction of
+                    # support vectors, should be in the interval (0, 1), defaults to 0.5)
                     svmNumber_default = 0.5
                     svmNumber_value = st.slider('SVM Number', 0.0, 1.0, svmNumber_default, 0.1)
-
+                    # Maximal number of Iterations to be selected
+                    # if -1 = no limit
                     maxIterations_default = -1
                     maxIterations_value = st.number_input('Maximum of Iterations', -1, 1000, maxIterations_default, 1)
 
+                # Optional regression method
                 if selected_regressor == "Elastic Net Regression":
                     pass
 
+                # Following options are given for the Support Vector Machine:
                 if selected_regressor == "Ridge Regression":
+                    # Solver to be selected
+                    # defaults to 'auto'
                     solver_list = ['auto', 'svd', 'cholesky', 'lsqr', 'sparse_cg', 'sag', 'saga', 'lbfgs']
                     selected_solver = st.selectbox("Solver:", solver_list)
 
+                    # Maximum number of iterations for conjugate gradient solver, defaults to 15000
                     maxIterations_default = 15000
                     maxIterations_value = st.number_input('Maximum of Iterations', 1, 50000, maxIterations_default, 100)
 
+                # Optional regression method
                 if selected_regressor == "Linear Regression":
                         pass
 
+                # Following options are given for the Stochastic Gradient Descent Regression:
                 if selected_regressor == "Stochastic Gradient Descent Regression":
+                    # The maximum number of passes over the training data, defaults to 1000
                     maxIterations_default = 1000
                     maxIterations_value = st.number_input('Maximum of Iterations', 1, 10000, maxIterations_default, 100)
 
 
         with st.container():
+            # The last row
             cc1, cc2, cc3= st.columns([1,2,2])
-
+            # Scaling the dataframe and storing it in a separated Datframe for later usage
             rg_df_norm = (rg_df - np.min(rg_df)) / (np.max(rg_df) - np.min(rg_df))
             regg_obj_norm = Regression(rg_df_norm)
 
@@ -444,42 +470,51 @@ def main(data_obj):
                     with st.spinner("Training models..."):
                         try:
                             if selected_regressor == "Support Vector Machine Regression":
-                                #################
+                                ################# Support Vector Machine Regression with the internal Dataset
+                                # Splitting the internal Dataset in a train and test portion
                                 regg_obj.split_train_test(label_target=selected_column,
                                                         testsize=tt_proportion,
                                                         random_state=0,
                                                         deleting_na=del_na,
                                                         scaling=scale,
                                                         deleting_duplicates=del_dup)
+                                # Building the Support Vector Machine Regression with the internal Dataset
                                 st.session_state.model,st.session_state.model_string = regg_obj.build_regression("Support Vector Machine Regression ",
                                                         kernel=selected_kernel,
                                                         degree=degree_value,
                                                         svmNumber=svmNumber_value,
                                                         maxIterations=maxIterations_value)
+                                # Outputting the regression plot and regression metrics
                                 st.session_state.fig = regg_obj.plot_regression_1()
                                 #################
+                                # Splitting the scaled Dataset in a train and test portion
                                 regg_obj_norm.split_train_test(label_target=selected_column,
                                                         testsize=tt_proportion,
                                                         random_state=0,
                                                         deleting_na=del_na,
                                                         scaling=False,
                                                         deleting_duplicates=del_dup)
+                                # Building the Support Vector Machine Regression with the scaled Dataset
                                 regg_obj_norm.build_regression("Support Vector Machine Regression ",
                                                         kernel=selected_kernel,
                                                         degree=degree_value,
                                                         svmNumber=svmNumber_value,
                                                         maxIterations=maxIterations_value)
+                                # Outputting the Sensitivity plot on the scaled Dataset
                                 st.session_state.fig_norm = regg_obj_norm.MainEffectsPlot()
 
                             if selected_regressor == "Elastic Net Regression":
-                                ######################
+                                ###################### Elastic Net Regression with the internal Dataset
+                                # Splitting the internal Dataset in a train and test portion
                                 regg_obj.split_train_test(label_target=selected_column,
                                                         testsize=tt_proportion,
                                                         random_state=0,
                                                         deleting_na=del_na,
                                                         scaling=scale,
                                                         deleting_duplicates=del_dup)
+                                # Building the Elastic Net Regression with the internal Dataset
                                 st.session_state.model,st.session_state.model_string = regg_obj.build_regression("Elastic Net Regression ")
+                                # Outputting the regression plot and regression metrics
                                 st.session_state.fig = regg_obj.plot_regression_1()
                                 ######################
                                 regg_obj_norm.split_train_test(label_target=selected_column,
@@ -489,72 +524,91 @@ def main(data_obj):
                                                         scaling=False,
                                                         deleting_duplicates=del_dup)
                                 regg_obj_norm.build_regression("Elastic Net Regression ")
+                                # Outputting the Sensitivity plot on the scaled Dataset
                                 st.session_state.fig_norm = regg_obj_norm.MainEffectsPlot()
 
                             if selected_regressor == "Ridge Regression":
-                                ######################
+                                ###################### Ridge Regression with the internal Dataset
+                                # Splitting the internal Dataset in a train and test portion
                                 regg_obj.split_train_test(label_target=selected_column,
                                                         testsize=tt_proportion,
                                                         random_state=0,
                                                         deleting_na=del_na,
                                                         scaling=scale,
                                                         deleting_duplicates=del_dup)
+                                # Building the Ridge Regression with the internal Dataset
                                 st.session_state.model,st.session_state.model_string = regg_obj.build_regression("Ridge Regression ",
                                                         max_iter=maxIterations_value,
                                                         solver=selected_solver)
+                                # Outputting the regression plot and regression metrics
                                 st.session_state.fig = regg_obj.plot_regression_1()
                                 ######################
+                                # Splitting the scaled Dataset in a train and test portion
                                 regg_obj_norm.split_train_test(label_target=selected_column,
                                                         testsize=tt_proportion,
                                                         random_state=0,
                                                         deleting_na=del_na,
                                                         scaling=False,
                                                         deleting_duplicates=del_dup)
+                                # Building the Ridge Regression with the scaled Dataset
                                 regg_obj_norm.build_regression("Ridge Regression ",
                                                         max_iter=maxIterations_value,
                                                         solver=selected_solver)
+                                # Outputting the Sensitivity plot on the scaled Dataset
                                 st.session_state.fig_norm = regg_obj_norm.MainEffectsPlot()
 
                             if selected_regressor == "Linear Regression":
-                                ######################
+                                ###################### Linear Regression with the internal Dataset
+                                # Splitting the internal Dataset in a train and test portion
                                 regg_obj.split_train_test(label_target=selected_column,
                                                         testsize=tt_proportion,
                                                         random_state=0,
                                                         deleting_na=del_na,
                                                         scaling=scale,
                                                         deleting_duplicates=del_dup)
+                                # Building the Linear Regression with the internal Dataset
                                 st.session_state.model,st.session_state.model_string = regg_obj.build_regression("Linear Regression ")
+                                # Outputting the regression plot and regression metrics
                                 st.session_state.fig = regg_obj.plot_regression_1()
-                                ######################
+                                ###################### Linear Regression with the scaled Dataset
+                                # Splitting the scaled Dataset in a train and test portion
                                 regg_obj_norm.split_train_test(label_target=selected_column,
                                                         testsize=tt_proportion,
                                                         random_state=0,
                                                         deleting_na=del_na,
                                                         scaling=False,
                                                         deleting_duplicates=del_dup)
+                                # Building the Linear Regression with the scaled Dataset
                                 regg_obj_norm.build_regression("Linear Regression ")
+                                # Outputting the Sensitivity plot on the scaled Dataset
                                 st.session_state.fig_norm = regg_obj_norm.MainEffectsPlot()
 
                             if selected_regressor == "Stochastic Gradient Descent Regression":
-                                ######################
+                                ###################### Stochastic Gradient Descent Regression with the internal Dataset
+                                # Splitting the internal Dataset in a train and test portion
                                 regg_obj.split_train_test(label_target=selected_column,
                                                         testsize=tt_proportion,
                                                         random_state=0,
                                                         deleting_na=del_na,
                                                         scaling=scale,
                                                         deleting_duplicates=del_dup)
+                                # Building the Stochastic Gradient Descent Regression with the internal Dataset
                                 st.session_state.model,st.session_state.model_string = regg_obj.build_regression("Stochastic Gradient Descent Regression ",
                                                         max_iter=maxIterations_value)
+                                # Outputting the regression plot and regression metrics
                                 st.session_state.fig = regg_obj.plot_regression_1()
                                 ######################
+                                # Splitting the scaled Dataset in a train and test portion
                                 regg_obj_norm.split_train_test(label_target=selected_column,
                                                         testsize=tt_proportion,
                                                         random_state=0,
                                                         deleting_na=del_na,
                                                         scaling=False,
                                                         deleting_duplicates=del_dup)
+                                # Building the Stochastic Gradient Descent Regression with the scaled Dataset
                                 regg_obj_norm.build_regression("Stochastic Gradient Descent Regression ",
                                                         max_iter=maxIterations_value)
+                                # Outputting the Sensitivity plot on the scaled Dataset
                                 st.session_state.fig_norm = regg_obj_norm.MainEffectsPlot()
 
 
@@ -562,6 +616,7 @@ def main(data_obj):
                             st.error("Please check if you selected a dataset and column suitable for the regression "
                                      "model.\n Remember that the regression model only works with numerical data")
                 try:
+                    # Outputting the Regression Methods metrics
                     st.metric(st.session_state.model_string[0]+str(" --> RMSE"),st.session_state.model_string[1])
                     st.metric(st.session_state.model_string[0]+str(" --> R2-Score"),st.session_state.model_string[2])
                 except AttributeError as e:
@@ -570,14 +625,18 @@ def main(data_obj):
             with cc2:
                 st.subheader('Model Graphs')
                 try:
+                    # Plotting the Regresssion Plot
                     st.caption("Actual- vs Expected Target Value")
                     st.pyplot(st.session_state.fig)
+                    # Plotting the Sensitivity Plot
                     st.caption("Main Effects Plot")
                     st.pyplot(st.session_state.fig_norm)
                 except:
                     pass
 
             with cc3:
+                # This Column creates the Ability for the User
+                # to use the trained model to make a prediction
                 st.subheader('Model Prediction')
                 columns_list = list(rg_df.columns)
                 parameter = []
@@ -599,7 +658,7 @@ def main(data_obj):
                         st.write("No model found!")
 
 
-            
+
 
 if __name__ == "__main__":
    main()

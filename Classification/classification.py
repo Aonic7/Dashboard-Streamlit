@@ -134,39 +134,41 @@ def main(data_obj):
         unsafe_allow_html=True)
 
     # Main data classification method radio selector
-
+        # Creating an Instance of the Classification Class with the Classification Object
         class_obj = Classification(cl_df)
         
         with st.container():
             st.subheader('Select input settings')
 
             cc1, cc2, cc3 = st.columns(3)
-
+            # In the left column are input option for the preparation of the dataset
             with cc1:
                 tt_proportion = st.slider('Portion of test data', 0.0, 1.0, 0.2, 0.05)
                 upsample_cl = st.checkbox('Upsample data?')
                 scale = st.checkbox('Scale data?')
                 del_na = st.checkbox('Get rid of N/A values?')
-
+            # In the middel column is the chosen target column of the dataset
             with cc2:
                 columns_list = list(cl_df.columns)
                 selected_column = st.selectbox("Column to classify:", columns_list)
 
+            # In the right column is the selected classifier
             with cc3:
                 classifier_list = ["KNN", "SVM", "LR"]
                 selected_classifier = st.selectbox("Select a classifier:", classifier_list)
-
+                # depending on the selected classifier are different options to setup
+                # Following options are given for the K-Nearest Neighbor
                 if selected_classifier == "KNN":
-                    k_default = isqrt(cl_df.shape[0])
+                    k_default = isqrt(cl_df.shape[0]) # Default K-Value is the square root of the number of sampels
                     if k_default >= 200: k_default = 200
                     k_value = st.number_input('"k" value:', 1, 200, k_default, 1)
-
+                # Following options are given for the Support Vector Machine
                 if selected_classifier == "SVM":
-                    kernel_list = ['linear', 'poly', 'rbf', 'sigmoid']
+                    kernel_list = ['linear', 'poly', 'rbf', 'sigmoid'] # default kernel is "linear"
                     selected_kernel = st.selectbox("Kernel:", kernel_list)
-
+                # Following options are given for the Logistic Regression
                 if selected_classifier == "LR":
-                    solver_list = ['liblinear', 'newton-cg', 'lbfgs', 'sag', 'saga']
+                    solver_list = ['liblinear', 'newton-cg', 'lbfgs', 'sag', 'saga']  # default solver is "liblinear"
                     selected_solver = st.selectbox("Solver:", solver_list)
 
         with st.container():
@@ -181,43 +183,52 @@ def main(data_obj):
 
                         try:
                             if selected_classifier == "KNN":
+                                # K Nearest Neighbor
+                                # Splitting the Dataset in the Train and Test portion
                                 class_obj.split_train_test(y_column_name=selected_column,
                                                         test_size=tt_proportion,
                                                         random_state=0,
                                                         upsample=upsample_cl,
                                                         scaling=scale,
                                                         deleting_na=del_na)
+                                # Building the KNN Classifier
                                 st.session_state.model, \
                                 st.session_state.pred =class_obj.build_classifier('KNN', k_value)
-
+                                # Generating the Plot and Metrics of the Classifier model
                                 st.session_state.fig_class,\
                                 st.session_state.cnf_matrix,\
                                 st.session_state.report = class_obj.show_classifier_accuracy()
 
                             if selected_classifier == "SVM":
+                                # Support Vector Machine
+                                # Splitting the Dataset in the Train and Test portion
                                 class_obj.split_train_test(y_column_name=selected_column,
                                                         test_size=tt_proportion,
                                                         random_state=0,
                                                         upsample=upsample_cl,
                                                         scaling=scale,
                                                         deleting_na=del_na)
+                                # Building the SVM Classifier
                                 st.session_state.model, \
                                 st.session_state.pred =class_obj.build_classifier('SVM', selected_kernel)
-
+                                # Generating the Plot and Metrics of the Classifier model
                                 st.session_state.fig_class,\
                                 st.session_state.cnf_matrix,\
                                 st.session_state.report = class_obj.show_classifier_accuracy()
 
                             if selected_classifier == "LR":
+                                # Logistic Regression
+                                # Splitting the Dataset in the Train and Test portion
                                 class_obj.split_train_test(y_column_name=selected_column,
                                                         test_size=tt_proportion,
                                                         random_state=0,
                                                         upsample=upsample_cl,
                                                         scaling=scale,
                                                         deleting_na=del_na)
+                                # Building the LR Classifier
                                 st.session_state.model, \
                                 st.session_state.pred =class_obj.build_classifier('LR', selected_solver)
-
+                                # Generating the Plot and Metrics of the Classifier model
                                 st.session_state.fig_class,\
                                 st.session_state.cnf_matrix,\
                                 st.session_state.report = class_obj.show_classifier_accuracy()
@@ -226,8 +237,10 @@ def main(data_obj):
                             st.error(
                                 "Please check if you selected a dataset and column suitable for binary classification. \nAlternatively, your labels should be one-hot encoded.")
                 try:
+                    # Printing the Overall Accuracy
                     st.metric("Overall Accuracy of "+str(st.session_state.model),st.session_state.pred)
                     for dim in range(st.session_state.cnf_matrix.shape[0]):
+                        # Printing the accuracy for every class
                         accuracy = st.session_state.cnf_matrix[dim][dim] / sum(st.session_state.cnf_matrix[dim])
                         # st.write("Accuracy for the ",dim,"class:", accuracy)
                         # st.write(f"Accuracy for the {dim} class:")
@@ -238,14 +251,18 @@ def main(data_obj):
             with cc2:
                 st.subheader('Model Graphs')
                 try:
+                    # Plotting the Confusion Matrix
                     st.caption("Confusion Matrix")
                     st.pyplot(st.session_state.fig_class)
+                    # Plotting the Classification Report
                     st.caption("Classification Report")
                     st.dataframe(st.session_state.report)
                 except:
                     pass
 
             with cc3:
+                # This Column creates the Ability for the User
+                # to use the trained model to make a prediction
                 st.subheader('Model Prediction')
                 columns_list = list(cl_df.columns)
                 parameter = []
@@ -257,7 +274,6 @@ def main(data_obj):
                                                         max_value=10000,
                                                         value=10,
                                                         step=10))
-
                 predict_button = st.button(label='Predict')
                 if predict_button:
                     try:
