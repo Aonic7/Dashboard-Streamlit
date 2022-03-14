@@ -1,17 +1,12 @@
 import datetime
-from code import interact
 import pandas as pd
 import numpy as np
 import streamlit as st
-from pandas.api.types import is_numeric_dtype
 from .Regression_final import Regressor
 from .MLP_Regressor import NN_Regressor, Regressor_Inputs
 from .MLP_TimeSeries import NN_TimeSeries_Reg, Regressor_Inputs_TS
-# from .RegressionClass import Regression
 from .Regression_Group4 import Regression
 from .TimeSeries_Final import Timeseries, rf_Inputs
-
-#dateparse = lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 
 
 
@@ -111,7 +106,7 @@ def main(data_obj):
                 with cc3:
                     number_hl = st.slider('Hidden layers:', 1, 5, 2, 1)
 
-                    a = []
+                    a = [] #
 
                     for i in range(number_hl):
                         a.append(st.number_input(f'Number of neurons in hidden layer {i+1}:', 1, 600, 1, 1, key=i))
@@ -259,11 +254,13 @@ def main(data_obj):
 
       
         with st.container():
+            
+            # Section header
             st.subheader('Select input settings')
-
             
             cc1, cc2, cc3 = st.columns(3)
             
+            # User input widgets/variables
             with cc1:
                 columns_list = list(rg_df.columns)
 
@@ -284,9 +281,6 @@ def main(data_obj):
                     base_column_list = [s for s in columns_list if s != selected_column and s != time_column]
                     base_column = st.selectbox("Select base column:", base_column_list)
 
-
-
-
             with cc3:
                 if t_s:
                     unique_val = st.selectbox("Select a unique:", list(rg_df[column_uniques].unique()))
@@ -296,13 +290,16 @@ def main(data_obj):
        
         with st.container():
                        
-            # calling the methods using object 'obj'
+            # Submit button
             with st.form(key="form"):
                 submit_button = st.form_submit_button(label='Submit')
 
+                # Submit button execution
                 if submit_button:
+                    # If TimeSeries flag is checked
                     if t_s:
                         try:
+                            # Spinner due to a long processing of TimeSeries
                             with st.spinner("Training models..."):
                                 dat = datetime.datetime(d.year,d.month,d.day)
                                 dt_input = datetime.datetime(d.year,d.month,d.day,t.hour,t.minute)
@@ -318,26 +315,25 @@ def main(data_obj):
                                 obj.Results()
                                 obj.SelectedSysCode(ts_rg_input)
                                 obj.UserSelectedmodel(tree_size, tt_proportion)
-                        except KeyError as e:
-                            st.error("Guess what? You hardcoded it again!")
-                        except:
-                            st.error("Something went wrong, Sneha...")
 
+                        except:
+                            st.error("Something went wrong...")
+                    
+                    # Checkbox is not activated (False value)
                     if t_s == False:        
                         try:
+                            # Spinner animation
                             with st.spinner("Training models..."):
                                 X = rg_df[x_list]
                                 Y = rg_df[selected_column]
                                 reg_inst = Regressor(X,Y) 
                                 reg_inst.model(tree_size, tt_proportion)
-                                # st.balloons()
-
+                                
                             reg_inst.result(reg_inst.Y_test, reg_inst.Y_pred)
                             reg_inst.prediction_plot(reg_inst.Y_test, reg_inst.Y_pred)
                             
                         except:
-                            st.balloons()
-                            st.error("Something went wrong, Sneha...")
+                            st.error("Something went wrong...")
 
     if rg_method == 'Other Methods':
         """_summary_
@@ -353,8 +349,6 @@ def main(data_obj):
                     mime='text/csv')
 
 
-        # st.header('Regression')
-
         rg_df = data_obj.df.copy()
         regg_obj = Regression(rg_df)
 
@@ -369,8 +363,6 @@ def main(data_obj):
             '<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;}</style>',
             unsafe_allow_html=True)
 
-        # st.dataframe(rg_df)
-        # st.write(rg_df.shape)
 
         with st.container():
             c1, c2, c3 = st.columns(3)
@@ -378,11 +370,7 @@ def main(data_obj):
             with c1:
                 st.subheader("Dataframe's datatypes")
                 st.dataframe(rg_df.dtypes.astype(str))
-                # st.download_button(label="Download data as CSV",
-                #                 data=rg_df.to_csv(index=False),
-                #                 file_name='Preprocessed Dataset.csv',
-                #                 mime='text/csv',
-                #                 )
+
             with c2:
                 st.subheader("Correlation heatmap")
                 regg_obj.plot_heatmap_correlation()
@@ -405,12 +393,6 @@ def main(data_obj):
             with cc2:
                 columns_list = list(rg_df.columns)
                 selected_column = st.selectbox("Column to regress:", columns_list)
-
-                #columns_list = list(rg_df.columns)
-                #selected_drop_column = st.selectbox("Column to drop:", columns_list)
-                #if st.button(label='Drop Column'):
-                #    rg_df = regg_obj.dropColumns(selected_drop_column)
-
 
             with cc3:
                 regression_list = ["Support Vector Machine Regression", "Elastic Net Regression","Ridge Regression",

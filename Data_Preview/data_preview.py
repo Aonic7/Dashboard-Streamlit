@@ -1,11 +1,6 @@
 # General import section
-import pandas as pd #to work with dataframes
 import streamlit as st #streamlit backend
-import os
 
-# Visualization import section
-import seaborn as sns #for plotting
-import matplotlib.pyplot as plt #to configure plots
 # Importing specific plots
 from Visualization.visualization import Heatmap
 
@@ -35,9 +30,6 @@ def main(data_obj):
     with col4:
         st.subheader("Correlation")
         st.dataframe(data_obj.df.corr())
-
-    # if os.path.isfile("Smoothing_and_Filtering//Preprocessing dataset.csv"):
-    #     os.remove("Smoothing_and_Filtering//Preprocessing dataset.csv")
 
     # Correlation matrix
     st.subheader("Correlation heatmap")

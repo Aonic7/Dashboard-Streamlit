@@ -2,7 +2,6 @@
 import pandas as pd #to work with dataframes
 import streamlit as st #streamlit backend
 import os #to work with files
-import numpy as np #to work with numerical arrays
 
 # Visualization import section
 from Visualization.visualization import doubleLinePlot, DoubleBoxPlot, Histogram, ScatterPlot, interpolation_subplot

@@ -1,5 +1,4 @@
 # General import section
-import pandas as pd #to work with dataframes
 import streamlit as st #streamlit backend
 
 # Visualization import section

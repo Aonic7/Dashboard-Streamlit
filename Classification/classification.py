@@ -1,4 +1,4 @@
-# General import section
+# General import section 
 import pandas as pd #to work with dataframes
 import streamlit as st #streamlit backend
 from sklearn.preprocessing import MinMaxScaler #for data preparation

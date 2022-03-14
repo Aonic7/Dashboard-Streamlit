@@ -30,8 +30,12 @@ def main():
     st.subheader("Source code")
     st.markdown("It can be found via navigating to the menu in the top right corner and pressing 'View App Source' or by using [this link](https://github.com/Aonic7/Dashboard-Streamlit).")
 
+    # To delete leftover files from the previous runs
     if os.path.isfile("Smoothing_and_Filtering//Preprocessing dataset.csv"):
         os.remove("Smoothing_and_Filtering//Preprocessing dataset.csv")
             
     if os.path.isfile("Smoothing_and_Filtering//Filtered Dataset.csv"):
         os.remove("Smoothing_and_Filtering//Filtered Dataset.csv")
+
+    if os.path.isfile("Smoothing_and_Filtering//initial.csv"):
+        os.remove("Smoothing_and_Filtering//initial.csv")

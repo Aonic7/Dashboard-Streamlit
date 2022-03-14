@@ -1,11 +1,9 @@
 # General import section
 import pandas as pd #to work with dataframes
-import streamlit as st #streamlit backend
 import numpy as np #to work with arrays and series
 import scipy.stats as stats #to work with z-score
 
 from scipy.signal import medfilt, savgol_filter
-from scipy.interpolate import interp1d
 class Remove_Outliers():
     """
     This class is used to provide methods for removing outliers from a given dataset.
