@@ -11,4 +11,4 @@ It allows you to:
 - Perform advanced machine learning with customizable parameters on you data
 - Visualize and download the results
 
-You can find a deployed version of this app [here](https://share.streamlit.io/aonic7/dashboard-streamlit/main).
+You can find a deployed version of this app [here](https://share.streamlit.io/aonic7/dashboard-streamlit/main) and documentation regarding the project [here](https://dashboard-streamlit.readthedocs.io/en/latest/index.html). 
